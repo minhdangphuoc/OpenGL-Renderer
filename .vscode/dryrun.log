@@ -1,0 +1,9 @@
+make -f /home/minhdang/Documents/OpenGL-Renderer/Makefile --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/minhdang/Documents/OpenGL-Renderer'
+make: Leaving directory '/home/minhdang/Documents/OpenGL-Renderer'
+ 
+make: /home/minhdang/Documents/OpenGL-Renderer/Makefile: No such file or directory
+make: *** No rule to make target '/home/minhdang/Documents/OpenGL-Renderer/Makefile'.
+make: Failed to remake makefile '/home/minhdang/Documents/OpenGL-Renderer/Makefile'.
+make: *** No targets specified and no makefile found.  Stop.
+
