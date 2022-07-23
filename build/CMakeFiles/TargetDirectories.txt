@@ -1,4 +1,0 @@
-/home/minhdang/Documents/OpenGL-Renderer/build/CMakeFiles/MDEngineOGL.dir
-/home/minhdang/Documents/OpenGL-Renderer/build/CMakeFiles/Shaders.dir
-/home/minhdang/Documents/OpenGL-Renderer/build/CMakeFiles/edit_cache.dir
-/home/minhdang/Documents/OpenGL-Renderer/build/CMakeFiles/rebuild_cache.dir
