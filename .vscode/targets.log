@@ -1,4 +1,7 @@
 make all -f /home/minhdang/Documents/OpenGL-Renderer/Makefile --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: /home/minhdang/Documents/OpenGL-Renderer/Makefile: No such file or directory
+make: *** No rule to make target '/home/minhdang/Documents/OpenGL-Renderer/Makefile'.  Stop.
+
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -6,7 +9,7 @@ make all -f /home/minhdang/Documents/OpenGL-Renderer/Makefile --print-data-base 
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sun Jul 17 01:48:52 2022
+# Make data base, printed on Sat Jul 23 14:50:13 2022
 
 # Variables
 
@@ -47,7 +50,7 @@ XDG_DATA_DIRS = /usr/share/pop:/usr/share/gnome:/home/minhdang/.local/share/flat
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/minhdang/.config/Code/CachedData/b06ae3b2d2dbfe28bca3134cc6be65935cdfea6a
+VSCODE_CODE_CACHE_PATH = /home/minhdang/.config/Code/CachedData/3b889b090b5ad5793f524b5d1d39fda662b96a2a
 # environment
 LANG = C
 # environment
@@ -85,13 +88,13 @@ MAKEFILE_LIST :=
 # environment
 ZSH = /home/minhdang/.oh-my-zsh
 # environment
-VSCODE_PID = 3165
+VSCODE_PID = 12522
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/pop-os:@/tmp/.ICE-unix/2555,unix/pop-os:/tmp/.ICE-unix/2555
+SESSION_MANAGER = local/pop-os:@/tmp/.ICE-unix/2589,unix/pop-os:/tmp/.ICE-unix/2589
 # automatic
 *F = $(notdir $*)
 # environment
@@ -129,7 +132,7 @@ MAKEFILES :=
 # automatic
 ^F = $(notdir $^)
 # environment
-INVOCATION_ID = 9a5fbea05df84e1390959605c9f2e2a8
+INVOCATION_ID = c10ad76cc0d94279afcabdf103b70d29
 # environment
 USERNAME = minhdang
 # automatic
@@ -161,7 +164,7 @@ PLATFORMIO_PATH = /home/minhdang/.platformio/python3/bin:/home/minhdang/.cargo/b
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 2584
+SYSTEMD_EXEC_PID = 2610
 # environment
 DISPLAY = :0
 # environment
@@ -171,9 +174,9 @@ GTK_MODULES = gail:atk-bridge:appmenu-gtk-module
 # default
 MAKE_VERSION := 4.3
 # environment
-MANAGERPID = 2277
+MANAGERPID = 2349
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 3165
+GIO_LAUNCHED_DESKTOP_FILE_PID = 12522
 # environment
 PAGER = less
 # environment
@@ -183,7 +186,7 @@ XDG_RUNTIME_DIR = /run/user/1000
 # environment
 GPG_AGENT_INFO = /run/user/1000/gnupg/S.gpg-agent:0:1
 # environment
-JOURNAL_STREAM = 8:45383
+JOURNAL_STREAM = 8:40439
 # environment
 XDG_SESSION_CLASS = user
 # environment
@@ -197,7 +200,7 @@ QT_IM_MODULE = ibus
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-1e1ca4e0-1.69.1-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-1e1ca4e0-1.69.2-main.sock
 # default
 .RECIPEPREFIX := 
 # automatic
@@ -261,9 +264,6 @@ all:
 # strcache performance: lookups = 9 / hit rate = 33%
 # hash-table stats:
 # Load=6/8192=0%, Rehash=0, Collisions=0/9=0%
-# Finished Make data base on Sun Jul 17 01:48:52 2022
+# Finished Make data base on Sat Jul 23 14:50:13 2022
 
  
-make: /home/minhdang/Documents/OpenGL-Renderer/Makefile: No such file or directory
-make: *** No rule to make target '/home/minhdang/Documents/OpenGL-Renderer/Makefile'.  Stop.
-

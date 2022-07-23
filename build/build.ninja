@@ -52,14 +52,14 @@ build cmake_object_order_depends_target_MDEngineOGL: phony || CMakeFiles/MDEngin
 build CMakeFiles/MDEngineOGL.dir/src/glad.c.o: C_COMPILER__MDEngineOGL_Debug /home/minhdang/Documents/OpenGL-Renderer/src/glad.c || cmake_object_order_depends_target_MDEngineOGL
   DEP_FILE = CMakeFiles/MDEngineOGL.dir/src/glad.c.o.d
   FLAGS = -g
-  INCLUDES = -I/home/minhdang/Documents/OpenGL-Renderer/external -I/home/minhdang/Documents/OpenGL-Renderer/src -I/home/minhdang/Documents/OpenGL-Renderer/./deps/tinyobjloader -I/home/minhdang/Documents/OpenGL-Renderer/./deps/glm -I/home/minhdang/Documents/OpenGL-Renderer/./deps/stb -I/home/minhdang/Documents/OpenGL-Renderer/./deps -I/home/minhdang/Documents/OpenGL-Renderer/assimp
+  INCLUDES = -I/home/minhdang/Documents/OpenGL-Renderer/external -I/home/minhdang/Documents/OpenGL-Renderer/src -I/home/minhdang/Documents/OpenGL-Renderer/./deps/tinyobjloader -I/home/minhdang/Documents/OpenGL-Renderer/./deps/glm -I/home/minhdang/Documents/OpenGL-Renderer/./deps/stb -I/home/minhdang/Documents/OpenGL-Renderer/./deps/glad -I/home/minhdang/Documents/OpenGL-Renderer/assimp
   OBJECT_DIR = CMakeFiles/MDEngineOGL.dir
   OBJECT_FILE_DIR = CMakeFiles/MDEngineOGL.dir/src
 
 build CMakeFiles/MDEngineOGL.dir/src/main.cpp.o: CXX_COMPILER__MDEngineOGL_Debug /home/minhdang/Documents/OpenGL-Renderer/src/main.cpp || cmake_object_order_depends_target_MDEngineOGL
   DEP_FILE = CMakeFiles/MDEngineOGL.dir/src/main.cpp.o.d
-  FLAGS = -g
-  INCLUDES = -I/home/minhdang/Documents/OpenGL-Renderer/external -I/home/minhdang/Documents/OpenGL-Renderer/src -I/home/minhdang/Documents/OpenGL-Renderer/./deps/tinyobjloader -I/home/minhdang/Documents/OpenGL-Renderer/./deps/glm -I/home/minhdang/Documents/OpenGL-Renderer/./deps/stb -I/home/minhdang/Documents/OpenGL-Renderer/./deps -I/home/minhdang/Documents/OpenGL-Renderer/assimp
+  FLAGS = -std=c++17 -g
+  INCLUDES = -I/home/minhdang/Documents/OpenGL-Renderer/external -I/home/minhdang/Documents/OpenGL-Renderer/src -I/home/minhdang/Documents/OpenGL-Renderer/./deps/tinyobjloader -I/home/minhdang/Documents/OpenGL-Renderer/./deps/glm -I/home/minhdang/Documents/OpenGL-Renderer/./deps/stb -I/home/minhdang/Documents/OpenGL-Renderer/./deps/glad -I/home/minhdang/Documents/OpenGL-Renderer/assimp
   OBJECT_DIR = CMakeFiles/MDEngineOGL.dir
   OBJECT_FILE_DIR = CMakeFiles/MDEngineOGL.dir/src
 
@@ -72,7 +72,7 @@ build CMakeFiles/MDEngineOGL.dir/src/main.cpp.o: CXX_COMPILER__MDEngineOGL_Debug
 # Link the executable MDEngineOGL
 
 build MDEngineOGL: CXX_EXECUTABLE_LINKER__MDEngineOGL_Debug CMakeFiles/MDEngineOGL.dir/src/glad.c.o CMakeFiles/MDEngineOGL.dir/src/main.cpp.o | /usr/local/lib/libglfw3.a /usr/lib/x86_64-linux-gnu/libvulkan.so /usr/lib/x86_64-linux-gnu/librt.a /usr/lib/x86_64-linux-gnu/libm.so /usr/lib/x86_64-linux-gnu/libX11.so
-  FLAGS = -g
+  FLAGS = -std=c++17 -g
   LINK_LIBRARIES = /usr/local/lib/libglfw3.a  /usr/lib/x86_64-linux-gnu/libvulkan.so  /usr/lib/x86_64-linux-gnu/librt.a  -lm  -ldl  /usr/lib/x86_64-linux-gnu/libX11.so
   OBJECT_DIR = CMakeFiles/MDEngineOGL.dir
   POST_BUILD = :
