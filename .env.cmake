@@ -4,7 +4,7 @@ if (WIN32)
     endif()
     
     set(GLM_PATH ./deps/glm)
-    set(GLAD_INCLUDE_PATH ./deps/glad)
+    set(GLAD_INCLUDE_PATH /deps/glad)
     set(STB_INCLUDE_PATH  ./deps/stb)
     set(TINYOBJ_PATH  ./deps/tinyobjloader)
 # Set MINGW_PATH if using mingwBuild.bat and not VisualStudio20XX
