@@ -2,11 +2,14 @@
 #define GL_RENDERER_HPP 
 #ifdef GL_RENDERER_HPP
 
+#include "Object.hpp"
+
 #include <vector>
 #include <cstdlib>
 #include <cstdint> 
 #include <string> 
 #include <array>
+
 
 class GLRenderer
 {
@@ -27,9 +30,11 @@ class GLRenderer
     uint32_t vertexShader;
     uint32_t fragmentShader;
     uint32_t shaderProgram;
+    unsigned int VBOs[2], VAOs[2];
 
+    std::vector<Object> Objects;
     std::string errorInfo;
 
-    uint32_t VBO, VAO, EBO;
+    
 };
 #endif // GL_RENDERER_HPP

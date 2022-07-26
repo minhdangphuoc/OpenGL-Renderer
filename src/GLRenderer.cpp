@@ -1,4 +1,4 @@
-#define POLYGON_MODE 1
+#define POLYGON_MODE 0
 
 #include "GLRenderer.hpp"
 #include "Utilities.h"
@@ -27,52 +27,89 @@ bool GLRenderer::init()
 }
 
 void GLRenderer::clean()
-{
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+{   
+    for (auto i: Objects)
+    {
+        glDeleteVertexArrays(1, &(i.VAO));
+        glDeleteBuffers(1, &(i.VBO));
+        // glDeleteBuffers(1, &(i.EBO));
+    }
     
     glDeleteProgram(shaderProgram);
 }
 
 void GLRenderer::loadObjects()
 {
+    Objects.push_back(Object({
+        // first triangle
+        -0.9f, -0.5f, 0.0f,  // left 
+        -0.0f, -0.5f, 0.0f,  // right
+        -0.45f, 0.5f, 0.0f,  // top 
+    }));
 
-    const float vertices[] = {
-        0.5f,  0.5f, 0.0f,  // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
-    };
-    const unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
-    };  
+    Objects.push_back(Object({
+        // second triangle
+        0.0f, -0.5f, 0.0f,  // left
+        0.9f, -0.5f, 0.0f,  // right
+        0.45f, 0.5f, 0.0f   // top 
+    }));
+    
+    for (auto i: Objects)
+    {
+        for (auto j: i.vertices)
+        {
+            std::cout << j << " ";
+        }
+        std::cout << size(Objects) << "\n";
+
+    }
+    
 
     // Generate VAO, VBO, EBO
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
-    
-    // bind the Vertex Array Object - VAO
-    glBindVertexArray(VAO);
+    // uint32_t * VAOs = &([=]() {
+    //     std::vector<uint32_t> tmp;
+    //     for(auto i:Objects){
+    //         tmp.push_back(i.VAO);
+    //     }
+    //     return tmp;
+    // }()[0]);
+    // uint32_t * VBOs = &([=](){
+    //     std::vector<uint32_t> tmp;
+    //     for(auto i:Objects){
+    //         tmp.push_back(i.VBO);
+    //     }
+    //     return tmp;
+    // }()[0]);
 
-    // bind and set vertex buffer(s) - VBO
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
     
-    // Configure vertex attributes(s) - EBO
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    glGenVertexArrays(Objects.size(), VAOs);
+    glGenBuffers(Objects.size(), VBOs);
     
-    // Set vertex attributes pointers
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);  
+    int tmp = 0;
+
+    for (auto i:Objects)
+    {
+        // bind the Vertex Array Object - VAO
+        glBindVertexArray(VAOs[tmp]);
+
+        // bind and set vertex buffer(s) - VBO
+        glBindBuffer(GL_ARRAY_BUFFER, VBOs[tmp]);
+        glBufferData(GL_ARRAY_BUFFER, sizeof((i.vertices)), (i.vertices.data()), GL_STATIC_DRAW);
+        
+        // Configure vertex attributes(s) - EBO
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        // glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+        
+        // Set vertex attributes pointers
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, (tmp != 1) ? 3 * sizeof(float) : 0, (void*)0);
+        glEnableVertexAttribArray(0);  
+        glBindVertexArray(0);
+        tmp++;
+    }
 
     // Unbind array buffers
     // glBindBuffer(GL_ARRAY_BUFFER, 0); 
 
-    glBindVertexArray(0); 
 
     // draw in wireframe polygons
     #if POLYGON_MODE
@@ -153,11 +190,15 @@ void GLRenderer::linkShaders()
 
 void GLRenderer::draw() 
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
-    // glDrawArrays(GL_TRIANGLES, 0, 6);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+    glBindVertexArray(VAOs[0]);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // then we draw the second triangle using the data from the second VAO
+    glBindVertexArray(VAOs[1]);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

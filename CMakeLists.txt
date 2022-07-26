@@ -158,7 +158,7 @@ if (WIN32)
     ${GLAD_LIBRARIES}
   )
 
-  target_link_libraries(${PROJECT_NAME} glfw3 ${GLAD_LIBRARIES} ${ASSIMP_LIB} ${OpenGL_LIBRARY})
+  target_link_libraries(${PROJECT_NAME} glfw3 ${ASSIMP_LIB} ${OpenGL_LIBRARY})
 elseif (UNIX)
     message(STATUS "CREATING BUILD FOR UNIX")
     target_include_directories(${PROJECT_NAME} PUBLIC
@@ -169,5 +169,5 @@ elseif (UNIX)
       ${GLAD_LIBRARIES}
       ${GLAD_INCLUDE_PATH}
     )
-    target_link_libraries(${PROJECT_NAME} glfw  ${ASSIMP_LIB} ${OpenGL_LIBRARY} ${GLAD_LIBRARIES})
+    target_link_libraries(${PROJECT_NAME} glfw  ${ASSIMP_LIB} ${OpenGL_LIBRARY})
 endif()
