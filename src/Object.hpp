@@ -5,7 +5,7 @@ class Object
 {
 public:
     Object(std::vector<float>  vertices, std::vector<uint32_t> indices): vertices(vertices), indices(indices){};
-    Object(std::vector<float>  vertices) {this->vertices = vertices; };
+    Object(std::vector<float>  vertices) : vertices(vertices) {};
     
     ~Object() {};
     uint32_t VBO, VAO, EBO;

@@ -30,7 +30,8 @@ class GLRenderer
     uint32_t vertexShader;
     uint32_t fragmentShader;
     uint32_t shaderProgram;
-    unsigned int VBOs[2], VAOs[2];
+    uint32_t VAO, VBO;
+
 
     std::vector<Object> Objects;
     std::string errorInfo;
