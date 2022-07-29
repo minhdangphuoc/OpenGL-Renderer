@@ -1,26 +1,35 @@
+#pragma once
 #define __UTILITIES_H__
 #ifdef __UTILITIES_H__
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include <fstream>
+#include <sstream>
+#include <iostream>
 
-static std::vector<char> readFile(const std::string& filename) {
-    std::ifstream file(filename, std::ios::ate | std::ios::binary);
 
-    if (!file.is_open()) {
-        throw std::runtime_error("failed to open file!");
-    }
+static std::string readFile(const std::string& path) {
+	std::string sourceCode;
+    std::ifstream file;
 
-	size_t fileSize = (size_t) file.tellg();
-	std::vector<char> buffer(fileSize);
+	file.exceptions (std::ifstream::failbit | std::ifstream::badbit);
 
-	file.seekg(0);
-	file.read(buffer.data(), fileSize);
-
-	file.close();
-
-	return buffer;
+	try
+	{
+		file.open(path);
+		std::stringstream fileStream;
+		fileStream << file.rdbuf();
+		file.close();
+		sourceCode = fileStream.str();
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+	
+	return sourceCode;
 }
 
 #endif // __UTILITIES_H__
