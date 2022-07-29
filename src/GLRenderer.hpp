@@ -1,9 +1,41 @@
 #pragma once
 #define GL_RENDERER_HPP 
 #ifdef GL_RENDERER_HPP
-class Render
+
+#include "Object.hpp"
+
+#include <vector>
+#include <cstdlib>
+#include <cstdint> 
+#include <string> 
+#include <array>
+
+
+class GLRenderer
 {
     public:
+        bool init();
+        void loadObjects();
+        void loadVertexShaders();
+        void loadFragShaders();
+        void linkShaders();
+        void clean();
+
+        void draw();
+
+        // getters
+        
+
     private:
+    uint32_t vertexShader;
+    uint32_t fragmentShader;
+    uint32_t shaderProgram;
+    uint32_t VAO, VBO;
+
+
+    std::vector<Object> Objects;
+    std::string errorInfo;
+
+    
 };
 #endif // GL_RENDERER_HPP
