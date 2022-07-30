@@ -18,6 +18,7 @@ bool GLRenderer::init()
     try
     {
         loadShaders();
+        loadTextures();
         loadObjects();
     }
     catch(const std::runtime_error& e)
@@ -34,7 +35,7 @@ void GLRenderer::clean()
     {
         glDeleteVertexArrays(1, &(VAO));
         glDeleteBuffers(1, &(VBO));
-        // glDeleteBuffers(1, &(i.EBO));
+        glDeleteBuffers(1, &(EBO));
     }
     
 }
@@ -124,7 +125,6 @@ void GLRenderer::loadTextures()
         std::cout << "Failed to load texture" << std::endl;
     }
     stbi_image_free(data);
-
 }
 
 void GLRenderer::draw() 
