@@ -58,6 +58,7 @@ void Window::render(GLRenderer * renderer)
         processInput(window.get());
         
         renderer->draw();
+        renderer->motion();
 
         glfwSwapBuffers(window.get());
         glfwPollEvents();    

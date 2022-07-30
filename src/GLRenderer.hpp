@@ -13,6 +13,11 @@
 #include <memory>
 
 
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 class GLRenderer
 {
     public:
@@ -23,6 +28,7 @@ class GLRenderer
         void loadObjects();
         void loadShaders();
         void loadTextures();
+        void motion();
         void clean();
 
         void draw();
@@ -53,7 +59,6 @@ class GLRenderer
 
     std::vector<Object> Objects;
     std::string errorInfo;
-
     std::unique_ptr<Shader, shaderDeleter> ourShader;
     uint32_t texture;
 };
