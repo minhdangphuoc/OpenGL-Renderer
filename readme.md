@@ -17,4 +17,4 @@
 
 ### Texture and Transform
 
-![Texture and Transform](texture_trans.gif)
+![Texture and Transform](screenshots/texture_trans.gif)
