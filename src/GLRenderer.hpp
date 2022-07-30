@@ -3,12 +3,14 @@
 #ifdef GL_RENDERER_HPP
 
 #include "Object.hpp"
+#include "Shader.hpp"
 
 #include <vector>
 #include <cstdlib>
 #include <cstdint> 
 #include <string> 
 #include <array>
+#include <memory>
 
 
 class GLRenderer
@@ -16,25 +18,31 @@ class GLRenderer
     public:
         bool init();
         void loadObjects();
-        void loadVertexShaders();
-        void loadFragShaders();
-        void linkShaders();
+        void loadShaders();
         void clean();
 
         void draw();
 
         // getters
         
-
+        // setters
+        void setShaderPaths(std::string vertexPath, std::string fragPath)
+        {
+            this -> vertexPath = vertexPath;
+            this -> fragPath = fragPath;
+        }
     private:
-    uint32_t vertexShader;
-    uint32_t fragmentShader;
-    uint32_t shaderProgram;
+    std::string vertexPath;
+    std::string fragPath;
+
+    
     uint32_t VAO, VBO;
 
 
     std::vector<Object> Objects;
     std::string errorInfo;
+
+    std::shared_ptr<Shader> ourShader;
 
     
 };

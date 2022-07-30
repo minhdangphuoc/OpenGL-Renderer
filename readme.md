@@ -6,7 +6,7 @@
 
 - [0.1.0] Hello Window
 - [0.2.0] Hello Triangle
-- [0.2.1] 
+- [0.2.1] Shader header
 
 
 ## Screenshots
