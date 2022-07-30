@@ -16,9 +16,13 @@
 class GLRenderer
 {
     public:
+        GLRenderer() = default;
+        ~GLRenderer() = default;
+
         bool init();
         void loadObjects();
         void loadShaders();
+        void loadTextures();
         void clean();
 
         void draw();
@@ -31,19 +35,26 @@ class GLRenderer
             this -> vertexPath = vertexPath;
             this -> fragPath = fragPath;
         }
+
+        struct shaderDeleter
+        {
+            void operator()(Shader *shader)
+            {
+                std::cout << "Destroying Shader" << std::endl;
+                // glDeleteProgram(shader->ID);
+            }
+        };
     private:
     std::string vertexPath;
     std::string fragPath;
-
     
-    uint32_t VAO, VBO;
+    uint32_t VAO, VBO, EBO;
 
 
     std::vector<Object> Objects;
     std::string errorInfo;
 
-    std::shared_ptr<Shader> ourShader;
-
-    
+    std::unique_ptr<Shader, shaderDeleter> ourShader;
+    uint32_t texture;
 };
 #endif // GL_RENDERER_HPP

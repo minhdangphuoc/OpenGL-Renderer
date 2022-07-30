@@ -36,7 +36,7 @@ int main(int argc, const char** argv)
         return EXIT_FAILURE;
     }
 
-    window.render(glRenderrer);
+    window.render(&glRenderrer);
     
     glRenderrer.clean();
     window.clean();

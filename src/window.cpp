@@ -51,13 +51,13 @@ bool Window::GLADInit()
 }
 
 
-void Window::render(GLRenderer renderer)
+void Window::render(GLRenderer * renderer)
 {
     while(!glfwWindowShouldClose(window.get()))
     {
         processInput(window.get());
         
-        renderer.draw();
+        renderer->draw();
 
         glfwSwapBuffers(window.get());
         glfwPollEvents();    
