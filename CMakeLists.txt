@@ -86,6 +86,10 @@ else()
 	message(STATUS "Using glad lib at: ${GLAD_LIBRARIES}")
 endif()
 
+# Add imgui
+set(IMGUI_LIBRARIES "${CMAKE_SOURCE_DIR}/deps/imgui") # 1.2 Make sure lib path is correct
+message(STATUS "Found IMGUI")
+message(STATUS "Using glad lib at: ${IMGUI_LIBRARIES}")
 
 # Copy texture and shaders to build dir
 find_path(TEXTURES_DIR_FOUND ${CMAKE_SOURCE_DIR}/build/Debug/textures)
@@ -112,12 +116,6 @@ endif()
 #file( COPY ${PROJECT_SOURCE_DIR}/models 
 #      DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug" )
       
-# If TINYOBJ_PATH not specified in .env.cmake, try fetching from git repo
-if (NOT TINYOBJ_PATH)
-  message(STATUS "TINYOBJ_PATH not specified in .env.cmake, using external/tinyobjloader")
-  set(TINYOBJ_PATH external/tinyobjloader)
-endif()
-
 file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.c*)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -150,12 +148,14 @@ if (WIN32)
     ${OpenGL_LIBRARY}
     ${GLAD_LIBRARIES}
     ${GLAD_INCLUDE_PATH}
+    ${IMGUI_LIBRARIES}
     )
 
   target_link_directories(${PROJECT_NAME} PUBLIC
     ${GLFW_LIB}
     ${STB_LIBRARIES}
     ${GLAD_LIBRARIES}
+    ${IMGUI_LIBRARIES}
   )
 
   target_link_libraries(${PROJECT_NAME} glfw3 ${ASSIMP_LIB} ${OpenGL_LIBRARY})
@@ -168,6 +168,7 @@ elseif (UNIX)
       ${STB_INCLUDE_PATH}
       ${GLAD_LIBRARIES}
       ${GLAD_INCLUDE_PATH}
+      ${IMGUI_LIBRARIES}
     )
     target_link_libraries(${PROJECT_NAME} glfw  ${ASSIMP_LIB} ${OpenGL_LIBRARY})
 endif()
