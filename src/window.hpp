@@ -26,7 +26,7 @@ public:
     bool GLFWInit();
     bool GLADInit();
     bool windowInit();
-    void render(GLRenderer program);
+    void render(GLRenderer * program);
     void clean();
 
 
