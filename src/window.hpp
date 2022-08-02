@@ -1,4 +1,7 @@
 #pragma once
+#define __WINDOW_HPP__
+#ifdef __WINDOW_HPP__
+
 
 #include <glad/glad.h> 
 #include <GLFW/glfw3.h>
@@ -6,6 +9,7 @@
 #include <memory>
 
 #include "GLRenderer.hpp"
+#include "Interface.hpp"
 
 class Window
 {
@@ -25,11 +29,13 @@ public:
     // Renderer Functions
     bool GLFWInit();
     bool GLADInit();
-    bool windowInit();
-    void render(GLRenderer * program);
+    bool windowInit(Interface *interface);
+    void render(GLRenderer *program, Interface *interface);
     void clean();
 
 
 private:
     std::unique_ptr<GLFWwindow, glfwDeleter> window;
 };
+
+#endif // __WINDOW_HPP__

@@ -1,13 +1,14 @@
-#include "window.hpp"
-#include "GLRenderer.hpp"
-
 #include <iostream>
 
+#include "window.hpp"
+#include "GLRenderer.hpp"
+#include "Interface.hpp"
 
 int main(int argc, const char** argv) 
 {
     Window window;
     GLRenderer glRenderrer;
+    Interface interface;
 
     if(!window.GLFWInit())
     {
@@ -17,7 +18,8 @@ int main(int argc, const char** argv)
     }
 
 
-    if(!window.windowInit())
+    
+    if(!window.windowInit(&interface))
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
         return EXIT_FAILURE;
@@ -36,8 +38,9 @@ int main(int argc, const char** argv)
         return EXIT_FAILURE;
     }
 
-    window.render(&glRenderrer);
+    window.render(&glRenderrer, &interface);
     
+    interface.clean();
     glRenderrer.clean();
     window.clean();
     

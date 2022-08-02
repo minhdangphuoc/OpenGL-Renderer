@@ -50,6 +50,7 @@ class GLRenderer
                 // glDeleteProgram(shader->ID);
             }
         };
+    float deg, x, y, z, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f;
     private:
     std::string vertexPath;
     std::string fragPath;
