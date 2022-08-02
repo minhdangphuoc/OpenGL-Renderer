@@ -63,7 +63,14 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         glfwPollEvents();    
         
         interface->start();
-        interface->beginWindow("Debug");
+
+        interface->beginWindow("Translate");
+        interface->CreateSlider("RotX", renderer->x, -1.0f, 1.0f);
+        interface->CreateSlider("RotY", renderer->y, -1.0f, 1.0f);
+        interface->CreateSlider("RotZ", renderer->z, -1.0f, 1.0f);
+        interface->endWindow();
+
+        interface->beginWindow("Rotate");
         interface->CreateSlider("Deg", renderer->deg, .0f, 360.0f);
         interface->CreateSlider("RotX", renderer->rotX, .0f, 10.0f);
         interface->CreateSlider("RotY", renderer->rotY, .0f, 10.0f);

@@ -143,7 +143,7 @@ void GLRenderer::draw()
     glm::mat4 transform;
 
     transform = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
-    
+    transform = glm::translate(transform, glm::vec3(x, y, z));
     transform = glm::rotate(transform, glm::radians(deg), glm::vec3(rotX, rotY, rotZ));
     unsigned int transformLoc = glGetUniformLocation(ourShader->ID, "transform");
     
