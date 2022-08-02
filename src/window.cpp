@@ -65,9 +65,9 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->start();
 
         interface->beginWindow("Translate");
-        interface->CreateSlider("RotX", renderer->x, -1.0f, 1.0f);
-        interface->CreateSlider("RotY", renderer->y, -1.0f, 1.0f);
-        interface->CreateSlider("RotZ", renderer->z, -1.0f, 1.0f);
+        interface->CreateSlider("X", renderer->x, -1.0f, 1.0f);
+        interface->CreateSlider("Y", renderer->y, -1.0f, 1.0f);
+        interface->CreateSlider("Z", renderer->z, -1.0f, 1.0f);
         interface->endWindow();
 
         interface->beginWindow("Rotate");

@@ -24,4 +24,4 @@
 
 ### imGUI
 
-![imgui](screenshots/imgui.png)
+![imgui](screenshots/imgui.gif)
