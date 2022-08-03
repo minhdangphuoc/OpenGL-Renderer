@@ -4,6 +4,7 @@
 
 #include "Object.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
 
 #include <vector>
 #include <cstdlib>
@@ -12,11 +13,6 @@
 #include <array>
 #include <memory>
 
-
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 class GLRenderer
 {
@@ -47,20 +43,21 @@ class GLRenderer
             void operator()(Shader *shader)
             {
                 std::cout << "Destroying Shader" << std::endl;
-                // glDeleteProgram(shader->ID);
+                glDeleteProgram(shader->ID);
             }
         };
-    float deg = 0.f, x = 0.f, y = 0.f, z = 0.f, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f;
+    float deg = 0.f, x = 0.f, y = 0.f, z = -3.0f, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f;
     private:
     std::string vertexPath;
     std::string fragPath;
     
-    uint32_t VAO, VBO, EBO;
+    uint32_t VAO, VBO, EBO, texture;
 
 
     std::vector<Object> Objects;
     std::string errorInfo;
     std::unique_ptr<Shader, shaderDeleter> ourShader;
-    uint32_t texture;
+    std::vector<std::unique_ptr<Texture>> textures;
+
 };
 #endif // GL_RENDERER_HPP

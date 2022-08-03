@@ -9,6 +9,9 @@
 #include <sstream>
 #include <iostream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 static std::string readFile(const std::string& path) {
 	std::string sourceCode;
