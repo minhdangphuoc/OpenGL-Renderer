@@ -9,7 +9,7 @@
 - [0.2.1] Shader header
 - [0.2.2] Texture Loading and Transform
 - [0.2.3] ImGUI
-- [0.2.3] 
+- [0.2.4] Perspective projection
 
 ## Screenshots
 
