@@ -139,23 +139,12 @@ if (WIN32)
 
   target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/src
-    ${TINYOBJ_PATH}
-    ${GLFW_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/deps
     ${GLM_PATH}
-    ${STB_INCLUDE_PATH}
-    ${GLAD_LIBRARIES}
-    ${ASSIMP_LIB}
-    ${OpenGL_LIBRARY}
-    ${GLAD_LIBRARIES}
-    ${GLAD_INCLUDE_PATH}
-    ${IMGUI_LIBRARIES}
     )
 
   target_link_directories(${PROJECT_NAME} PUBLIC
     ${GLFW_LIB}
-    ${STB_LIBRARIES}
-    ${GLAD_LIBRARIES}
-    ${IMGUI_LIBRARIES}
   )
 
   target_link_libraries(${PROJECT_NAME} glfw3 ${ASSIMP_LIB} ${OpenGL_LIBRARY})
@@ -163,11 +152,8 @@ elseif (UNIX)
     message(STATUS "CREATING BUILD FOR UNIX")
     target_include_directories(${PROJECT_NAME} PUBLIC
       ${PROJECT_SOURCE_DIR}/src
-      ${TINYOBJ_PATH}
+      ${PROJECT_SOURCE_DIR}/deps
       ${GLM_PATH}
-      ${STB_INCLUDE_PATH}
-      ${GLAD_LIBRARIES}
-      ${GLAD_INCLUDE_PATH}
       ${IMGUI_LIBRARIES}
     )
     target_link_libraries(${PROJECT_NAME} glfw  ${ASSIMP_LIB} ${OpenGL_LIBRARY})
