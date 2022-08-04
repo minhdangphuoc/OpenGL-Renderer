@@ -6,10 +6,20 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }  
 
-void processInput(GLFWwindow *window)
+void Window::processInput()
 {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+    if(glfwGetKey(window.get(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window.get(), true);
+
+    const float cameraSpeed = 0.05f; // adjust accordingly
+    if (glfwGetKey(window.get(), GLFW_KEY_W) == GLFW_PRESS)
+        renderer->cameraPos += cameraSpeed * renderer->cameraFront;
+    if (glfwGetKey(window.get(), GLFW_KEY_S) == GLFW_PRESS)
+        renderer->cameraPos -= cameraSpeed * renderer->cameraFront;
+    if (glfwGetKey(window.get(), GLFW_KEY_A) == GLFW_PRESS)
+        renderer->cameraPos -= glm::normalize(glm::cross(renderer->cameraFront, renderer->cameraUp)) * cameraSpeed;
+    if (glfwGetKey(window.get(), GLFW_KEY_D) == GLFW_PRESS)
+        renderer->cameraPos += glm::normalize(glm::cross(renderer->cameraFront, renderer->cameraUp)) * cameraSpeed;
 }
 
 
@@ -57,10 +67,10 @@ bool Window::GLADInit()
 
 void Window::render(GLRenderer *renderer, Interface *interface)
 {
+    this -> renderer.reset(renderer);
     while(!glfwWindowShouldClose(window.get()))
     {
-        processInput(window.get());
-        glfwPollEvents();    
+        processInput();
         
         interface->start();
 
@@ -80,16 +90,17 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->render();
 
         renderer->draw();
-        renderer->motion();
         
         interface->renderDrawData();
 
         glfwSwapBuffers(window.get());
+        glfwPollEvents();
+        glfwPollEvents();    
     }
 }
 
 void Window::clean()
 {
-    glfwDestroyWindow(window.get());
+    // glfwDestroyWindow(window.get());
     glfwTerminate();
 }

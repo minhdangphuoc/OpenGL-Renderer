@@ -24,7 +24,7 @@ class GLRenderer
         void loadObjects();
         void loadShaders();
         void loadTextures();
-        void motion();
+        void setProjection();
         void clean();
 
         void draw();
@@ -46,7 +46,17 @@ class GLRenderer
                 glDeleteProgram(shader->ID);
             }
         };
-    float deg = 0.f, x = 0.f, y = 0.f, z = -3.0f, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f;
+    
+    float deg = 0.f, x = 0.f, y = 0.f, z = 0.f, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f;
+    
+    glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
+    glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+        
+    // timing
+    float deltaTime = 0.0f;
+    float lastFrame = 0.0f;
+    
     private:
     std::string vertexPath;
     std::string fragPath;
@@ -57,7 +67,10 @@ class GLRenderer
     std::vector<Object> Objects;
     std::string errorInfo;
     std::unique_ptr<Shader, shaderDeleter> ourShader;
+
     std::vector<std::unique_ptr<Texture>> textures;
+
+    
 
 };
 #endif // GL_RENDERER_HPP

@@ -19,6 +19,7 @@ bool GLRenderer::init()
         loadShaders();
         loadTextures();
         loadObjects();
+        setProjection();
     }
     catch(const std::runtime_error& e)
     {
@@ -151,9 +152,10 @@ void GLRenderer::loadTextures()
     }
 }
 
-void GLRenderer::motion()
+void GLRenderer::setProjection()
 {
-    
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.f / 600.f, 0.1f, 100.0f);
+    ourShader->setMat4("projection", projection);
 }
 
 void GLRenderer::draw() 
@@ -169,28 +171,19 @@ void GLRenderer::draw()
     
     ourShader->use();
     
-    // Set model, view, and proj to default
-    glm::mat4 model         = glm::mat4(1.0f); 
-    glm::mat4 view          = glm::mat4(1.0f);
-    glm::mat4 projection    = glm::mat4(1.0f);
+    // camera/view transformation
+    glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    ourShader->setMat4("view", view);
 
-    // create transformations
-    view  = glm::translate(view, glm::vec3(x, y, z));
-    model = glm::rotate(model, glm::radians(deg), glm::vec3(rotX, rotY, rotZ));
-    projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
-    
-    // retrieve the matrix uniform locations
-    uint32_t modelLoc = glGetUniformLocation(ourShader->ID, "model");
-    uint32_t viewLoc  = glGetUniformLocation(ourShader->ID, "view");
-
-    // pass them to the shaders (3 different ways)
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-    glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
-   
-    // note: currently we set the projection matrix each frame, but since the projection matrix rarely changes it's often best practice to set it outside the main loop only once.
-    ourShader->setMat4("projection", projection);
-    
     glBindVertexArray(VAO);
+    
+    // Render Box
+    glm::mat4 model = glm::mat4(1.0f); 
+    model = glm::translate(model, glm::vec3(x, y, z));
+    model = glm::rotate(model, glm::radians(deg), glm::vec3(rotX, rotY, rotZ));
+    ourShader->setMat4("model", model);
+    
+    
     glDrawArrays(GL_TRIANGLES, 0, 36);
     // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

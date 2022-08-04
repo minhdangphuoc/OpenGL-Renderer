@@ -2,10 +2,10 @@
 #define __INTERFACE_HPP__
 #ifdef __INTERFACE_HPP__
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_spectrum.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_spectrum.h"
 #include <string>
 
 #include <glad/glad.h> 

@@ -41,7 +41,6 @@ int main(int argc, const char** argv)
     window.render(&glRenderrer, &interface);
     
     interface.clean();
-    glRenderrer.clean();
     window.clean();
     
     return 0;
