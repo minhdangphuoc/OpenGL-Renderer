@@ -1,6 +1,6 @@
 #pragma once
+#ifndef __TEXTURE_HPP__
 #define __TEXTURE_HPP__
-#ifdef __TEXTURE_HPP__
 
 #include <iostream>
 #include <cstdint> 

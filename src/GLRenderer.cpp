@@ -2,6 +2,7 @@
 
 #include "GLRenderer.hpp"
 #include "Utilities.h"
+#include "Controller.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -11,7 +12,6 @@
 #include <array>
 
 
-
 bool GLRenderer::init()
 {
     try
@@ -19,7 +19,6 @@ bool GLRenderer::init()
         loadShaders();
         loadTextures();
         loadObjects();
-        setProjection();
     }
     catch(const std::runtime_error& e)
     {
@@ -154,9 +153,15 @@ void GLRenderer::loadTextures()
 
 void GLRenderer::setProjection()
 {
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.f / 600.f, 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)800.f/ (float)600.f  , 0.1f, 100.0f);
     ourShader->setMat4("projection", projection);
 }
+
+void GLRenderer::setCamera(Camera * newCamera)
+{
+    camera.reset(newCamera);
+}
+
 
 void GLRenderer::draw() 
 {
@@ -171,9 +176,12 @@ void GLRenderer::draw()
     
     ourShader->use();
     
+    setProjection();
+
     // camera/view transformation
-    glm::mat4 view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+    glm::mat4 view = camera->GetViewMatrix();
     ourShader->setMat4("view", view);
+
 
     glBindVertexArray(VAO);
     

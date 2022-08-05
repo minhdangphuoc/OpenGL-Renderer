@@ -1,6 +1,6 @@
 #pragma once
+#ifndef __INTERFACE_HPP__
 #define __INTERFACE_HPP__
-#ifdef __INTERFACE_HPP__
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"

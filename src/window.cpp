@@ -1,25 +1,17 @@
 #include "window.hpp"
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}  
-
 void Window::processInput()
 {
     if(glfwGetKey(window.get(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window.get(), true);
 
-    const float cameraSpeed = 0.05f; // adjust accordingly
     if (glfwGetKey(window.get(), GLFW_KEY_W) == GLFW_PRESS)
-        renderer->cameraPos += cameraSpeed * renderer->cameraFront;
+        camera->ProcessKeyboard(FORWARD, renderer->deltaTime);
     if (glfwGetKey(window.get(), GLFW_KEY_S) == GLFW_PRESS)
-        renderer->cameraPos -= cameraSpeed * renderer->cameraFront;
+        camera->ProcessKeyboard(BACKWARD, renderer->deltaTime);
     if (glfwGetKey(window.get(), GLFW_KEY_A) == GLFW_PRESS)
-        renderer->cameraPos -= glm::normalize(glm::cross(renderer->cameraFront, renderer->cameraUp)) * cameraSpeed;
+        camera->ProcessKeyboard(LEFT, renderer->deltaTime);
     if (glfwGetKey(window.get(), GLFW_KEY_D) == GLFW_PRESS)
-        renderer->cameraPos += glm::normalize(glm::cross(renderer->cameraFront, renderer->cameraUp)) * cameraSpeed;
+        camera->ProcessKeyboard(RIGHT, renderer->deltaTime);
 }
 
 
@@ -41,17 +33,28 @@ bool Window::GLFWInit()
 }
 
 bool Window::windowInit(Interface *interface)
-{
+{   
     window.reset(glfwCreateWindow(800, 600, "OpenGL", NULL, NULL));
 
     if (!window)
     {
         return false;
     }
-    
+
     glfwMakeContextCurrent(window.get());
-    glfwSetFramebufferSizeCallback(window.get(), framebuffer_size_callback);  
+    glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);  
     interface->init("#version 330", window.get());
+    return true;
+}
+
+bool Window::controlInit()
+{
+    auto pCamera = camera.get();
+    HWInput.reset(new Controller);
+    HWInput->setCamera(pCamera);
+    glfwSetCursorPosCallback(window.get(), HWInput->mouse_callback);
+    glfwSetScrollCallback(window.get(), HWInput->scroll_callback);
+    glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
     return true;
 }
 
@@ -64,12 +67,22 @@ bool Window::GLADInit()
     return true;
 }
 
+void Window::setCamera(Camera * newCamera)
+{
+    camera.reset(newCamera);
+}
 
 void Window::render(GLRenderer *renderer, Interface *interface)
 {
     this -> renderer.reset(renderer);
     while(!glfwWindowShouldClose(window.get()))
     {
+        // per-frame time logic
+        // --------------------
+        float currentFrame = static_cast<float>(glfwGetTime());
+        renderer->deltaTime = currentFrame - renderer->lastFrame;
+        renderer->lastFrame = currentFrame;
+
         processInput();
         
         interface->start();

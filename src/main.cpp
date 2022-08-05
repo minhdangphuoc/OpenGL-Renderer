@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "window.hpp"
-#include "GLRenderer.hpp"
 #include "Interface.hpp"
 
 int main(int argc, const char** argv) 
@@ -9,7 +8,11 @@ int main(int argc, const char** argv)
     Window window;
     GLRenderer glRenderrer;
     Interface interface;
+    Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
+    window.setCamera(&camera);
+    glRenderrer.setCamera(&camera);
+    
     if(!window.GLFWInit())
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
@@ -17,8 +20,6 @@ int main(int argc, const char** argv)
         return EXIT_FAILURE;
     }
 
-
-    
     if(!window.windowInit(&interface))
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
@@ -28,6 +29,13 @@ int main(int argc, const char** argv)
     if(!window.GLADInit())
     {
         std::cerr << "Failed to initialize GLAD" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+
+    if(!window.controlInit())
+    {
+        std::cerr << "Failed to initialize controller" << std::endl;
         return EXIT_FAILURE;
     }
 

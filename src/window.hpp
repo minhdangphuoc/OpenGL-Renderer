@@ -1,6 +1,6 @@
 #pragma once
+#ifndef __WINDOW_HPP__
 #define __WINDOW_HPP__
-#ifdef __WINDOW_HPP__
 
 
 #include <glad/glad.h> 
@@ -8,26 +8,32 @@
 #include <iostream>
 #include <memory>
 
-#include "GLRenderer.hpp"
+
 #include "Interface.hpp"
+#include "Controller.hpp"
+#include "GLRenderer.hpp"
 
 class Window
 {
 public:
     Window() = default;
-    ~Window() = default;
+    ~Window() 
+    {
+        camera.reset();
+    }
 
     
-
     // Renderer Functions
     
     bool GLFWInit();
     bool GLADInit();
     bool windowInit(Interface *interface);
+    bool controlInit();
     void render(GLRenderer *program, Interface *interface);
     void clean();
 
-
+    // Setters
+    void setCamera(Camera * newCamera);
 private:
     void processInput();
     struct glfwDeleter
@@ -49,6 +55,9 @@ private:
     };
     std::unique_ptr<GLFWwindow, glfwDeleter> window;
     std::unique_ptr<GLRenderer, rendererDeleter> renderer;
+    std::unique_ptr<Controller> HWInput;
+    std::unique_ptr<Camera> camera;
+    
 };
 
 #endif // __WINDOW_HPP__
