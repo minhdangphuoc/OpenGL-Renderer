@@ -12,6 +12,28 @@ void Window::processInput()
         camera->ProcessKeyboard(LEFT, renderer->deltaTime);
     if (glfwGetKey(window.get(), GLFW_KEY_D) == GLFW_PRESS)
         camera->ProcessKeyboard(RIGHT, renderer->deltaTime);
+    
+    if (glfwGetKey(window.get(), GLFW_KEY_LEFT_ALT) == GLFW_PRESS) 
+    {
+
+        if (isPressAlt == false) isPressAlt = true;
+    } else if (isPressAlt == true)
+    {
+        isPressAlt = false;
+    }
+
+
+    if(isPressAlt){
+
+        glfwSetCursorPosCallback(window.get(), HWInput->mouse_callback);
+        glfwSetScrollCallback(window.get(), HWInput->scroll_callback);
+        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);   
+    }
+    else {
+        glfwSetCursorPosCallback(window.get(), nullptr);
+        glfwSetScrollCallback(window.get(), nullptr);
+        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
 }
 
 
@@ -41,6 +63,8 @@ bool Window::windowInit(Interface *interface)
         return false;
     }
 
+    
+
     glfwMakeContextCurrent(window.get());
     glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);  
     interface->init("#version 330", window.get());
@@ -49,12 +73,9 @@ bool Window::windowInit(Interface *interface)
 
 bool Window::controlInit()
 {
-    auto pCamera = camera.get();
     HWInput.reset(new Controller);
-    HWInput->setCamera(pCamera);
-    glfwSetCursorPosCallback(window.get(), HWInput->mouse_callback);
-    glfwSetScrollCallback(window.get(), HWInput->scroll_callback);
-    glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
+    HWInput->setCamera(camera.get());
+      
     return true;
 }
 
@@ -72,17 +93,34 @@ void Window::setCamera(Camera * newCamera)
     camera.reset(newCamera);
 }
 
+uint32_t Window::framePerSecond(){
+    uint32_t fps;
+    // per-frame time logic
+    // --------------------
+    double currentFrame = static_cast<float>(glfwGetTime());
+    renderer->deltaTime = currentFrame - renderer->lastFrame;
+    renderer->lastFrame = currentFrame;
+
+    
+    frameCount++;
+
+    if (currentFrame - renderer->previousFrame >= 1.f)
+    {
+        fps = frameCount;
+        frameCount = 0;
+        renderer->previousFrame = currentFrame;
+        return fps;   
+    }
+    return 0;
+}
+
 void Window::render(GLRenderer *renderer, Interface *interface)
 {
     this -> renderer.reset(renderer);
+    renderer->previousFrame = glfwGetTime();
     while(!glfwWindowShouldClose(window.get()))
     {
-        // per-frame time logic
-        // --------------------
-        float currentFrame = static_cast<float>(glfwGetTime());
-        renderer->deltaTime = currentFrame - renderer->lastFrame;
-        renderer->lastFrame = currentFrame;
-
+        int fps = framePerSecond();
         processInput();
         
         interface->start();
@@ -100,15 +138,18 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->CreateSlider("RotZ", renderer->rotZ, .0f, 10.0f);
         interface->endWindow();
 
+        interface->beginWindow("Frame");
+        interface->createText(std::to_string(fps));
+        interface->endWindow();
+
         interface->render();
 
         renderer->draw();
         
         interface->renderDrawData();
-
+        
         glfwSwapBuffers(window.get());
-        glfwPollEvents();
-        glfwPollEvents();    
+        glfwPollEvents();   
     }
 }
 

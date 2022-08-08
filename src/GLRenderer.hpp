@@ -52,8 +52,9 @@ class GLRenderer
         glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
             
         // timing
-        float deltaTime = 0.0f;
-        float lastFrame = 0.0f;
+        double deltaTime = 0.0f;
+        double lastFrame = 0.0f;
+        double previousFrame = 0.0f;
         
     
     private:

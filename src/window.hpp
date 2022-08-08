@@ -35,6 +35,8 @@ public:
     // Setters
     void setCamera(Camera * newCamera);
 private:
+    uint32_t frameCount = 0;
+    uint32_t framePerSecond();
     void processInput();
     struct glfwDeleter
     {
@@ -58,6 +60,7 @@ private:
     std::unique_ptr<Controller> HWInput;
     std::unique_ptr<Camera> camera;
     
+    bool isPressAlt = false;
 };
 
 #endif // __WINDOW_HPP__
