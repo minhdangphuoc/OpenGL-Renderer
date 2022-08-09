@@ -37,8 +37,12 @@
 
 ![Texture and Transform 2](screenshots/texture_trans_demo2.gif)
 
-### imGUI
+### ImGUI
 
 ![imgui](screenshots/imgui.gif)
 
 ![imgui](screenshots/3DImgui.gif)
+
+### Movements
+
+![Movements](screenshots/HWInput.gif)

@@ -46,8 +46,11 @@ void Window::processInput(GLRenderer *renderer)
         HWInput->lastY = ypos;
 
         renderer->camera->ProcessMouseMovement(xoffset, yoffset);
+
         renderer->camera->ProcessMouseScroll(io.MouseWheel);
-        std::cerr<< std::to_string(io.MouseWheel) << std::endl;
+        
+        std::cerr<< std::to_string(glfwGetTime()) << " " << std::to_string(io.MouseWheel) << std::endl;
+
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);   
     }
 }
