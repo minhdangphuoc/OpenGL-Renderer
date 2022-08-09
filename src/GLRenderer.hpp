@@ -50,7 +50,6 @@ class GLRenderer
         // timing
         double deltaTime = 0.0f;
         double lastFrame = 0.0f;
-        double previousFrame = 0.0f;
         
     std::unique_ptr<Camera> camera;
     

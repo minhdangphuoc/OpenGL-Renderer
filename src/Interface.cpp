@@ -6,7 +6,6 @@ void Interface::init(const std::string & glsl_version, GLFWwindow * window)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    
     // Setup Dear ImGui style
     ImGui::Spectrum::StyleColorsSpectrum();
     
@@ -15,6 +14,7 @@ void Interface::init(const std::string & glsl_version, GLFWwindow * window)
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
+    io.ConfigInputTrickleEventQueue == false;
     ImGui_ImplOpenGL3_Init(glsl_version.c_str());
 }
 

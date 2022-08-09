@@ -33,7 +33,6 @@ public:
     void setCamera(Camera * newCamera);
 private:
     uint32_t frameCount = 0;
-    uint32_t framePerSecond(GLRenderer * renderer);
     void processInput(GLRenderer * renderer);
     struct glfwDeleter
     {

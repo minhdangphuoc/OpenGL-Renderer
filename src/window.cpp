@@ -1,5 +1,4 @@
 #include "window.hpp"
-
 void Window::processInput(GLRenderer *renderer)
 {
     ImGuiIO& io = ImGui::GetIO();
@@ -13,11 +12,12 @@ void Window::processInput(GLRenderer *renderer)
     } else if (isPressAlt == true)
     {
         isPressAlt = false;
+        HWInput->firstMouse = true;
+        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
 
     if(isPressAlt){
-
         if (io.KeysDown[ImGuiKey_W])
             renderer->camera->ProcessKeyboard(FORWARD, renderer->deltaTime);
         if (io.KeysDown[ImGuiKey_S])
@@ -46,19 +46,9 @@ void Window::processInput(GLRenderer *renderer)
         HWInput->lastY = ypos;
 
         renderer->camera->ProcessMouseMovement(xoffset, yoffset);
-
         renderer->camera->ProcessMouseScroll(io.MouseWheel);
+        std::cerr<< std::to_string(io.MouseWheel) << std::endl;
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);   
-    }
-    else {
-        // glfwSetCursorPosCallback(window.get(), nullptr);
-        // glfwSetScrollCallback(window.get(), nullptr);
-        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        renderer->deltaTime = 0.0f;
-        renderer->lastFrame = 0.0f;
-        HWInput->firstMouse = true;
-        HWInput->lastX = 800.f/2.f;
-        HWInput->lastY = 600.f/2.f;
     }
 }
 
@@ -93,8 +83,6 @@ bool Window::windowInit(Interface *interface)
     glfwMakeContextCurrent(window.get());
     interface->init("#version 330", window.get());
     glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);  
-    glfwSetCursorPosCallback(window.get(), ImGui_ImplGlfw_CursorPosCallback);
-    glfwSetScrollCallback(window.get(), ImGui_ImplGlfw_ScrollCallback);
     
     return true;
 }
@@ -114,19 +102,17 @@ bool Window::GLADInit()
     return true;
 }
 
-uint32_t Window::framePerSecond(GLRenderer *renderer){
-
-}
-
 void Window::render(GLRenderer *renderer, Interface *interface)
 {
     while(!glfwWindowShouldClose(window.get()))
     {
-        glfwPollEvents();   
-        processInput(renderer);
         double currentFrame = static_cast<float>(glfwGetTime());
         renderer->deltaTime = currentFrame - renderer->lastFrame;
         renderer->lastFrame = currentFrame;
+
+        processInput(renderer);
+        glfwPollEvents();   
+        
         
         interface->start();
 

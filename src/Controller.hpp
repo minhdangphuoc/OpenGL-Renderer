@@ -10,8 +10,6 @@
 #include "GLRenderer.hpp"
 
 
-
-
 class Controller
 {
 public:
@@ -19,9 +17,7 @@ public:
     ~Controller() = default;
 
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-
-    
-    bool firstMouse;
+    bool firstMouse = true;
     float lastX;
     float lastY;
 

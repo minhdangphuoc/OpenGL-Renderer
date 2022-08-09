@@ -178,7 +178,7 @@ void GLRenderer::draw()
     
     setProjection();
 
-    // camera/view transformation
+    // camera/view transformat  ion
     glm::mat4 view = camera->GetViewMatrix();
     ourShader->setMat4("view", view);
 

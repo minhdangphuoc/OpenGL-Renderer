@@ -8,9 +8,8 @@ int main(int argc, const char** argv)
     Window window;
     GLRenderer glRenderrer;
     Interface interface;
-    Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-    glRenderrer.setCamera(&camera);
+    glRenderrer.setCamera(new Camera(glm::vec3(0.0f, 0.0f, 3.0f)));
     
     if(!window.GLFWInit())
     {
