@@ -1,19 +1,12 @@
 #include "window.hpp"
-void Window::processInput()
-{
-    if(glfwGetKey(window.get(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window.get(), true);
 
-    if (glfwGetKey(window.get(), GLFW_KEY_W) == GLFW_PRESS)
-        camera->ProcessKeyboard(FORWARD, renderer->deltaTime);
-    if (glfwGetKey(window.get(), GLFW_KEY_S) == GLFW_PRESS)
-        camera->ProcessKeyboard(BACKWARD, renderer->deltaTime);
-    if (glfwGetKey(window.get(), GLFW_KEY_A) == GLFW_PRESS)
-        camera->ProcessKeyboard(LEFT, renderer->deltaTime);
-    if (glfwGetKey(window.get(), GLFW_KEY_D) == GLFW_PRESS)
-        camera->ProcessKeyboard(RIGHT, renderer->deltaTime);
+void Window::processInput(GLRenderer *renderer)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    if(io.KeysDown[ImGuiKey_Escape])
+        glfwSetWindowShouldClose(window.get(), true);
     
-    if (glfwGetKey(window.get(), GLFW_KEY_LEFT_ALT) == GLFW_PRESS) 
+    if (io.KeysDown[ImGuiKey_LeftAlt]) 
     {
 
         if (isPressAlt == false) isPressAlt = true;
@@ -25,14 +18,47 @@ void Window::processInput()
 
     if(isPressAlt){
 
-        glfwSetCursorPosCallback(window.get(), HWInput->mouse_callback);
-        glfwSetScrollCallback(window.get(), HWInput->scroll_callback);
+        if (io.KeysDown[ImGuiKey_W])
+            renderer->camera->ProcessKeyboard(FORWARD, renderer->deltaTime);
+        if (io.KeysDown[ImGuiKey_S])
+            renderer->camera->ProcessKeyboard(BACKWARD, renderer->deltaTime);
+        if (io.KeysDown[ImGuiKey_A])
+            renderer->camera->ProcessKeyboard(LEFT, renderer->deltaTime);
+        if (io.KeysDown[ImGuiKey_D])
+            renderer->camera->ProcessKeyboard(RIGHT, renderer->deltaTime);
+
+        
+        // Mouse pos
+        float xpos = static_cast<float>(io.MousePos.x);
+        float ypos = static_cast<float>(io.MousePos.y);
+
+        if (HWInput->firstMouse)
+        {
+            HWInput->lastX = xpos;
+            HWInput->lastY = ypos;
+            HWInput->firstMouse = false;
+        }
+
+        float xoffset = xpos - HWInput->lastX;
+        float yoffset = HWInput->lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+        HWInput->lastX = xpos;
+        HWInput->lastY = ypos;
+
+        renderer->camera->ProcessMouseMovement(xoffset, yoffset);
+
+        renderer->camera->ProcessMouseScroll(io.MouseWheel);
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);   
     }
     else {
-        glfwSetCursorPosCallback(window.get(), nullptr);
-        glfwSetScrollCallback(window.get(), nullptr);
+        // glfwSetCursorPosCallback(window.get(), nullptr);
+        // glfwSetScrollCallback(window.get(), nullptr);
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        renderer->deltaTime = 0.0f;
+        renderer->lastFrame = 0.0f;
+        HWInput->firstMouse = true;
+        HWInput->lastX = 800.f/2.f;
+        HWInput->lastY = 600.f/2.f;
     }
 }
 
@@ -63,19 +89,19 @@ bool Window::windowInit(Interface *interface)
         return false;
     }
 
-    
 
     glfwMakeContextCurrent(window.get());
-    glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);  
     interface->init("#version 330", window.get());
+    glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);  
+    glfwSetCursorPosCallback(window.get(), ImGui_ImplGlfw_CursorPosCallback);
+    glfwSetScrollCallback(window.get(), ImGui_ImplGlfw_ScrollCallback);
+    
     return true;
 }
 
 bool Window::controlInit()
 {
     HWInput.reset(new Controller);
-    HWInput->setCamera(camera.get());
-      
     return true;
 }
 
@@ -88,40 +114,19 @@ bool Window::GLADInit()
     return true;
 }
 
-void Window::setCamera(Camera * newCamera)
-{
-    camera.reset(newCamera);
-}
+uint32_t Window::framePerSecond(GLRenderer *renderer){
 
-uint32_t Window::framePerSecond(){
-    uint32_t fps;
-    // per-frame time logic
-    // --------------------
-    double currentFrame = static_cast<float>(glfwGetTime());
-    renderer->deltaTime = currentFrame - renderer->lastFrame;
-    renderer->lastFrame = currentFrame;
-
-    
-    frameCount++;
-
-    if (currentFrame - renderer->previousFrame >= 1.f)
-    {
-        fps = frameCount;
-        frameCount = 0;
-        renderer->previousFrame = currentFrame;
-        return fps;   
-    }
-    return 0;
 }
 
 void Window::render(GLRenderer *renderer, Interface *interface)
 {
-    this -> renderer.reset(renderer);
-    renderer->previousFrame = glfwGetTime();
     while(!glfwWindowShouldClose(window.get()))
     {
-        int fps = framePerSecond();
-        processInput();
+        glfwPollEvents();   
+        processInput(renderer);
+        double currentFrame = static_cast<float>(glfwGetTime());
+        renderer->deltaTime = currentFrame - renderer->lastFrame;
+        renderer->lastFrame = currentFrame;
         
         interface->start();
 
@@ -139,7 +144,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->endWindow();
 
         interface->beginWindow("Frame");
-        interface->createText(std::to_string(fps));
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
         interface->endWindow();
 
         interface->render();
@@ -149,7 +154,6 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->renderDrawData();
         
         glfwSwapBuffers(window.get());
-        glfwPollEvents();   
     }
 }
 

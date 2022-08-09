@@ -19,10 +19,6 @@ class GLRenderer
 {
     public:
         GLRenderer() = default;
-        ~GLRenderer() 
-        {
-            camera.reset();
-        }
 
         bool init();
         void loadObjects();
@@ -56,6 +52,7 @@ class GLRenderer
         double lastFrame = 0.0f;
         double previousFrame = 0.0f;
         
+    std::unique_ptr<Camera> camera;
     
     private:
         struct shaderDeleter
@@ -64,6 +61,7 @@ class GLRenderer
             {
                 std::cout << "Destroying Shader" << std::endl;
                 glDeleteProgram(shader->ID);
+                std::cout << "Destroyed Shader" << std::endl;
             }
         };
     std::string vertexPath;
@@ -77,6 +75,5 @@ class GLRenderer
     std::unique_ptr<Shader, shaderDeleter> ourShader;
     std::vector<std::unique_ptr<Texture>> textures;
 
-    std::unique_ptr<Camera> camera;
 };
 #endif // GL_RENDERER_HPP

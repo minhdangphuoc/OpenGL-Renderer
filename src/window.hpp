@@ -17,10 +17,7 @@ class Window
 {
 public:
     Window() = default;
-    ~Window() 
-    {
-        camera.reset();
-    }
+    ~Window() = default;
 
     
     // Renderer Functions
@@ -36,14 +33,15 @@ public:
     void setCamera(Camera * newCamera);
 private:
     uint32_t frameCount = 0;
-    uint32_t framePerSecond();
-    void processInput();
+    uint32_t framePerSecond(GLRenderer * renderer);
+    void processInput(GLRenderer * renderer);
     struct glfwDeleter
     {
         void operator()(GLFWwindow *window)
         {
             std::cout << "Destroying GLFW Window Context" << std::endl;
             glfwDestroyWindow(window);
+            std::cout << "Destroyed GLFW Window Context" << std::endl;
         }
     };
 
@@ -53,12 +51,12 @@ private:
         {
             std::cout << "Destroying renderer" << std::endl;
             renderer -> clean();
+            std::cout << "Destroyed renderer" << std::endl;
         }    
     };
     std::unique_ptr<GLFWwindow, glfwDeleter> window;
-    std::unique_ptr<GLRenderer, rendererDeleter> renderer;
+    // std::unique_ptr<GLRenderer, rendererDeleter> renderer;
     std::unique_ptr<Controller> HWInput;
-    std::unique_ptr<Camera> camera;
     
     bool isPressAlt = false;
 };

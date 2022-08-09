@@ -10,17 +10,20 @@
 #include "GLRenderer.hpp"
 
 
+
+
 class Controller
 {
 public:
     Controller() = default;
-    ~Controller();
+    ~Controller() = default;
 
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-    static void mouse_callback(GLFWwindow* window, double xPos, double yPos);
-    static void scroll_callback(GLFWwindow* window, double xOffset, double yOffset);
 
-    void setCamera(Camera * newCamera);
+    
+    bool firstMouse;
+    float lastX;
+    float lastY;
 
     private:
 };

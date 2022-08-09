@@ -10,13 +10,18 @@ int main(int argc, const char** argv)
     Interface interface;
     Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-    window.setCamera(&camera);
     glRenderrer.setCamera(&camera);
     
     if(!window.GLFWInit())
     {
         std::cerr << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
+        return EXIT_FAILURE;
+    }
+
+    if(!window.controlInit())
+    {
+        std::cerr << "Failed to initialize controller" << std::endl;
         return EXIT_FAILURE;
     }
 
@@ -33,11 +38,7 @@ int main(int argc, const char** argv)
     }
 
 
-    if(!window.controlInit())
-    {
-        std::cerr << "Failed to initialize controller" << std::endl;
-        return EXIT_FAILURE;
-    }
+
 
     glRenderrer.setShaderPaths("../shaders/shader.vert", "../shaders/shader.frag");
 

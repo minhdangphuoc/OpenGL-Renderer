@@ -2,6 +2,19 @@
 
 ## Idea
 - Modern C++ OpenGL Renderer
+
+# TODO
+
+- [ ] Windows and basic rendering - 90%
+- [ ] Lighting
+  - [ ] Color
+  - [ ] Basic lighting
+  - [ ] Material
+  - [ ] Lighting Maps
+  - [ ] Light casters
+  - [ ] Multiple lights
+- [ ] Model Loading
+    
 ## Version
 
 - [0.1.0] Hello Window
