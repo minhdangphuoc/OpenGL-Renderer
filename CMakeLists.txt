@@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 3.23.0)
 
 set(NAME MDEngineOGL)
 
+option(GLFW_USE_HYBRID_HPG "Force use of high-performance GPU on hybrid systems" ON)
+
 message(STATUS "using ${CMAKE_GENERATOR}")
 if (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
     if (NOT MINGW_PATH) 
