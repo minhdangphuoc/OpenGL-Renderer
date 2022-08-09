@@ -151,7 +151,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
 
 
             
-        interface->createPlotLine("FPS Linechart", time, fps, max_values);
+        interface->createPlotLine("fps", time, fps, max_values);
         interface->endWindow();
 
         interface->render();

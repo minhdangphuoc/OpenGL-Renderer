@@ -46,3 +46,7 @@
 ### Movements
 
 ![Movements](screenshots/HWInput.gif)
+
+### Implot
+
+![FPS Chart](screenshots/FPSLineChart.png)
