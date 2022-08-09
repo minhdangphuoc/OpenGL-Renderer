@@ -1,15 +1,58 @@
 #include "window.hpp"
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void Window::processInput(GLRenderer *renderer)
 {
-    glViewport(0, 0, width, height);
-}  
+    ImGuiIO& io = ImGui::GetIO();
+    if(io.KeysDown[ImGuiKey_Escape])
+        glfwSetWindowShouldClose(window.get(), true);
+    
+    if (io.KeysDown[ImGuiKey_LeftAlt]) 
+    {
 
-void processInput(GLFWwindow *window)
-{
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
+        if (isPressAlt == false) isPressAlt = true;
+    } else if (isPressAlt == true)
+    {
+        isPressAlt = false;
+        HWInput->firstMouse = true;
+        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+
+
+    if(isPressAlt){
+        if (io.KeysDown[ImGuiKey_W])
+            renderer->camera->ProcessKeyboard(FORWARD, renderer->deltaTime);
+        if (io.KeysDown[ImGuiKey_S])
+            renderer->camera->ProcessKeyboard(BACKWARD, renderer->deltaTime);
+        if (io.KeysDown[ImGuiKey_A])
+            renderer->camera->ProcessKeyboard(LEFT, renderer->deltaTime);
+        if (io.KeysDown[ImGuiKey_D])
+            renderer->camera->ProcessKeyboard(RIGHT, renderer->deltaTime);
+
+        
+        // Mouse pos
+        float xpos = static_cast<float>(io.MousePos.x);
+        float ypos = static_cast<float>(io.MousePos.y);
+
+        if (HWInput->firstMouse)
+        {
+            HWInput->lastX = xpos;
+            HWInput->lastY = ypos;
+            HWInput->firstMouse = false;
+        }
+
+        float xoffset = xpos - HWInput->lastX;
+        float yoffset = HWInput->lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+        HWInput->lastX = xpos;
+        HWInput->lastY = ypos;
+
+        renderer->camera->ProcessMouseMovement(xoffset, yoffset);
+
+        renderer->camera->ProcessMouseScroll(io.MouseWheel);
+        
+        std::cerr<< std::to_string(glfwGetTime()) << " " << std::to_string(io.MouseWheel) << std::endl;
+
+        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);   
+    }
 }
 
 
@@ -31,17 +74,25 @@ bool Window::GLFWInit()
 }
 
 bool Window::windowInit(Interface *interface)
-{
+{   
     window.reset(glfwCreateWindow(800, 600, "OpenGL", NULL, NULL));
 
     if (!window)
     {
         return false;
     }
-    
+
+
     glfwMakeContextCurrent(window.get());
-    glfwSetFramebufferSizeCallback(window.get(), framebuffer_size_callback);  
     interface->init("#version 330", window.get());
+    glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);  
+    
+    return true;
+}
+
+bool Window::controlInit()
+{
+    HWInput.reset(new Controller);
     return true;
 }
 
@@ -54,13 +105,17 @@ bool Window::GLADInit()
     return true;
 }
 
-
 void Window::render(GLRenderer *renderer, Interface *interface)
 {
     while(!glfwWindowShouldClose(window.get()))
     {
-        processInput(window.get());
-        glfwPollEvents();    
+        double currentFrame = static_cast<float>(glfwGetTime());
+        renderer->deltaTime = currentFrame - renderer->lastFrame;
+        renderer->lastFrame = currentFrame;
+
+        processInput(renderer);
+        glfwPollEvents();   
+        
         
         interface->start();
 
@@ -77,19 +132,22 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->CreateSlider("RotZ", renderer->rotZ, .0f, 10.0f);
         interface->endWindow();
 
+        interface->beginWindow("Frame");
+        ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        interface->endWindow();
+
         interface->render();
 
         renderer->draw();
-        renderer->motion();
         
         interface->renderDrawData();
-
+        
         glfwSwapBuffers(window.get());
     }
 }
 
 void Window::clean()
 {
-    glfwDestroyWindow(window.get());
+    // glfwDestroyWindow(window.get());
     glfwTerminate();
 }

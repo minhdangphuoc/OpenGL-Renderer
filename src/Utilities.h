@@ -1,6 +1,6 @@
 #pragma once
+#ifndef __UTILITIES_H__
 #define __UTILITIES_H__
-#ifdef __UTILITIES_H__
 
 #include <iostream>
 #include <vector>

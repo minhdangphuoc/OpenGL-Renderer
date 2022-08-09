@@ -2,6 +2,19 @@
 
 ## Idea
 - Modern C++ OpenGL Renderer
+
+# TODO
+
+- [x] Windows and basic rendering
+- [ ] Lighting
+  - [ ] Color
+  - [ ] Basic lighting
+  - [ ] Material
+  - [ ] Lighting Maps
+  - [ ] Light casters
+  - [ ] Multiple lights
+- [ ] Model Loading
+    
 ## Version
 
 - [0.1.0] Hello Window
@@ -10,6 +23,7 @@
 - [0.2.2] Texture Loading and Transform
 - [0.2.3] ImGUI
 - [0.2.4] Perspective projection
+- [0.2.5] Camera and keyboard & mouse input - Imgui intergrated
 
 ## Screenshots
 
@@ -23,8 +37,12 @@
 
 ![Texture and Transform 2](screenshots/texture_trans_demo2.gif)
 
-### imGUI
+### ImGUI
 
 ![imgui](screenshots/imgui.gif)
 
 ![imgui](screenshots/3DImgui.gif)
+
+### Movements
+
+![Movements](screenshots/HWInput.gif)
