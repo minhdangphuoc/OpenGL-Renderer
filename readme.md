@@ -5,7 +5,7 @@
 
 # TODO
 
-- [ ] Windows and basic rendering - 90%
+- [x] Windows and basic rendering
 - [ ] Lighting
   - [ ] Color
   - [ ] Basic lighting
@@ -23,6 +23,7 @@
 - [0.2.2] Texture Loading and Transform
 - [0.2.3] ImGUI
 - [0.2.4] Perspective projection
+- [0.2.5] Camera and keyboard & mouse input - Imgui intergrated
 
 ## Screenshots
 
