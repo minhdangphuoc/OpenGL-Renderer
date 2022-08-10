@@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 3.23.0)
 
 set(NAME MDEngineOGL)
 
+option(GLFW_USE_HYBRID_HPG "Force use of high-performance GPU on hybrid systems" ON)
+
 message(STATUS "using ${CMAKE_GENERATOR}")
 if (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
     if (NOT MINGW_PATH) 
@@ -15,7 +17,7 @@ if (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
     set(CMAKE_CXX_COMPILER  ${MINGW_PATH}/bin/g++.exe)
 endif()
 
-project(${NAME} VERSION 0.2.5)
+project(${NAME} VERSION 0.2.6)
 
 # 2. Set GLFW_PATH in .env.cmake to target specific glfw
 if (DEFINED GLFW_PATH)
@@ -56,21 +58,6 @@ set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 message(STATUS "Found OpenGL: $ENV{OpenGL_SDK}")
 
-# ASSIMP
-if (DEFINED ASSIMP_INCLUDE_PATH)
-  set(ASSIMP_LIB "${ASSIMP_INCLUDE_PATH}") # 1.2 Make sure lib path is correct
-  set(ASSIMP_FOUND "True")
-else()
-  find_package(assimp REQUIRED)
-  set(ASSIMP_LIB assimp)
-  message(STATUS "Found ASSIMP")
-endif()
-if (NOT ASSIMP_LIB)
-	message(FATAL_ERROR "Could not find assimp library!")
-else()
-	message(STATUS "Using assimp lib at: ${ASSIMP_LIB}")
-endif()
-
 # Add Glad
 if (DEFINED GLAD_INCLUDE_PATH)
   set(GLAD_LIBRARIES "${CMAKE_SOURCE_DIR}${GLAD_INCLUDE_PATH}") # 1.2 Make sure lib path is correct
@@ -91,6 +78,11 @@ set(IMGUI_LIBRARIES "${CMAKE_SOURCE_DIR}/deps/imgui") # 1.2 Make sure lib path i
 message(STATUS "Found IMGUI")
 message(STATUS "Using glad lib at: ${IMGUI_LIBRARIES}")
 
+    # Add implot
+    set(IMPLOT_LIBRARIES "${CMAKE_SOURCE_DIR}/deps/implot") # 1.2 Make sure lib path is correct
+    message(STATUS "Found IMPLOT")
+    message(STATUS "Using glad lib at: ${IMPLOT_LIBRARIES}")
+
 # Copy texture and shaders to build dir
 find_path(TEXTURES_DIR_FOUND ${CMAKE_SOURCE_DIR}/build/Debug/textures)
 if (NOT TEXTURES_DIR_FOUND)
@@ -107,15 +99,7 @@ if (NOT MODELS_DIR_FOUND)
   file(MAKE_DIRECTORY ${CMAKE_SOURCE_DIR}/build/Debug/models)
 endif()
 
-#file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.frag.spv 
-#      DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug/shaders" )
-#file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.vert.spv 
-#     DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug/shaders" )
-#file( COPY ${PROJECT_SOURCE_DIR}/textures 
-#      DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug" )
-#file( COPY ${PROJECT_SOURCE_DIR}/models 
-#      DESTINATION "${CMAKE_SOURCE_DIR}/build/Debug" )
-      
+
 file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.c*)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -127,6 +111,15 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 if (WIN32)
   message(STATUS "CREATING BUILD FOR WINDOWS")
+  
+  file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.frag
+      DESTINATION "${CMAKE_SOURCE_DIR}/build/shaders" )
+  file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.vert
+      DESTINATION "${CMAKE_SOURCE_DIR}/build/shaders" )
+  file( COPY ${PROJECT_SOURCE_DIR}/textures 
+      DESTINATION "${CMAKE_SOURCE_DIR}/build" )
+  file( COPY ${PROJECT_SOURCE_DIR}/models 
+      DESTINATION "${CMAKE_SOURCE_DIR}/build" )
 
   if (USE_MINGW)
     target_include_directories(${PROJECT_NAME} PUBLIC
@@ -141,13 +134,14 @@ if (WIN32)
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/deps
     ${GLM_PATH}
+    ${IMGUI_LIBRARIES}
     )
 
   target_link_directories(${PROJECT_NAME} PUBLIC
     ${GLFW_LIB}
   )
 
-  target_link_libraries(${PROJECT_NAME} glfw3 ${ASSIMP_LIB} ${OpenGL_LIBRARY})
+  target_link_libraries(${PROJECT_NAME} glfw3 ${OpenGL_LIBRARY})
 elseif (UNIX)
     message(STATUS "CREATING BUILD FOR UNIX")
     target_include_directories(${PROJECT_NAME} PUBLIC
@@ -156,5 +150,5 @@ elseif (UNIX)
       ${GLM_PATH}
       ${IMGUI_LIBRARIES}
     )
-    target_link_libraries(${PROJECT_NAME} glfw  ${ASSIMP_LIB} ${OpenGL_LIBRARY})
+    target_link_libraries(${PROJECT_NAME} glfw ${OpenGL_LIBRARY})
 endif()

@@ -5,6 +5,8 @@ void Interface::init(const std::string & glsl_version, GLFWwindow * window)
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImPlot::CreateContext();
+
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     // Setup Dear ImGui style
     ImGui::Spectrum::StyleColorsSpectrum();
@@ -41,6 +43,7 @@ void Interface::clean()
     // Cleanup
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
+    ImPlot::DestroyContext();
     ImGui::DestroyContext();
 }
 
@@ -65,7 +68,14 @@ void Interface::createText(std::string title)
     ImGui::Text(title.c_str());
 }
 
-void Interface::CreateSlider(std::string title, float &f, const float min, const float max)
+void Interface::createSlider(std::string title, float &f, const float min, const float max)
 {
     ImGui::SliderFloat(title.c_str(), &f, min, max);
+}
+
+void Interface::createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size)
+{
+    ImPlot::BeginPlot("FPS Line Chart");
+    ImPlot::PlotLine(title.c_str(), x_data.data(), y_data.data(), size);
+    ImPlot::EndPlot();
 }

@@ -49,7 +49,7 @@ void Window::processInput(GLRenderer *renderer)
 
         renderer->camera->ProcessMouseScroll(io.MouseWheel);
         
-        std::cerr<< std::to_string(glfwGetTime()) << " " << std::to_string(io.MouseWheel) << std::endl;
+        // std::cerr<< std::to_string(glfwGetTime()) << " " << std::to_string(io.MouseWheel) << std::endl;
 
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);   
     }
@@ -107,6 +107,9 @@ bool Window::GLADInit()
 
 void Window::render(GLRenderer *renderer, Interface *interface)
 {
+    std::vector<float> fps, time;
+    int max_values = 0;
+
     while(!glfwWindowShouldClose(window.get()))
     {
         double currentFrame = static_cast<float>(glfwGetTime());
@@ -120,20 +123,35 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->start();
 
         interface->beginWindow("Translate");
-        interface->CreateSlider("X", renderer->x, -5.0f, 5.0f);
-        interface->CreateSlider("Y", renderer->y, -5.0f, 5.0f);
-        interface->CreateSlider("Z", renderer->z, -5.0f, 5.0f);
+        interface->createSlider("X", renderer->x, -5.0f, 5.0f);
+        interface->createSlider("Y", renderer->y, -5.0f, 5.0f);
+        interface->createSlider("Z", renderer->z, -5.0f, 5.0f);
         interface->endWindow();
 
         interface->beginWindow("Rotate");
-        interface->CreateSlider("Deg", renderer->deg, .0f, 360.0f);
-        interface->CreateSlider("RotX", renderer->rotX, .0f, 10.0f);
-        interface->CreateSlider("RotY", renderer->rotY, .0f, 10.0f);
-        interface->CreateSlider("RotZ", renderer->rotZ, .0f, 10.0f);
+        interface->createSlider("Deg", renderer->deg, .0f, 360.0f);
+        interface->createSlider("RotX", renderer->rotX, .0f, 10.0f);
+        interface->createSlider("RotY", renderer->rotY, .0f, 10.0f);
+        interface->createSlider("RotZ", renderer->rotZ, .0f, 10.0f);
         interface->endWindow();
+
+
 
         interface->beginWindow("Frame");
         ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        if (max_values + 1 >= 1000)
+        {
+            fps.erase(fps.begin());
+        } else 
+        {
+            max_values++;
+            time.push_back(max_values);
+        }
+        fps.push_back(ImGui::GetIO().Framerate);
+
+
+            
+        interface->createPlotLine("fps", time, fps, max_values);
         interface->endWindow();
 
         interface->render();
