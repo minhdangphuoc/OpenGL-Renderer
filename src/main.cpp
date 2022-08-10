@@ -37,11 +37,6 @@ int main(int argc, const char** argv)
         return EXIT_FAILURE;
     }
 
-
-
-
-    glRenderrer.setShaderPaths("../shaders/color.vert", "../shaders/color.frag");
-
     if(glRenderrer.init() == EXIT_FAILURE)
     {
         return EXIT_FAILURE;

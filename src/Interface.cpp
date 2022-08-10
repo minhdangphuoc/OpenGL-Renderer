@@ -75,7 +75,7 @@ void Interface::createSlider(std::string title, float &f, const float min, const
 
 void Interface::createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size)
 {
-    ImPlot::BeginPlot("FPS Line Chart");
+    ImPlot::BeginPlot("FPS Line Chart", ImVec2(320.f, 240.f));
     ImPlot::PlotLine(title.c_str(), x_data.data(), y_data.data(), size);
     ImPlot::EndPlot();
 }

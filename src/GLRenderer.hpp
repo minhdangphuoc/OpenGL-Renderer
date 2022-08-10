@@ -13,6 +13,7 @@
 #include <string> 
 #include <array>
 #include <memory>
+#include <map>
 
 
 class GLRenderer
@@ -52,7 +53,7 @@ class GLRenderer
         double lastFrame = 0.0f;
         
     std::unique_ptr<Camera> camera;
-    
+    bool polyMode = false;
     private:
         struct shaderDeleter
         {
@@ -71,7 +72,7 @@ class GLRenderer
 
     std::vector<Object> Objects;
     std::string errorInfo;
-    std::unique_ptr<Shader, shaderDeleter> ourShader;
+    std::map<std::string /* title */, std::unique_ptr<Shader>> shaders;
     std::vector<std::unique_ptr<Texture>> textures;
 
 };
