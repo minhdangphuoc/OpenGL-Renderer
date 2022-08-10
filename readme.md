@@ -27,10 +27,20 @@
 - [0.2.6] Implot
 
 ## Screenshots
+### Implot
 
-### Hello triangle
+![FPS Chart](screenshots/FPSLineChart.png)
 
-![Hello Triangle](screenshots/hello_triangle.png)
+
+
+### Movements
+
+![Movements](screenshots/HWInput.gif)
+### ImGUI
+
+![imgui](screenshots/imgui.gif)
+
+![imgui](screenshots/3DImgui.gif)
 
 ### Texture and Transform
 
@@ -38,16 +48,6 @@
 
 ![Texture and Transform 2](screenshots/texture_trans_demo2.gif)
 
-### ImGUI
+### Hello triangle
 
-![imgui](screenshots/imgui.gif)
-
-![imgui](screenshots/3DImgui.gif)
-
-### Movements
-
-![Movements](screenshots/HWInput.gif)
-
-### Implot
-
-![FPS Chart](screenshots/FPSLineChart.png)
+![Hello Triangle](screenshots/hello_triangle.png)
