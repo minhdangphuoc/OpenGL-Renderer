@@ -24,6 +24,7 @@
 - [0.2.3] ImGUI
 - [0.2.4] Perspective projection
 - [0.2.5] Camera and keyboard & mouse input - Imgui intergrated
+- [0.2.6] Implot
 
 ## Screenshots
 
