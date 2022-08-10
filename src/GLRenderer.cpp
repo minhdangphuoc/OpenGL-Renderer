@@ -71,11 +71,14 @@ void GLRenderer::loadObjects()
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, i.shape.indices.size() * sizeof(uint32_t), (i.shape.indices.data()), GL_STATIC_DRAW);
 
         // position attribute
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
-        // texture coord attribute
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+        // normal attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
+        // texture coord attribute
+        // glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+        // glEnableVertexAttribArray(2);
     }
 
 }
@@ -116,20 +119,20 @@ void GLRenderer::draw()
     // draw in wireframe polygons
     if(polyMode) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // POLYGON_MODE
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+
+    glClearColor(0.2f, 0.2f, 0.2f, 0.5f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for (int i = 0; i < textures.size(); i++)
-    {
-        glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, textures[i]->getTexture());
-    }
+    // for (int i = 0; i < textures.size(); i++)
+    // {
+    //     glActiveTexture(GL_TEXTURE0 + i);
+    //     glBindTexture(GL_TEXTURE_2D, textures[i]->getTexture());
+    // }
     
     shaders.at("cubeShader")->use();
-    shaders.at("cubeShader")->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-    shaders.at("cubeShader")->setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-
-    setProjection();
+    shaders.at("cubeShader")->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
+    shaders.at("cubeShader")->setVec3("lightColor",  glm::vec3(1.0f, 1.0f, 1.0f));
+    shaders.at("cubeShader")->setVec3("lightPos", glm::vec3(1.2f, 1.0f, 2.0f));
 
     // camera/view
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)1080.f/ (float)720.f  , 0.1f, 100.0f);
