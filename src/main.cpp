@@ -40,7 +40,7 @@ int main(int argc, const char** argv)
 
 
 
-    glRenderrer.setShaderPaths("../shaders/shader.vert", "../shaders/shader.frag");
+    glRenderrer.setShaderPaths("../shaders/color.vert", "../shaders/color.frag");
 
     if(glRenderrer.init() == EXIT_FAILURE)
     {

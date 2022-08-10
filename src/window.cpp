@@ -75,7 +75,7 @@ bool Window::GLFWInit()
 
 bool Window::windowInit(Interface *interface)
 {   
-    window.reset(glfwCreateWindow(800, 600, "OpenGL", NULL, NULL));
+    window.reset(glfwCreateWindow(1080, 720, "OpenGL", NULL, NULL));
 
     if (!window)
     {

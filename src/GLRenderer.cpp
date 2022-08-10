@@ -32,9 +32,9 @@ void GLRenderer::clean()
 {   
     for (auto i: Objects)
     {
-        glDeleteVertexArrays(1, &(VAO));
-        glDeleteBuffers(1, &(VBO));
-        glDeleteBuffers(1, &(EBO));
+        glDeleteVertexArrays(1, &(i.VAO));
+        glDeleteBuffers(1, &(i.VBO));
+        glDeleteBuffers(1, &(i.EBO));
     }
     
 }
@@ -103,23 +103,20 @@ void GLRenderer::loadObjects()
 
     for (auto i:Objects)
     {
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-    }
+        glGenVertexArrays(1, &(i.VAO));
+        glGenBuffers(1, &(i.VBO));
+        glGenBuffers(1, &(i.EBO));
 
-    for (auto i:Objects)
-    {
         // bind the Vertex Array Object - VAO
-        glBindVertexArray(VAO);
+        glBindVertexArray(i.VAO);
 
         // bind and set vertex buffer(s) - VBO
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, i.VBO);
         // Note: "Add i.vertices.size()" * sizeof(GLfloat) when using vector.
         glBufferData(GL_ARRAY_BUFFER, i.vertices.size() * sizeof(GLfloat), (i.vertices.data()), GL_STATIC_DRAW);
 
         // Index Buffer
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, i.EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, i.indices.size() * sizeof(uint32_t), (i.indices.data()), GL_STATIC_DRAW);
 
         // position attribute
@@ -153,7 +150,7 @@ void GLRenderer::loadTextures()
 
 void GLRenderer::setProjection()
 {
-    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)800.f/ (float)600.f  , 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)1080.f/ (float)720.f  , 0.1f, 100.0f);
     ourShader->setMat4("projection", projection);
 }
 
@@ -175,23 +172,27 @@ void GLRenderer::draw()
     }
     
     ourShader->use();
-    
+    ourShader->setVec3("objectColor", 1.0f, 0.5f, 0.31f);
+    ourShader->setVec3("lightColor",  1.0f, 1.0f, 1.0f);
+
     setProjection();
 
     // camera/view transformat  ion
     glm::mat4 view = camera->GetViewMatrix();
     ourShader->setMat4("view", view);
 
-
-    glBindVertexArray(VAO);
+    for (auto i:Objects)
+    {
+        // Render Box
+        glm::mat4 model = glm::mat4(1.0f); 
+        model = glm::translate(model, glm::vec3(x, y, z));
+        model = glm::rotate(model, glm::radians(deg), glm::vec3(rotX, rotY, rotZ));
+        ourShader->setMat4("model", model);
+        
+        
+        glBindVertexArray(i.VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    }
     
-    // Render Box
-    glm::mat4 model = glm::mat4(1.0f); 
-    model = glm::translate(model, glm::vec3(x, y, z));
-    model = glm::rotate(model, glm::radians(deg), glm::vec3(rotX, rotY, rotZ));
-    ourShader->setMat4("model", model);
-    
-    
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
