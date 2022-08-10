@@ -7,7 +7,7 @@
 
 - [x] Windows and basic rendering
 - [ ] Lighting
-  - [ ] Color
+  - [x] Color
   - [ ] Basic lighting
   - [ ] Material
   - [ ] Lighting Maps
