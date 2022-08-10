@@ -70,7 +70,7 @@ class GLRenderer
     uint32_t VAO, VBO, EBO, texture;
 
 
-    std::vector<Object> Objects;
+    std::map<std::string /* title */, std::unique_ptr<Object>> Objects;
     std::string errorInfo;
     std::map<std::string /* title */, std::unique_ptr<Shader>> shaders;
     std::vector<std::unique_ptr<Texture>> textures;
