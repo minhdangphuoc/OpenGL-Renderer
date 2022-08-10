@@ -75,7 +75,7 @@ bool Window::GLFWInit()
 
 bool Window::windowInit(Interface *interface)
 {   
-    window.reset(glfwCreateWindow(800, 600, "OpenGL", NULL, NULL));
+    window.reset(glfwCreateWindow(1080, 720, "OpenGL", NULL, NULL));
 
     if (!window)
     {
@@ -122,13 +122,11 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         
         interface->start();
 
-        interface->beginWindow("Translate");
+        interface->beginWindow("Box");
+        ImGui::Checkbox("POLYGON_MODE", &(renderer->polyMode));
         interface->createSlider("X", renderer->x, -5.0f, 5.0f);
         interface->createSlider("Y", renderer->y, -5.0f, 5.0f);
         interface->createSlider("Z", renderer->z, -5.0f, 5.0f);
-        interface->endWindow();
-
-        interface->beginWindow("Rotate");
         interface->createSlider("Deg", renderer->deg, .0f, 360.0f);
         interface->createSlider("RotX", renderer->rotX, .0f, 10.0f);
         interface->createSlider("RotY", renderer->rotY, .0f, 10.0f);
@@ -149,8 +147,6 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         }
         fps.push_back(ImGui::GetIO().Framerate);
 
-
-            
         interface->createPlotLine("fps", time, fps, max_values);
         interface->endWindow();
 
