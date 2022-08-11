@@ -88,6 +88,8 @@ void GLRenderer::draw()
 {
     glm::vec3 lightPos(0.0f, 2.0f, 0.0f);
 
+    lightPos.x = sin(glfwGetTime()) * 1.5f;
+    lightPos.z = cos(glfwGetTime()) * 1.5f;
 
     // draw in wireframe polygons
     if(polyMode) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // POLYGON_MODE
@@ -103,17 +105,16 @@ void GLRenderer::draw()
     // }
     
     // Changing position of lighting point
-    lightPos.x = sin(glfwGetTime()) * 2.f;
-    lightPos.z = cos(glfwGetTime()) * 2.f;
 
     shaders.at("cubeShader")->use();
-    shaders.at("cubeShader")->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
-    shaders.at("cubeShader")->setVec3("lightColor",  glm::vec3(1.0f, 1.0f, 1.0f));
+    shaders.at("cubeShader")->setVec3("objectColor", glm::vec3(objectColor.at(0), objectColor.at(1), objectColor.at(2)));
+    shaders.at("cubeShader")->setVec3("lightColor",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)));
     shaders.at("cubeShader")->setVec3("lightPos", lightPos);
     shaders.at("cubeShader")->setVec3("viewPos", camera->Position);
+    shaders.at("cubeShader")->setInt("shininess", static_cast<int32_t>(shininess));
     
     // camera/view
-    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)1080.f/ (float)720.f  , 0.1f, 100.0f);
+    glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float) wWidth/ (float) wHeight, 0.1f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
     shaders.at("cubeShader")->setMat4("projection", projection);
     shaders.at("cubeShader")->setMat4("view", view);
@@ -121,24 +122,15 @@ void GLRenderer::draw()
     // Render Box
     glm::mat4 model = glm::mat4(1.0f); 
     model = glm::translate(model, glm::vec3(x, y, z));
-    model = glm::rotate(model, glm::radians(deg), glm::vec3(rotX, rotY, rotZ));
+    model = glm::rotate(model, glm::radians(rotX), glm::vec3(1.f, .0f, .0f));
+    model = glm::rotate(model, glm::radians(rotY), glm::vec3(.0f, 1.f, .0f));
+    model = glm::rotate(model, glm::radians(rotZ), glm::vec3(.0f, .0f, 1.f));
+    model = glm::scale(model,  glm::vec3(sX, sY, sZ)); // a smaller cube
     shaders.at("cubeShader")->setMat4("model", model);
     
     
     glBindVertexArray(Objects.at("colorCube")->shape.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
-
-    // Render smaller Box
-    model = glm::mat4(1.0f); 
-    model = glm::translate(model, glm::vec3(x, y + .75f, z));
-    model = glm::rotate(model, glm::radians(deg), glm::vec3(rotX, rotY, rotZ));
-    model = glm::scale(model, glm::vec3(0.5f)); // a smaller cube
-    shaders.at("cubeShader")->setMat4("model", model);
-    
-    
-    glBindVertexArray(Objects.at("colorCube")->shape.VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-
     // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     // also draw the lamp object

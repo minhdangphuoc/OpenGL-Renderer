@@ -15,7 +15,7 @@
 
 #include <glad/glad.h> 
 #include <GLFW/glfw3.h>
-
+#include <array>
 class Interface
 {
 private:
@@ -40,6 +40,7 @@ public:
     void createText(std::string title);
     void createSlider(std::string title, float &f, const float min, const float max);
     void createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size);
+    void createColorEdit3(std::string title, std::array<float, 3> & color);
 
 };
 

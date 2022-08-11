@@ -1,5 +1,6 @@
 #include "Interface.hpp"
 
+
 void Interface::init(const std::string & glsl_version, GLFWwindow * window)
 {
     // Setup Dear ImGui context
@@ -78,4 +79,9 @@ void Interface::createPlotLine(std::string title, std::vector<float> & x_data, s
     ImPlot::BeginPlot("FPS Line Chart", ImVec2(320.f, 240.f));
     ImPlot::PlotLine(title.c_str(), x_data.data(), y_data.data(), size);
     ImPlot::EndPlot();
+}
+
+void Interface::createColorEdit3(std::string title, std::array<float, 3>  & color)
+{
+    ImGui::ColorEdit3(title.c_str(), color.data());
 }

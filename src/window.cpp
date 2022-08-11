@@ -48,7 +48,7 @@ void Window::processInput(GLRenderer *renderer)
         renderer->camera->ProcessMouseMovement(xoffset, yoffset);
 
         renderer->camera->ProcessMouseScroll(io.MouseWheel);
-        
+
         // std::cerr<< std::to_string(glfwGetTime()) << " " << std::to_string(io.MouseWheel) << std::endl;
 
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);   
@@ -109,6 +109,8 @@ void Window::render(GLRenderer *renderer, Interface *interface)
 {
     std::vector<float> fps, time;
     int max_values = 0;
+    ImVec2 windowSize1(340.f, 300.f);
+    ImVec2 windowSize2(340.f, 400.f);
 
     while(!glfwWindowShouldClose(window.get()))
     {
@@ -116,24 +118,35 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         renderer->deltaTime = currentFrame - renderer->lastFrame;
         renderer->lastFrame = currentFrame;
 
+        glfwGetWindowSize(window.get(), &renderer->wWidth,  &renderer->wHeight);
+
         processInput(renderer);
         glfwPollEvents();   
         
         
         interface->start();
 
+        ImGui::SetNextWindowSizeConstraints(windowSize2, windowSize2);
+
         interface->beginWindow("Box");
         ImGui::Checkbox("POLYGON_MODE", &(renderer->polyMode));
+        interface->createText("Position");
         interface->createSlider("X", renderer->x, -5.0f, 5.0f);
         interface->createSlider("Y", renderer->y, -5.0f, 5.0f);
         interface->createSlider("Z", renderer->z, -5.0f, 5.0f);
-        interface->createSlider("Deg", renderer->deg, .0f, 360.0f);
-        interface->createSlider("RotX", renderer->rotX, .0f, 10.0f);
-        interface->createSlider("RotY", renderer->rotY, .0f, 10.0f);
-        interface->createSlider("RotZ", renderer->rotZ, .0f, 10.0f);
+        interface->createText("Rotate");
+        interface->createSlider("RX", renderer->rotX, .0f, 360.0f);
+        interface->createSlider("RY", renderer->rotY, .0f, 360.0f);
+        interface->createSlider("RZ", renderer->rotZ, .0f, 360.0f);
+        interface->createText("Scale");
+        interface->createSlider("X", renderer->sX, -5.0f, 5.0f);
+        interface->createSlider("Y", renderer->sY, -5.0f, 5.0f);
+        interface->createSlider("Z", renderer->sZ, -5.0f, 5.0f);
+        interface->createSlider("shininess", renderer->shininess, 2.f, 256.f);
+        interface->createColorEdit3("Object color", renderer->objectColor);
         interface->endWindow();
 
-
+        ImGui::SetNextWindowSizeConstraints(windowSize1, windowSize1);
 
         interface->beginWindow("Frame");
         ImGui::Text("Application average %.3f ms/frame (%.3f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
