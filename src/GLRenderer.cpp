@@ -32,9 +32,9 @@ void GLRenderer::clean()
 {   
     for (auto & it: Objects)
     {
-        glDeleteVertexArrays(1, &(it.second->VAO));
-        glDeleteBuffers(1, &(it.second->VBO));
-        glDeleteBuffers(1, &(it.second->EBO));
+        glDeleteVertexArrays(1, &(it.second->shape.VAO));
+        glDeleteBuffers(1, &(it.second->shape.VBO));
+        glDeleteBuffers(1, &(it.second->shape.EBO));
     }
     
 }
@@ -47,51 +47,10 @@ void GLRenderer::loadShaders()
 
 void GLRenderer::loadObjects()
 {
-    Objects.insert(std::pair("colorCube", std::make_unique<Object>(Box())));
-    Objects.insert(std::pair("lightCube", std::make_unique<Object>(Box())));
-
     glEnable(GL_DEPTH_TEST); // Z-Buffer
 
-    glGenVertexArrays(1, &(Objects.at("colorCube")->VAO));
-    glGenBuffers(1, &(Objects.at("colorCube")->VBO));
-    glGenBuffers(1, &(Objects.at("colorCube")->EBO));
-
-    // bind the Vertex Array Object - VAO
-    glBindVertexArray(Objects.at("colorCube")->VAO);
-
-    // bind and set vertex buffer(s) - VBO
-    glBindBuffer(GL_ARRAY_BUFFER, Objects.at("colorCube")->VBO);
-    // Note: "Add i.vertices.size()" * sizeof(GLfloat) when using vector.
-    glBufferData(GL_ARRAY_BUFFER, Objects.at("colorCube")->shape.vertices.size() * sizeof(GLfloat), (Objects.at("colorCube")->shape.vertices.data()), GL_STATIC_DRAW);
-
-    // Index Buffer
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Objects.at("colorCube")->EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, Objects.at("colorCube")->shape.indices.size() * sizeof(uint32_t), (Objects.at("colorCube")->shape.indices.data()), GL_STATIC_DRAW);
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-    // normal attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    // texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-
-    // Light Cube
-    glGenVertexArrays(1, &(Objects.at("lightCube")->VAO));
-    glBindVertexArray(Objects.at("lightCube")->VAO);
-
-    // Vertex Binding
-    glBindBuffer(GL_ARRAY_BUFFER, Objects.at("lightCube")->VBO);
-   
-    // Index Buffer
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Objects.at("lightCube")->EBO);
-    
-    // note that we update the lamp's position attribute's stride to reflect the updated buffer data
-    glVertexAttribPointer(0, 3,  GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
+    Objects.insert(std::pair("colorCube", std::make_unique<Object>(Box())));
+    Objects.insert(std::pair("lightCube", std::make_unique<Object>(LightCube())));
 }
 
 void GLRenderer::loadTextures()
@@ -144,7 +103,8 @@ void GLRenderer::draw()
     shaders.at("cubeShader")->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.31f));
     shaders.at("cubeShader")->setVec3("lightColor",  glm::vec3(1.0f, 1.0f, 1.0f));
     shaders.at("cubeShader")->setVec3("lightPos", glm::vec3(1.2f, 1.0f, 2.0f));
-
+    shaders.at("cubeShader")->setVec3("viewPos", camera->Position);
+    
     // camera/view
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)1080.f/ (float)720.f  , 0.1f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
@@ -158,7 +118,7 @@ void GLRenderer::draw()
     shaders.at("cubeShader")->setMat4("model", model);
     
     
-    glBindVertexArray(Objects.at("colorCube")->VAO);
+    glBindVertexArray(Objects.at("colorCube")->shape.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -171,7 +131,7 @@ void GLRenderer::draw()
     model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
     shaders.at("lightCubeShader")->setMat4("model", model);
 
-    glBindVertexArray(Objects.at("lightCube")->VAO);
+    glBindVertexArray(Objects.at("lightCube")->shape.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     
 }

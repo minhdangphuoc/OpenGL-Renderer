@@ -70,9 +70,10 @@ class GLRenderer
     
     uint32_t VAO, VBO, EBO, texture;
 
-
-    std::unordered_map<std::string /* title */, std::unique_ptr<Object>> Objects;
     std::string errorInfo;
+
+    // Renderer Components
+    std::unordered_map<std::string /* title */, std::unique_ptr<Object>> Objects;
     std::unordered_map<std::string /* title */, std::unique_ptr<Shader>> shaders;
     std::vector<std::unique_ptr<Texture>> textures;
 
