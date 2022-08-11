@@ -14,6 +14,7 @@
 #include <array>
 #include <memory>
 #include <map>
+#include <unordered_map>
 
 
 class GLRenderer
@@ -70,9 +71,9 @@ class GLRenderer
     uint32_t VAO, VBO, EBO, texture;
 
 
-    std::map<std::string /* title */, std::unique_ptr<Object>> Objects;
+    std::unordered_map<std::string /* title */, std::unique_ptr<Object>> Objects;
     std::string errorInfo;
-    std::map<std::string /* title */, std::unique_ptr<Shader>> shaders;
+    std::unordered_map<std::string /* title */, std::unique_ptr<Shader>> shaders;
     std::vector<std::unique_ptr<Texture>> textures;
 
 };

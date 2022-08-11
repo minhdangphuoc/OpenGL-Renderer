@@ -25,13 +25,18 @@
 - [0.2.4] Perspective projection
 - [0.2.5] Camera and keyboard & mouse input - Imgui intergrated
 - [0.2.6] Implot
+- [0.3.0] Basic Lighting and Color
+- [0.3.1] Diffuse, Specular, and Phong lighting
+
 
 ## Screenshots
+
+### Ligting
+#### Defuse Lighting
+![Defuse Lighting](screenshots/defuse_lighting.gif)
 ### Implot
 
 ![FPS Chart](screenshots/FPSLineChart.png)
-
-
 
 ### Movements
 

@@ -30,12 +30,12 @@ bool GLRenderer::init()
 
 void GLRenderer::clean()
 {   
-    // for (auto i: Objects)
-    // {
-    //     glDeleteVertexArrays(1, &(i.VAO));
-    //     glDeleteBuffers(1, &(i.VBO));
-    //     glDeleteBuffers(1, &(i.EBO));
-    // }
+    for (auto & it: Objects)
+    {
+        glDeleteVertexArrays(1, &(it.second->VAO));
+        glDeleteBuffers(1, &(it.second->VBO));
+        glDeleteBuffers(1, &(it.second->EBO));
+    }
     
 }
 
@@ -161,7 +161,6 @@ void GLRenderer::draw()
     glBindVertexArray(Objects.at("colorCube")->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
 
     // also draw the lamp object
     shaders.at("lightCubeShader")->use();
