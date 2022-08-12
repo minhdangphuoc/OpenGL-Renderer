@@ -8,7 +8,7 @@
 - [x] Windows and basic rendering
 - [ ] Lighting
   - [x] Color
-  - [ ] Basic lighting
+  - [x] Basic lighting
   - [ ] Material
   - [ ] Lighting Maps
   - [ ] Light casters
