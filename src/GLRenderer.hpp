@@ -14,6 +14,7 @@
 #include <array>
 #include <memory>
 #include <map>
+#include <unordered_map>
 
 
 class GLRenderer
@@ -42,7 +43,7 @@ class GLRenderer
         void setCamera(Camera * newCamera);
 
     
-        float deg = 0.f, x = 0.f, y = 0.f, z = 0.f, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f;
+        float x = 0.f, y = 0.f, z = 0.f, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f, sX = 1.0f, sY = 1.0f, sZ = 1.0f;
         
         glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
         glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -52,8 +53,12 @@ class GLRenderer
         double deltaTime = 0.0f;
         double lastFrame = 0.0f;
         
-    std::unique_ptr<Camera> camera;
-    bool polyMode = false;
+        std::unique_ptr<Camera> camera;
+        bool polyMode = false;
+        float shininess = 2.f;
+        std::array<float, 3> objectColor = {1.0f, 0.5f, 0.31f}, lightColor = {1.0f, 1.0f, 1.0f};
+
+        int wHeight = 720, wWidth = 1080;
     private:
         struct shaderDeleter
         {
@@ -69,10 +74,11 @@ class GLRenderer
     
     uint32_t VAO, VBO, EBO, texture;
 
-
-    std::vector<Object> Objects;
     std::string errorInfo;
-    std::map<std::string /* title */, std::unique_ptr<Shader>> shaders;
+
+    // Renderer Components
+    std::unordered_map<std::string /* title */, std::unique_ptr<Object>> Objects;
+    std::unordered_map<std::string /* title */, std::unique_ptr<Shader>> shaders;
     std::vector<std::unique_ptr<Texture>> textures;
 
 };
