@@ -2,19 +2,18 @@
 #ifndef GL_RENDERER_HPP
 #define GL_RENDERER_HPP 
 
-#include "Object.hpp"
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "CameraSystem.hpp"
+#include "Object.hpp"
 
 #include <vector>
 #include <cstdlib>
 #include <cstdint> 
-#include <string> 
 #include <array>
-#include <memory>
 #include <map>
 #include <unordered_map>
+#include <memory>
 
 
 class GLRenderer
@@ -59,6 +58,7 @@ class GLRenderer
         std::array<float, 3> objectColor = {1.0f, 0.5f, 0.31f}, lightColor = {1.0f, 1.0f, 1.0f};
 
         int wHeight = 720, wWidth = 1080;
+        std::unordered_map<std::string /* title */, std::unique_ptr<Object>> Objects;
     private:
         struct shaderDeleter
         {
@@ -77,7 +77,6 @@ class GLRenderer
     std::string errorInfo;
 
     // Renderer Components
-    std::unordered_map<std::string /* title */, std::unique_ptr<Object>> Objects;
     std::unordered_map<std::string /* title */, std::unique_ptr<Shader>> shaders;
     std::vector<std::unique_ptr<Texture>> textures;
 

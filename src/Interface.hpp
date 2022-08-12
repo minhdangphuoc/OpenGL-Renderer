@@ -9,13 +9,15 @@
 
 #include "imgui/implot.h"
 #include "imgui/implot_internal.h"
+#include "glm/glm.hpp"
 
 #include <string>
-#include <vector>
-
+#include <memory>
 #include <glad/glad.h> 
 #include <GLFW/glfw3.h>
+#include <unordered_map>
 #include <array>
+#include <vector>
 class Interface
 {
 private:
@@ -40,8 +42,10 @@ public:
     void createText(std::string title);
     void createSlider(std::string title, float &f, const float min, const float max);
     void createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size);
-    void createColorEdit3(std::string title, std::array<float, 3> & color);
+    void createColorEdit3(std::string title, float * color);
 
+    // Create Box
+    void createComboBox(const std::string title, unsigned int & selected, const std::vector<std::string> & list);
 };
 
 #endif // __INTERFACE_HPP__

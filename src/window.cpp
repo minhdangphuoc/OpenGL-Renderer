@@ -1,4 +1,5 @@
 #include "window.hpp"
+
 void Window::processInput(GLRenderer *renderer)
 {
     ImGuiIO& io = ImGui::GetIO();
@@ -109,7 +110,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
 {
     std::vector<float> fps, time;
     int max_values = 0;
-    ImVec2 windowSize1(340.f, 300.f);
+    ImVec2 windowSize1(340.f, 200.f);
     ImVec2 windowSize2(340.f, 400.f);
 
     while(!glfwWindowShouldClose(window.get()))
@@ -139,11 +140,14 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->createSlider("RY", renderer->rotY, .0f, 360.0f);
         interface->createSlider("RZ", renderer->rotZ, .0f, 360.0f);
         interface->createText("Scale");
-        interface->createSlider("X", renderer->sX, -5.0f, 5.0f);
-        interface->createSlider("Y", renderer->sY, -5.0f, 5.0f);
-        interface->createSlider("Z", renderer->sZ, -5.0f, 5.0f);
-        interface->createSlider("shininess", renderer->shininess, 2.f, 256.f);
-        interface->createColorEdit3("Object color", renderer->objectColor);
+        interface->createSlider("SX", renderer->sX, -5.0f, 5.0f);
+        interface->createSlider("SY", renderer->sY, -5.0f, 5.0f);
+        interface->createSlider("SZ", renderer->sZ, -5.0f, 5.0f);
+        interface->createSlider("shininess", renderer->Objects.at("colorCube")->material.shininess, 0.f, 256.f);
+        interface->createColorEdit3("Object ambient", glm::value_ptr(renderer->Objects.at("colorCube")->material.ambient));
+        interface->createColorEdit3("Object defuse", glm::value_ptr(renderer->Objects.at("colorCube")->material.diffuse));
+        interface->createColorEdit3("Light color", renderer->lightColor.data());
+        interface->createComboBox("Material", renderer->Objects.at("colorCube")->selectedMaterial, MaterialNames);
         interface->endWindow();
 
         ImGui::SetNextWindowSizeConstraints(windowSize1, windowSize1);

@@ -1,3 +1,8 @@
+#pragma once
+#ifndef __Shape_HPP__
+#define __Shape_HPP__
+
+
 #include <vector>
 #include <cstdint> 
 #include <glm/glm.hpp>
@@ -201,3 +206,5 @@ public:
         glEnableVertexAttribArray(0);
     }
 };
+
+#endif

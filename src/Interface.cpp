@@ -1,6 +1,5 @@
 #include "Interface.hpp"
 
-
 void Interface::init(const std::string & glsl_version, GLFWwindow * window)
 {
     // Setup Dear ImGui context
@@ -76,12 +75,31 @@ void Interface::createSlider(std::string title, float &f, const float min, const
 
 void Interface::createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size)
 {
-    ImPlot::BeginPlot("FPS Line Chart", ImVec2(320.f, 240.f));
+    ImPlot::BeginPlot("FPS Line Chart", ImVec2(320.f, 160.f), ImPlotFlags_NoTitle);
+    ImPlot::SetupAxis(ImAxis_X1, "", ImPlotAxisFlags_AutoFit + ImPlotAxisFlags_NoTickLabels);
+    ImPlot::SetupAxis(ImAxis_Y1, "", ImPlotAxisFlags_AutoFit);
+    ImPlot::SetupFinish();
     ImPlot::PlotLine(title.c_str(), x_data.data(), y_data.data(), size);
     ImPlot::EndPlot();
 }
 
-void Interface::createColorEdit3(std::string title, std::array<float, 3>  & color)
+void Interface::createColorEdit3(const std::string title, float*  color)
 {
-    ImGui::ColorEdit3(title.c_str(), color.data());
+    ImGui::ColorEdit3(title.c_str(), color);
+}
+
+void Interface::createComboBox(const std::string title, unsigned int & selected, const std::vector<std::string> & list)
+{
+    if(ImGui::BeginCombo(title.c_str(), list.at(selected).c_str()))
+    {
+        for(int i = 1; i < list.size(); i++)
+        {
+            bool is_selected = (selected == i);
+            if (ImGui::Selectable(list.at(i).c_str(), is_selected))
+                selected = i;
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
 }
