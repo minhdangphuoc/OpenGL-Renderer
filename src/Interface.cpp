@@ -16,7 +16,7 @@ void Interface::init(const std::string & glsl_version, GLFWwindow * window)
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
-    io.ConfigInputTrickleEventQueue == false;
+    io.ConfigInputTrickleEventQueue = false;
     ImGui_ImplOpenGL3_Init(glsl_version.c_str());
 }
 

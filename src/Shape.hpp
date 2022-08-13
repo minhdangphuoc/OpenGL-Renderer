@@ -90,7 +90,9 @@ public:
     };
     void loadObjBuffer() override
     {
-        std::cout<< "loadObjBuffer() in Cube" <<std::endl;
+        #if (DEBUG)
+            std::cout<< "loadObjBuffer() in Cube" <<std::endl;
+        #endif
         
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -184,7 +186,9 @@ public:
     
     void loadObjBuffer() override
     {
+        #if (DEBUG)
         std::cout<< "loadObjBuffer() in LightBox" <<std::endl;
+        #endif
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
