@@ -113,7 +113,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
     ImVec2 windowSize1(340.f, 200.f);
     ImVec2 windowPos1(8.f, 8.f);
     ImVec2 windowSize2(340.f, 450.f);
-    ImVec2 windowPos2(8.f, 208.f);
+    ImVec2 windowPos2(8.f, 216.f);
 
     while(!glfwWindowShouldClose(window.get()))
     {
