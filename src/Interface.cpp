@@ -88,17 +88,25 @@ void Interface::createColorEdit3(const std::string title, float*  color)
     ImGui::ColorEdit3(title.c_str(), color);
 }
 
-void Interface::createComboBox(const std::string title, unsigned int & selected, const std::vector<std::string> & list)
-{
-    if(ImGui::BeginCombo(title.c_str(), list.at(selected).c_str()))
+void Interface::createComboBox(const std::string title, Object & object, const std::vector<std::string> & list)
+{   if (object.selectedMaterial != 0)
+    if(object.material != object.MaterialPresets.at(MaterialNames.at(object.selectedMaterial)))
+        object.selectedMaterial = 0;
+
+    if(ImGui::BeginCombo(title.c_str(), list.at(object.selectedMaterial).c_str()))
     {
         for(int i = 1; i < list.size(); i++)
         {
-            bool is_selected = (selected == i);
+            bool is_selected = (object.selectedMaterial == i);
             if (ImGui::Selectable(list.at(i).c_str(), is_selected))
-                selected = i;
+                {
+                    object.selectedMaterial = i;
+                    object.material = object.MaterialPresets.at(MaterialNames.at(object.selectedMaterial));
+                }
             if (is_selected)
+            {
                 ImGui::SetItemDefaultFocus();
+            }
         }
         ImGui::EndCombo();
     }

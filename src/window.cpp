@@ -147,7 +147,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->createColorEdit3("Object ambient", glm::value_ptr(renderer->Objects.at("colorCube")->material.ambient));
         interface->createColorEdit3("Object defuse", glm::value_ptr(renderer->Objects.at("colorCube")->material.diffuse));
         interface->createColorEdit3("Light color", renderer->lightColor.data());
-        interface->createComboBox("Material", renderer->Objects.at("colorCube")->selectedMaterial, MaterialNames);
+        interface->createComboBox("Material", *(renderer->Objects.at("colorCube")), MaterialNames);
         interface->endWindow();
 
         ImGui::SetNextWindowSizeConstraints(windowSize1, windowSize1);

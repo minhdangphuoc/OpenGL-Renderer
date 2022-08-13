@@ -10,6 +10,7 @@
 #include "imgui/implot.h"
 #include "imgui/implot_internal.h"
 #include "glm/glm.hpp"
+#include "Object.hpp"
 
 #include <string>
 #include <memory>
@@ -44,8 +45,10 @@ public:
     void createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size);
     void createColorEdit3(std::string title, float * color);
 
+    void createColorEdit3(std::string title, Object & object);
+    
     // Create Box
-    void createComboBox(const std::string title, unsigned int & selected, const std::vector<std::string> & list);
+    void createComboBox(const std::string title, Object & object, const std::vector<std::string> & list);
 };
 
 #endif // __INTERFACE_HPP__

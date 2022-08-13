@@ -104,11 +104,6 @@ void GLRenderer::draw()
     //     glActiveTexture(GL_TEXTURE0 + i);
     //     glBindTexture(GL_TEXTURE_2D, textures[i]->getTexture());
     // }
-
-    if (Objects.at("colorCube")->selectedMaterial > 0)
-    {
-        Objects.at("colorCube")->material = Objects.at("colorCube")->MaterialPresets.at(MaterialNames.at(Objects.at("colorCube")->selectedMaterial));
-    }
     
     // Changing position of lighting point
     shaders.at("cubeShader")->use();
@@ -139,7 +134,7 @@ void GLRenderer::draw()
             Objects.at("colorCube")->material.specular.y, 
             Objects.at("colorCube")->material.specular.z
         ));
-    shaders.at("cubeShader")->setFloat("material.shininess", Objects.at("colorCube")->material.shininess * 100.f);
+    shaders.at("cubeShader")->setFloat("material.shininess", Objects.at("colorCube")->material.shininess);
     
     // camera/view
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float) wWidth/ (float) wHeight, 0.1f, 100.0f);

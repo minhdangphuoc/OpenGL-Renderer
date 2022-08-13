@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __Object_HPP__
-#define __Object_HPP__
+#ifndef __OBJECT_HPP__
+#define __OBJECT_HPP__
 
 #include <cstdint> 
 #include <vector>
@@ -44,6 +44,11 @@ class Material{
     glm::vec3 diffuse;
     glm::vec3 specular;
     float shininess;
+
+    bool operator!= (const Material & mt)
+    {
+        return !((this -> ambient == mt.ambient)&&(this -> diffuse == mt.diffuse)&&(this -> specular == mt.specular)&&(this -> shininess == mt.shininess));
+    }
 };
 
 class Object

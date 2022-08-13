@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __Shape_HPP__
-#define __Shape_HPP__
+#ifndef __SHAPE_HPP__
+#define __SHAPE_HPP__
 
 
 #include <vector>
