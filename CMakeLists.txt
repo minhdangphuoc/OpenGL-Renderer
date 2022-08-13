@@ -112,10 +112,8 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 if (WIN32)
   message(STATUS "CREATING BUILD FOR WINDOWS")
   
-  file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.frag
-      DESTINATION "${CMAKE_SOURCE_DIR}/build/shaders" )
-  file( COPY ${PROJECT_SOURCE_DIR}/shaders/shader.vert
-      DESTINATION "${CMAKE_SOURCE_DIR}/build/shaders" )
+  file( COPY ${PROJECT_SOURCE_DIR}/shaders
+      DESTINATION "${CMAKE_SOURCE_DIR}/build" )
   file( COPY ${PROJECT_SOURCE_DIR}/textures 
       DESTINATION "${CMAKE_SOURCE_DIR}/build" )
   #file( COPY ${PROJECT_SOURCE_DIR}/models 
