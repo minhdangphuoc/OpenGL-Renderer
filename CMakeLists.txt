@@ -118,8 +118,8 @@ if (WIN32)
       DESTINATION "${CMAKE_SOURCE_DIR}/build/shaders" )
   file( COPY ${PROJECT_SOURCE_DIR}/textures 
       DESTINATION "${CMAKE_SOURCE_DIR}/build" )
-  file( COPY ${PROJECT_SOURCE_DIR}/models 
-      DESTINATION "${CMAKE_SOURCE_DIR}/build" )
+  #file( COPY ${PROJECT_SOURCE_DIR}/models 
+      #DESTINATION "${CMAKE_SOURCE_DIR}/build" )
 
   if (USE_MINGW)
     target_include_directories(${PROJECT_NAME} PUBLIC
@@ -135,6 +135,7 @@ if (WIN32)
     ${PROJECT_SOURCE_DIR}/deps
     ${GLM_PATH}
     ${IMGUI_LIBRARIES}
+    ${GLFW_INCLUDE_DIRS}
     )
 
   target_link_directories(${PROJECT_NAME} PUBLIC
