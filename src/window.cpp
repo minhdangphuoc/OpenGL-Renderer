@@ -111,7 +111,9 @@ void Window::render(GLRenderer *renderer, Interface *interface)
     std::vector<float> fps, time;
     int max_values = 0;
     ImVec2 windowSize1(340.f, 200.f);
-    ImVec2 windowSize2(340.f, 400.f);
+    ImVec2 windowPos1(8.f, 8.f);
+    ImVec2 windowSize2(340.f, 450.f);
+    ImVec2 windowPos2(8.f, 208.f);
 
     while(!glfwWindowShouldClose(window.get()))
     {
@@ -128,6 +130,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->start();
 
         ImGui::SetNextWindowSizeConstraints(windowSize2, windowSize2);
+        ImGui::SetNextWindowPos(windowPos2);
 
         interface->beginWindow("Box");
         ImGui::Checkbox("POLYGON_MODE", &(renderer->polyMode));
@@ -151,6 +154,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->endWindow();
 
         ImGui::SetNextWindowSizeConstraints(windowSize1, windowSize1);
+        ImGui::SetNextWindowPos(windowPos1);
 
         interface->beginWindow("Frame");
         ImGui::Text("Application average %.3f ms/frame (%.3f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);

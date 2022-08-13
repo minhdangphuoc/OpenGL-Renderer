@@ -27,4 +27,6 @@ bool Object::initMaterial()
     MaterialPresets.insert(std::pair("red rubber", Material(glm::vec3(0.05f,0.0f,0.0f), glm::vec3(0.5f,0.4f,0.4f), glm::vec3(0.7f,0.04f,0.04f),0.078125f*100.f)));
     MaterialPresets.insert(std::pair("white rubber", Material(glm::vec3(0.05f,0.05f,0.05f), glm::vec3(0.5f,0.5f,0.5f), glm::vec3(0.7f,0.7f,0.7f),0.078125f*100.f)));
     MaterialPresets.insert(std::pair("yellow rubber", Material(glm::vec3(0.05f,0.05f,0.0f), glm::vec3(0.5f,0.5f,0.4f), glm::vec3(0.7f,0.7f,0.04f),0.078125f*100.f)));
+
+    return true;
 }
