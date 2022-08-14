@@ -56,12 +56,15 @@ void GLRenderer::loadObjects()
 
 void GLRenderer::loadTextures()
 {
-    textures.push_back(std::make_unique<Texture>("../textures/container.png"));
-    // textures.push_back(std::make_unique<Texture>("../textures/pepe.png"));
+    textures.push_back(std::make_unique<Texture>("../textures/container_darker.png"));
+    textures.push_back(std::make_unique<Texture>("../textures/container_specular.png"));
+    textures.push_back(std::make_unique<Texture>("../textures/matrix.jpg"));
     
     shaders.at("cubeShader")->use();
 
-    shaders.at("cubeShader")->setInt("material.diffuseImg", 0);
+    shaders.at("cubeShader")->setInt("material.diffuseMap", 0);
+    shaders.at("cubeShader")->setInt("material.specularMap", 1);
+    shaders.at("cubeShader")->setInt("material.emissionMap", 2);
 }
 
 void GLRenderer::setProjection()
@@ -92,6 +95,7 @@ void GLRenderer::draw()
     
     // Changing position of lighting point
     shaders.at("cubeShader")->use();
+    shaders.at("cubeShader")->setFloat("time", glfwGetTime());
     shaders.at("cubeShader")->setInt("isLightMap", 1);
     shaders.at("cubeShader")->setVec3("light.position", lightPos);
     shaders.at("cubeShader")->setVec3("viewPos", camera->Position);
@@ -115,11 +119,11 @@ void GLRenderer::draw()
     //         Objects.at("colorCube")->material.diffuse.y, 
     //         Objects.at("colorCube")->material.diffuse.z
     //     ));
-    shaders.at("cubeShader")->setVec3("material.specular", glm::vec3(
-            Objects.at("colorCube")->material.specular.x, 
-            Objects.at("colorCube")->material.specular.y, 
-            Objects.at("colorCube")->material.specular.z
-        ));
+    // shaders.at("cubeShader")->setVec3("material.specular", glm::vec3(
+    //         Objects.at("colorCube")->material.specular.x, 
+    //         Objects.at("colorCube")->material.specular.y, 
+    //         Objects.at("colorCube")->material.specular.z
+    //     ));
     shaders.at("cubeShader")->setFloat("material.shininess", Objects.at("colorCube")->material.shininess);
     
     // camera/view
@@ -158,5 +162,4 @@ void GLRenderer::draw()
 
     glBindVertexArray(Objects.at("lightCube")->shape.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    
 }
