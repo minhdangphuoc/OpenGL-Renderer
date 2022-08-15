@@ -10,7 +10,11 @@
   - [x] Color
   - [x] Basic lighting
   - [x] Material
+<<<<<<< HEAD
+  - [ ] Lighting Maps
+=======
   - [x] Lighting Maps
+>>>>>>> feature/0.3.3
   - [ ] Light casters
   - [ ] Multiple lights
 - [ ] Model Loading
@@ -27,18 +31,24 @@
 - [0.2.6] Implot
 - [0.3.0] Basic Lighting and Color
 - [0.3.1] Diffuse, Specular, and Phong lighting
+<<<<<<< HEAD
 - [0.3.2] Materials
-- [0.3.3] Lighting Maps
+
+## Screenshots
+
+### Materials
+![Gold Demo](screenshots/MaterialDemo.png)
+
+### Ligting
+=======
+- [0.3.2] Lighting Maps
 
 ## Screenshots
 
 ### Ligting maps
 
 ![Lighting Maps](screenshots/LightMap.png)
-
-### Materials
-
-![Gold Demo](screenshots/MaterialDemo.png)
+>>>>>>> feature/0.3.3
 
 #### Defuse Lighting
 

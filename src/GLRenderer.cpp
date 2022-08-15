@@ -19,7 +19,7 @@ bool GLRenderer::init()
         loadShaders();
         loadObjects();
         Object::initMaterial();
-        // loadTextures();
+        loadTextures();
     }
     catch(const std::runtime_error& e)
     {
@@ -56,22 +56,15 @@ void GLRenderer::loadObjects()
 
 void GLRenderer::loadTextures()
 {
-    textures.push_back(std::make_unique<Texture>("../textures/wall.jpg"));
-    textures.push_back(std::make_unique<Texture>("../textures/pepe.png"));
+    textures.push_back(std::make_unique<Texture>("../textures/container_darker.png"));
+    textures.push_back(std::make_unique<Texture>("../textures/container_specular.png"));
+    textures.push_back(std::make_unique<Texture>("../textures/matrix.jpg"));
     
     shaders.at("cubeShader")->use();
 
-    for (int i = 0; i < textures.size(); i++)
-    {
-        shaders.at("cubeShader")->setInt("texture"+std::to_string(i), i);
-    }
-
-    shaders.at("lightCubeShader")->use();
-
-    for (int i = 0; i < textures.size(); i++)
-    {
-        shaders.at("lightCubeShader")->setInt("texture"+std::to_string(i), i);
-    }
+    shaders.at("cubeShader")->setInt("material.diffuseMap", 0);
+    shaders.at("cubeShader")->setInt("material.specularMap", 1);
+    shaders.at("cubeShader")->setInt("material.emissionMap", 2);
 }
 
 void GLRenderer::setProjection()
@@ -99,41 +92,38 @@ void GLRenderer::draw()
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // for (int i = 0; i < textures.size(); i++)
-    // {
-    //     glActiveTexture(GL_TEXTURE0 + i);
-    //     glBindTexture(GL_TEXTURE_2D, textures[i]->getTexture());
-    // }
     
     // Changing position of lighting point
     shaders.at("cubeShader")->use();
+    shaders.at("cubeShader")->setFloat("time", glfwGetTime());
+    shaders.at("cubeShader")->setInt("isLightMap", 1);
     shaders.at("cubeShader")->setVec3("light.position", lightPos);
     shaders.at("cubeShader")->setVec3("viewPos", camera->Position);
 
     // light properties
     shaders.at("cubeShader")->setVec3("light.diffuse",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)) * glm::vec3(0.5f));
-    // shaders.at("cubeShader")->setVec3("light.diffuse",  1.f, 1.f, 1.f);
     shaders.at("cubeShader")->setVec3("light.ambient",  1.f, 1.f, 1.f);
     shaders.at("cubeShader")->setVec3("light.specular", 1.f, 1.f, 1.f);
+    // shaders.at("cubeShader")->setVec3("light.diffuse",  1.f, 1.f, 1.f);
     // shaders.at("cubeShader")->setVec3("light.ambient",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)) * glm::vec3(0.5f) * glm::vec3(0.2f));
     // shaders.at("cubeShader")->setVec3("light.specular", 1.f, 1.f, 1.f);
 
-    shaders.at("cubeShader")->setVec3("material.ambient", glm::vec3(
-            Objects.at("colorCube")->material.ambient.x, 
-            Objects.at("colorCube")->material.ambient.y, 
-            Objects.at("colorCube")->material.ambient.z
-        ));
+    // shaders.at("cubeShader")->setVec3("material.ambient", glm::vec3(
+    //         Objects.at("colorCube")->material.ambient.x, 
+    //         Objects.at("colorCube")->material.ambient.y, 
+    //         Objects.at("colorCube")->material.ambient.z
+    //     ));
             
-    shaders.at("cubeShader")->setVec3("material.diffuse", glm::vec3(
-            Objects.at("colorCube")->material.diffuse.x, 
-            Objects.at("colorCube")->material.diffuse.y, 
-            Objects.at("colorCube")->material.diffuse.z
-        ));
-    shaders.at("cubeShader")->setVec3("material.specular", glm::vec3(
-            Objects.at("colorCube")->material.specular.x, 
-            Objects.at("colorCube")->material.specular.y, 
-            Objects.at("colorCube")->material.specular.z
-        ));
+    // shaders.at("cubeShader")->setVec3("material.diffuse", glm::vec3(
+    //         Objects.at("colorCube")->material.diffuse.x, 
+    //         Objects.at("colorCube")->material.diffuse.y, 
+    //         Objects.at("colorCube")->material.diffuse.z
+    //     ));
+    // shaders.at("cubeShader")->setVec3("material.specular", glm::vec3(
+    //         Objects.at("colorCube")->material.specular.x, 
+    //         Objects.at("colorCube")->material.specular.y, 
+    //         Objects.at("colorCube")->material.specular.z
+    //     ));
     shaders.at("cubeShader")->setFloat("material.shininess", Objects.at("colorCube")->material.shininess);
     
     // camera/view
@@ -151,6 +141,11 @@ void GLRenderer::draw()
     model = glm::scale(model,  glm::vec3(sX, sY, sZ)); 
     shaders.at("cubeShader")->setMat4("model", model);
     
+    for (int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, textures[i]->getTexture());
+    }
     
     glBindVertexArray(Objects.at("colorCube")->shape.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -167,5 +162,4 @@ void GLRenderer::draw()
 
     glBindVertexArray(Objects.at("lightCube")->shape.VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    
 }

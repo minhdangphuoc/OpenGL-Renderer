@@ -27,18 +27,13 @@
 - [0.2.6] Implot
 - [0.3.0] Basic Lighting and Color
 - [0.3.1] Diffuse, Specular, and Phong lighting
-- [0.3.2] Materials
-- [0.3.3] Lighting Maps
+- [0.3.2] Lighting Maps
 
 ## Screenshots
 
 ### Ligting maps
 
 ![Lighting Maps](screenshots/LightMap.png)
-
-### Materials
-
-![Gold Demo](screenshots/MaterialDemo.png)
 
 #### Defuse Lighting
 
