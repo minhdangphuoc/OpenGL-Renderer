@@ -18,6 +18,7 @@ bool GLRenderer::init()
     {
         loadShaders();
         loadObjects();
+        Object::initMaterial();
         // loadTextures();
     }
     catch(const std::runtime_error& e)
@@ -86,16 +87,16 @@ void GLRenderer::setCamera(Camera * newCamera)
 
 void GLRenderer::draw() 
 {
-    glm::vec3 lightPos(0.0f, 2.0f, 0.0f);
-
+    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
     lightPos.x = sin(glfwGetTime()) * 1.5f;
     lightPos.z = cos(glfwGetTime()) * 1.5f;
+
 
     // draw in wireframe polygons
     if(polyMode) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // POLYGON_MODE
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    glClearColor(0.2f, 0.2f, 0.2f, 0.5f);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // for (int i = 0; i < textures.size(); i++)
@@ -105,13 +106,35 @@ void GLRenderer::draw()
     // }
     
     // Changing position of lighting point
-
     shaders.at("cubeShader")->use();
-    shaders.at("cubeShader")->setVec3("objectColor", glm::vec3(objectColor.at(0), objectColor.at(1), objectColor.at(2)));
-    shaders.at("cubeShader")->setVec3("lightColor",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)));
-    shaders.at("cubeShader")->setVec3("lightPos", lightPos);
+    shaders.at("cubeShader")->setVec3("light.position", lightPos);
     shaders.at("cubeShader")->setVec3("viewPos", camera->Position);
-    shaders.at("cubeShader")->setInt("shininess", static_cast<int32_t>(shininess));
+
+    // light properties
+    shaders.at("cubeShader")->setVec3("light.diffuse",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)) * glm::vec3(0.5f));
+    // shaders.at("cubeShader")->setVec3("light.diffuse",  1.f, 1.f, 1.f);
+    shaders.at("cubeShader")->setVec3("light.ambient",  1.f, 1.f, 1.f);
+    shaders.at("cubeShader")->setVec3("light.specular", 1.f, 1.f, 1.f);
+    // shaders.at("cubeShader")->setVec3("light.ambient",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)) * glm::vec3(0.5f) * glm::vec3(0.2f));
+    // shaders.at("cubeShader")->setVec3("light.specular", 1.f, 1.f, 1.f);
+
+    shaders.at("cubeShader")->setVec3("material.ambient", glm::vec3(
+            Objects.at("colorCube")->material.ambient.x, 
+            Objects.at("colorCube")->material.ambient.y, 
+            Objects.at("colorCube")->material.ambient.z
+        ));
+            
+    shaders.at("cubeShader")->setVec3("material.diffuse", glm::vec3(
+            Objects.at("colorCube")->material.diffuse.x, 
+            Objects.at("colorCube")->material.diffuse.y, 
+            Objects.at("colorCube")->material.diffuse.z
+        ));
+    shaders.at("cubeShader")->setVec3("material.specular", glm::vec3(
+            Objects.at("colorCube")->material.specular.x, 
+            Objects.at("colorCube")->material.specular.y, 
+            Objects.at("colorCube")->material.specular.z
+        ));
+    shaders.at("cubeShader")->setFloat("material.shininess", Objects.at("colorCube")->material.shininess);
     
     // camera/view
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float) wWidth/ (float) wHeight, 0.1f, 100.0f);
@@ -125,7 +148,7 @@ void GLRenderer::draw()
     model = glm::rotate(model, glm::radians(rotX), glm::vec3(1.f, .0f, .0f));
     model = glm::rotate(model, glm::radians(rotY), glm::vec3(.0f, 1.f, .0f));
     model = glm::rotate(model, glm::radians(rotZ), glm::vec3(.0f, .0f, 1.f));
-    model = glm::scale(model,  glm::vec3(sX, sY, sZ)); // a smaller cube
+    model = glm::scale(model,  glm::vec3(sX, sY, sZ)); 
     shaders.at("cubeShader")->setMat4("model", model);
     
     

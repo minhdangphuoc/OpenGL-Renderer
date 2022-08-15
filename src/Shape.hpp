@@ -1,3 +1,8 @@
+#pragma once
+#ifndef __SHAPE_HPP__
+#define __SHAPE_HPP__
+
+
 #include <vector>
 #include <cstdint> 
 #include <glm/glm.hpp>
@@ -85,7 +90,9 @@ public:
     };
     void loadObjBuffer() override
     {
-        std::cout<< "loadObjBuffer() in Cube" <<std::endl;
+        #if (DEBUG)
+            std::cout<< "loadObjBuffer() in Cube" <<std::endl;
+        #endif
         
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
@@ -179,7 +186,9 @@ public:
     
     void loadObjBuffer() override
     {
+        #if (DEBUG)
         std::cout<< "loadObjBuffer() in LightBox" <<std::endl;
+        #endif
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
@@ -201,3 +210,5 @@ public:
         glEnableVertexAttribArray(0);
     }
 };
+
+#endif
