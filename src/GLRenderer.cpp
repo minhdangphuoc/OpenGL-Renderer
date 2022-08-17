@@ -80,11 +80,21 @@ void GLRenderer::setCamera(Camera * newCamera)
 
 void GLRenderer::draw() 
 {
-    glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-    lightPos.x = sin(glfwGetTime()) * 1.5f;
-    lightPos.z = cos(glfwGetTime()) * 1.5f;
+    glm::vec3 lightPos(x, y, z);
+    // positions of the point lights
+    glm::vec3 pointLightPositions[] = {
+        glm::vec3( 0.7f,  0.2f,  2.0f),
+        glm::vec3( 2.3f, -3.3f, -4.0f),
+        glm::vec3(-4.0f,  2.0f, -12.0f),
+        glm::vec3( 0.0f,  0.0f, -3.0f)
+    };
 
-
+    glm::vec3 pointLightColors[] = {
+        glm::vec3(0.1f, 0.1f, 0.1f),
+        glm::vec3(0.1f, 0.1f, 0.1f),
+        glm::vec3(0.1f, 0.1f, 0.1f),
+        glm::vec3(0.3f, 0.1f, 0.1f)
+    };
     // draw in wireframe polygons
     if(polyMode) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // POLYGON_MODE
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -92,20 +102,84 @@ void GLRenderer::draw()
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    for (int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, textures[i]->getTexture());
+    }
     
     // Changing position of lighting point
     shaders.at("cubeShader")->use();
     shaders.at("cubeShader")->setFloat("time", glfwGetTime());
-    shaders.at("cubeShader")->setInt("isLightMap", 1);
-    shaders.at("cubeShader")->setVec3("light.position", lightPos);
     shaders.at("cubeShader")->setVec3("viewPos", camera->Position);
+    shaders.at("cubeShader")->setFloat("material.shininess", Objects.at("colorCube")->material.shininess);
+
+    // Directional light
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "dirLight.direction"), -0.2f, -1.0f, -0.3f);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "dirLight.ambient"), 0.0f, 0.0f, 0.0f);	
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "dirLight.diffuse"), 0.05f, 0.05f, 0.05); 
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "dirLight.specular"), 0.2f, 0.2f, 0.2f);
+// Point light 1
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[0].position"), pointLightPositions[0].x, pointLightPositions[0].y, pointLightPositions[0].z);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[0].ambient"), pointLightColors[0].x * 0.1,  pointLightColors[0].y * 0.1,  pointLightColors[0].z * 0.1);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[0].diffuse"), pointLightColors[0].x,  pointLightColors[0].y,  pointLightColors[0].z); 
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[0].specular"), pointLightColors[0].x,  pointLightColors[0].y,  pointLightColors[0].z);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[0].constant"), 1.0f);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[0].linear"), 0.14);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[0].quadratic"), 0.07);		
+// Point light 2
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[1].position"), pointLightPositions[1].x, pointLightPositions[1].y, pointLightPositions[1].z);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[1].ambient"), pointLightColors[1].x * 0.1,  pointLightColors[1].y * 0.1,  pointLightColors[1].z * 0.1);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[1].diffuse"), pointLightColors[1].x,  pointLightColors[1].y,  pointLightColors[1].z); 
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[1].specular"), pointLightColors[1].x,  pointLightColors[1].y,  pointLightColors[1].z);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[1].constant"), 1.0f);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[1].linear"), 0.14);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[1].quadratic"), 0.07);		
+// Point light 3
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[2].position"), pointLightPositions[2].x, pointLightPositions[2].y, pointLightPositions[2].z);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[2].ambient"), pointLightColors[2].x * 0.1,  pointLightColors[2].y * 0.1,  pointLightColors[2].z * 0.1);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[2].diffuse"), pointLightColors[2].x,  pointLightColors[2].y,  pointLightColors[2].z); 
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[2].specular") ,pointLightColors[2].x,  pointLightColors[2].y,  pointLightColors[2].z);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[2].constant"), 1.0f);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[2].linear"), 0.22);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[2].quadratic"), 0.20);		
+// Point light 4
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[3].position"), pointLightPositions[3].x, pointLightPositions[3].y, pointLightPositions[3].z);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[3].ambient"), pointLightColors[3].x * 0.1,  pointLightColors[3].y * 0.1,  pointLightColors[3].z * 0.1);		
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[3].diffuse"), pointLightColors[3].x,  pointLightColors[3].y,  pointLightColors[3].z); 
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[3].specular"), pointLightColors[3].x,  pointLightColors[3].y,  pointLightColors[3].z);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[3].constant"), 1.0f);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[3].linear"), 0.14);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[3].quadratic"), 0.07);		
+// SpotLight
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.position"), camera->Position.x, camera->Position.y, camera->Position.z);	
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.direction"), camera->Front.x, camera->Front.y, camera->Front.z);
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.ambient"), 0.0f, 0.0f, 0.0f);	
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.diffuse"), 1.0f, 1.0f, 1.0f); 
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.specular"), 1.0f, 1.0f, 1.0f);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.constant"), 1.0f);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.linear"), 0.09);
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.quadratic"), 0.032);			
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.cutOff"), glm::cos(glm::radians(10.0f)));
+glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.outerCutOff"), glm::cos(glm::radians(15.0f)));     
+
+
+    // shaders.at("cubeShader")->setVec3("light.position", lightPos);
+    // shaders.at("cubeShader")->setVec3("light.position",  camera->Position);
+    // shaders.at("cubeShader")->setVec3("light.direction", camera->Front);
+    // shaders.at("cubeShader")->setFloat("light.cutOff",   glm::cos(glm::radians(12.5f)));
+    // shaders.at("cubeShader")->setInt("isLightMap", 1);
 
     // light properties
-    shaders.at("cubeShader")->setVec3("light.diffuse",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)) * glm::vec3(0.5f));
-    shaders.at("cubeShader")->setVec3("light.ambient",  1.f, 1.f, 1.f);
-    shaders.at("cubeShader")->setVec3("light.specular", 1.f, 1.f, 1.f);
+    // shaders.at("cubeShader")->setVec3("light.ambient",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2))  * glm::vec3(0.1f));
+    // shaders.at("cubeShader")->setVec3("light.diffuse",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)));
+    // shaders.at("cubeShader")->setVec3("light.ambient",  0.1f, 0.1f, 0.1f);
+    // shaders.at("cubeShader")->setVec3("light.diffuse",  0.8f, 0.8f, 0.8f);
+    // shaders.at("cubeShader")->setVec3("light.specular", 1.f, 1.f, 1.f);
+    // shaders.at("cubeShader")->setFloat("light.constant",  1.0f);
+    // shaders.at("cubeShader")->setFloat("light.linear",    0.09f);
+    // shaders.at("cubeShader")->setFloat("light.quadratic", 0.032f);	 
     // shaders.at("cubeShader")->setVec3("light.diffuse",  1.f, 1.f, 1.f);
-    // shaders.at("cubeShader")->setVec3("light.ambient",  glm::vec3(lightColor.at(0), lightColor.at(1), lightColor.at(2)) * glm::vec3(0.5f) * glm::vec3(0.2f));
     // shaders.at("cubeShader")->setVec3("light.specular", 1.f, 1.f, 1.f);
 
     // shaders.at("cubeShader")->setVec3("material.ambient", glm::vec3(
@@ -124,7 +198,6 @@ void GLRenderer::draw()
     //         Objects.at("colorCube")->material.specular.y, 
     //         Objects.at("colorCube")->material.specular.z
     //     ));
-    shaders.at("cubeShader")->setFloat("material.shininess", Objects.at("colorCube")->material.shininess);
     
     // camera/view
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float) wWidth/ (float) wHeight, 0.1f, 100.0f);
@@ -134,32 +207,34 @@ void GLRenderer::draw()
 
     // Render Box
     glm::mat4 model = glm::mat4(1.0f); 
-    model = glm::translate(model, glm::vec3(x, y, z));
-    model = glm::rotate(model, glm::radians(rotX), glm::vec3(1.f, .0f, .0f));
-    model = glm::rotate(model, glm::radians(rotY), glm::vec3(.0f, 1.f, .0f));
-    model = glm::rotate(model, glm::radians(rotZ), glm::vec3(.0f, .0f, 1.f));
-    model = glm::scale(model,  glm::vec3(sX, sY, sZ)); 
-    shaders.at("cubeShader")->setMat4("model", model);
-    
-    for (int i = 0; i < textures.size(); i++)
+    for(unsigned int i = 0; i < 10; i++)
     {
-        glActiveTexture(GL_TEXTURE0 + i);
-        glBindTexture(GL_TEXTURE_2D, textures[i]->getTexture());
+        model = glm::mat4(1.0f); 
+        model = glm::translate(model, glm::vec3(glm::sin(20.f * i/6.f), glm::cos(20.f * i/6.f), i));
+        model = glm::rotate(model, glm::radians(rotX), glm::vec3(1.f, .0f, .0f));
+        model = glm::rotate(model, glm::radians(rotY), glm::vec3(.0f, 1.f, .0f));
+        model = glm::rotate(model, glm::radians(rotZ), glm::vec3(.0f, .0f, 1.f));
+        model = glm::scale(model,  glm::vec3(sX, sY, sZ)); 
+        shaders.at("cubeShader")->setMat4("model", model);
+          
+        glBindVertexArray(Objects.at("colorCube")->shape.VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     }
-    
-    glBindVertexArray(Objects.at("colorCube")->shape.VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-    // also draw the lamp object
     shaders.at("lightCubeShader")->use();
     shaders.at("lightCubeShader")->setMat4("projection", projection);
     shaders.at("lightCubeShader")->setMat4("view", view);
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, lightPos);
-    model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-    shaders.at("lightCubeShader")->setMat4("model", model);
-
+    // we now draw as many light bulbs as we have point lights.
     glBindVertexArray(Objects.at("lightCube")->shape.VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    for (unsigned int i = 0; i < 4; i++)
+    {
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, pointLightPositions[i]);
+        model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+        shaders.at("lightCubeShader")->setMat4("model", model);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
+
+
 }

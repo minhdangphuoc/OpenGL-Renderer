@@ -29,8 +29,21 @@
 - [0.3.1] Diffuse, Specular, and Phong lighting
 - [0.3.2] Materials
 - [0.3.3] Lighting Maps
+- [0.3.4] Light casters
 
 ## Screenshots
+
+### Light casters
+
+#### Point light
+
+![Point light](screenshots/pointlight.png)
+
+#### Spot light
+
+![Flash light](screenshots/spotlight.png)
+
+#### Spot light with soft edges
 
 ### Ligting maps
 
