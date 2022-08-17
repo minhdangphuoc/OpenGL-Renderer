@@ -29,8 +29,7 @@
 - [0.3.1] Diffuse, Specular, and Phong lighting
 - [0.3.2] Materials
 - [0.3.3] Lighting Maps
-- [0.3.4] Light casters
-- [0.3.5] Multiple Lights
+- [0.3.4] Light casters and Multiple Lights
 ## Screenshots
 
 ### Multiple Lights
