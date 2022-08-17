@@ -23,6 +23,8 @@ public:
     }
     std::vector<float> vertices;
     std::vector<uint32_t> indices;
+    std::vector<uint32_t> textures;
+
     uint32_t VBO, VAO, EBO;
 private:
 };
