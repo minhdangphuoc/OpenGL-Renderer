@@ -155,7 +155,7 @@ glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "pointLights[3].q
 glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.position"), camera->Position.x, camera->Position.y, camera->Position.z);	
 glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.direction"), camera->Front.x, camera->Front.y, camera->Front.z);
 glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.ambient"), 0.0f, 0.0f, 0.0f);	
-glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.diffuse"), 1.0f, 1.0f, 1.0f); 
+glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.diffuse"), lightColor[0], lightColor[1], lightColor[2]); 
 glUniform3f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.specular"), 1.0f, 1.0f, 1.0f);
 glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.constant"), 1.0f);
 glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.linear"), 0.09);
@@ -210,7 +210,8 @@ glUniform1f(glGetUniformLocation(shaders.at("cubeShader")->ID, "spotLight.outerC
     for(unsigned int i = 0; i < 10; i++)
     {
         model = glm::mat4(1.0f); 
-        model = glm::translate(model, glm::vec3(glm::sin(20.f * i/6.f), glm::cos(20.f * i/6.f), i));
+        model = glm::translate(model, glm::vec3(glm::sin(20.f * i/6.f), glm::cos(20.f * i/6.f), i)) + glm::translate(model, glm::vec3(x,y,z));
+        
         model = glm::rotate(model, glm::radians(rotX), glm::vec3(1.f, .0f, .0f));
         model = glm::rotate(model, glm::radians(rotY), glm::vec3(.0f, 1.f, .0f));
         model = glm::rotate(model, glm::radians(rotZ), glm::vec3(.0f, .0f, 1.f));

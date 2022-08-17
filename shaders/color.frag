@@ -84,7 +84,11 @@ void main()
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);    
     // phase 3: spot light
     result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
-
+    // emission
+    float speed = 0.5;
+    vec3 emission = calculate_emission() * (abs(sin(time))); //Fade effect
+    result += emission;
+    
     FragColor = vec4(result, 1.0);
 }
 
@@ -147,13 +151,9 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     vec3 ambient = light.ambient * vec3(texture(material.diffuseMap, TexCoords));
     vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuseMap, TexCoords));
     vec3 specular = light.specular * spec * vec3(texture(material.specularMap, TexCoords));
-
-    // emission
-    float speed = 0.5;
-    vec3 emission = calculate_emission() * (abs(sin(time))); //Fade effect
     
     ambient *= attenuation * intensity;
     diffuse *= attenuation * intensity;
     specular *= attenuation * intensity;
-    return (ambient + diffuse + specular + emission);
+    return (ambient + diffuse + specular);
 }
