@@ -2,10 +2,9 @@ include(./.env.cmake OPTIONAL RESULT_VARIABLE LOCAL_ENV)
 
 message(STATUS "Local .env.cmake: ${LOCAL_ENV}")
 
-cmake_minimum_required(VERSION 3.24.0)
+cmake_minimum_required(VERSION 3.20.0)
 
 set(NAME MDEngineOGL)
-
 
 message(STATUS "using ${CMAKE_GENERATOR}")
 if (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
