@@ -3,7 +3,7 @@
 #define FLIP_TEXTURE 1
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
+#include <stb_image.h>
 
 Texture::Texture(std::string path)
 {
