@@ -1,6 +1,6 @@
 #include "Shader.hpp"
 
-#define DEBUG 1 
+#define DEBUG 0 
 
 Shader::Shader(const std::string vertexPath, const std::string fragmentPath)
 {   

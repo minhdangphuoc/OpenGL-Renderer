@@ -9,13 +9,10 @@
 
 class Texture
 {
-private:
-    uint32_t texture;
 public:
-    Texture(std::string path);
-    ~Texture() = default;
-
-    uint32_t getTexture() {return texture;}
+    uint32_t id;
+    std::string type;
+    std::string path;
 };
 
 #endif // __TEXTURE_HPP__

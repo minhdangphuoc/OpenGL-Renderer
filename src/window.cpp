@@ -136,23 +136,11 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         ImGui::Checkbox("POLYGON_MODE", &(renderer->polyMode));
         interface->createText("Camera:" + std::to_string(renderer->camera->Position.x) + ", " + std::to_string(renderer->camera->Position.y) + ", "+ std::to_string(renderer->camera->Position.z));
         interface->createText("Front:" + std::to_string(renderer->camera->Front.x) + ", " + std::to_string(renderer->camera->Front.y) + ", "+ std::to_string(renderer->camera->Front.z));
-        interface->createText("Position");
+        interface->createText("Position: Light 1");
         interface->createSlider("X", renderer->x, -5.0f, 5.0f);
         interface->createSlider("Y", renderer->y, -5.0f, 5.0f);
         interface->createSlider("Z", renderer->z, -5.0f, 5.0f);
-        interface->createText("Rotate");
-        interface->createSlider("RX", renderer->rotX, .0f, 360.0f);
-        interface->createSlider("RY", renderer->rotY, .0f, 360.0f);
-        interface->createSlider("RZ", renderer->rotZ, .0f, 360.0f);
-        interface->createText("Scale");
-        interface->createSlider("SX", renderer->sX, -5.0f, 5.0f);
-        interface->createSlider("SY", renderer->sY, -5.0f, 5.0f);
-        interface->createSlider("SZ", renderer->sZ, -5.0f, 5.0f);
-        interface->createSlider("shininess", renderer->Objects.at("colorCube")->material.shininess, 0.f, 256.f);
-        interface->createColorEdit3("Object ambient", glm::value_ptr(renderer->Objects.at("colorCube")->material.ambient));
-        interface->createColorEdit3("Object defuse", glm::value_ptr(renderer->Objects.at("colorCube")->material.diffuse));
-        interface->createColorEdit3("Light color", renderer->lightColor.data());
-        interface->createComboBox("Material", *(renderer->Objects.at("colorCube")), MaterialNames);
+
         interface->endWindow();
 
         ImGui::SetNextWindowSizeConstraints(windowSize1, windowSize1);

@@ -6,14 +6,14 @@
 # TODO
 
 - [x] Windows and basic rendering
-- [ ] Lighting
+- [x] Lighting
   - [x] Color
   - [x] Basic lighting
   - [x] Material
   - [x] Lighting Maps
   - [x] Light casters
   - [x] Multiple lights
-- [ ] Model Loading
+- [x] Model Loading
     
 ## Version
 
@@ -30,7 +30,12 @@
 - [0.3.2] Materials
 - [0.3.3] Lighting Maps
 - [0.3.4] Light casters and Multiple Lights
+- [0.4.0] Model Loader
 ## Screenshots
+
+### Multiple Lights
+
+![Model Loader](screenshots/model_loader.gif)
 
 ### Multiple Lights
 
