@@ -5,9 +5,6 @@ struct Material {
     vec3 ambient;
     sampler2D diffuseMap;
     sampler2D specularMap;
-    sampler2D emissionMap;
-    vec3 diffuse;
-    vec3 specular;    
     float shininess;
 }; 
 
@@ -60,11 +57,8 @@ uniform SpotLight spotLight;
 uniform int isLightMap;
 uniform float time;
 
-vec3 calculate_emission()
-{
-    vec3 show = step(vec3(1.0), vec3(1.0) - texture(material.specularMap, TexCoords).rgb);
-    return texture(material.emissionMap, TexCoords + vec2(0.0, time)).rgb * show;
-}
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_specular1;
 
 // function prototypes
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
@@ -73,6 +67,8 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 
 void main()
 {    
+    material.diffuseMap = texture_diffuse1;
+    material.specularMap = texture_specular1;
     // properties
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
@@ -84,10 +80,6 @@ void main()
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);    
     // phase 3: spot light
     result += CalcSpotLight(spotLight, norm, FragPos, viewDir);    
-    // emission
-    float speed = 0.5;
-    vec3 emission = calculate_emission() * (abs(sin(time))); //Fade effect
-    result += emission;
     
     FragColor = vec4(result, 1.0);
 }

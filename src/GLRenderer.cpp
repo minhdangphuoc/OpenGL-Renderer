@@ -38,21 +38,22 @@ void GLRenderer::clean()
 
 void GLRenderer::loadShaders()
 {
-    shaders.insert(std::pair("modelShader", std::make_unique<Shader>("../shaders/color.vert", "../shaders/color.frag")));
-    shaders.insert(std::pair("lightShader", std::make_unique<Shader>("../shaders/light_cube.vert", "../shaders/light_cube.frag")));
+    shaders.insert(std::pair("modelShader", std::make_unique<Shader>("../shaders/colorModel.vert", "../shaders/colorModel.frag")));
+    shaders.insert(std::pair("lightShader", std::make_unique<Shader>("../shaders/light.vert", "../shaders/light.frag")));
 }
 
 void GLRenderer::loadObjects()
 {
     glEnable(GL_DEPTH_TEST); // Z-Buffer
     Objects.insert(std::pair("Guitar", std::make_unique<Model>("../Models/miku/scene.gltf")));
-    Objects.insert(std::pair("light", std::make_unique<Model>("../Models/lightbulb/scene.gltf")));
+    Objects.insert(std::pair("Light", std::make_unique<Model>("../Models/lightbulb/scene.gltf")));
 }
 
 void GLRenderer::setCamera(Camera * newCamera)
 {
     camera.reset(newCamera);
 }
+
 
 
 void GLRenderer::draw() 
@@ -63,17 +64,28 @@ void GLRenderer::draw()
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // Directional light
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "dirLight.direction"), 1.2f, 1.0f, 2.0f);		
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "dirLight.diffuse"), 1.f, 1.f, 1.f); 
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "dirLight.ambient"), 1.f, 1.f, 1.f);	
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "dirLight.specular"), 1.f, 1.f, 1.f);
-
-
-    // don't forget to enable shader before setting uniforms
+    
     shaders.at("modelShader")->use();
+    shaders.at("modelShader")->setVec3("viewPos", camera->Position);
 
+    // Point light 1
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].position"),  0.f, 2.f, 0.f);		
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);		
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].diffuse"), 0.5f, 0.5f, 0.5f); 
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].specular"), 0.5f, 0.5f, 0.5f);
+    glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].constant"), 1.0f);
+    glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].linear"), 0.14);
+    glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].quadratic"), 0.07);	
+    
+    // Point light 2
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].position"),  x, y, z);		
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].ambient"), 0.025f, 0.025f, 0.025f);		
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].diffuse"), 0.5f, 0.5f, 0.5f); 
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].specular"), 0.5f, 0.5f, 0.5f);  
+    glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].constant"), 1.0f);
+    glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].linear"), 0.14);
+    glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].quadratic"), 0.07);	
+    
     // view/projection transformations
     glm::mat4 projection = glm::perspective(glm::radians(camera->Zoom), (float)wWidth / (float)wHeight, 0.1f, 100.0f);
     glm::mat4 view = camera->GetViewMatrix();
@@ -86,15 +98,22 @@ void GLRenderer::draw()
     model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
     shaders.at("modelShader")->setMat4("model", model);
     Objects.at("Guitar")->Draw(shaders.at("modelShader").get());
-
-    // we now draw as many light bulbs as we have point lights.
+    
     shaders.at("lightShader")->use();
     shaders.at("lightShader")->setMat4("projection", projection);
     shaders.at("lightShader")->setMat4("view", view);
+    
+    //PL1
     model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(5.0f, 1.f, 1.f));
-    model = glm::rotate(model, glm::radians(180.0f), glm::vec3(1.f,.0f,.0f));
-    model = glm::scale(model, glm::vec3(0.5f)); // Make it a smaller cube
+    model = glm::translate(model, glm::vec3(0, 2, 0));
+    model = glm::scale(model, glm::vec3(0.1f));
     shaders.at("lightShader")->setMat4("model", model);
-    Objects.at("light")->Draw(shaders.at("lightShader").get());
+    Objects.at("Light")->Draw(shaders.at("lightShader").get());
+    
+    //PL2
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(x, y, z));
+    model = glm::scale(model, glm::vec3(0.1f));
+    shaders.at("lightShader")->setMat4("model", model);
+    Objects.at("Light")->Draw(shaders.at("lightShader").get());
 }

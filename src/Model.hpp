@@ -11,7 +11,7 @@
 
 #include "Mesh.hpp"
 #include "Shader.hpp"
-
+#include "Material.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -38,6 +38,7 @@ private:
 
 
     void loadModel(std::string const &path);
+    Material loadMaterial(aiMaterial* mat);
     void processNode(aiNode *node, const aiScene *scene);
     Mesh processMesh(aiMesh *mesh, const aiScene *scene);
     std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, 
