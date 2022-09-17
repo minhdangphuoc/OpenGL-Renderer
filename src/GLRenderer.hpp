@@ -5,7 +5,7 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "CameraSystem.hpp"
-#include "Object.hpp"
+#include "Model.hpp"
 
 #include <vector>
 #include <cstdlib>
@@ -24,7 +24,6 @@ class GLRenderer
         bool init();
         void loadObjects();
         void loadShaders();
-        void loadTextures();
         void setProjection();
         void clean();
 
@@ -58,7 +57,7 @@ class GLRenderer
         std::array<float, 3> objectColor = {1.0f, 0.5f, 0.31f}, lightColor = {1.0f, 1.0f, 1.0f};
 
         int wHeight = 720, wWidth = 1080;
-        std::unordered_map<std::string /* title */, std::unique_ptr<Object>> Objects;
+        std::unordered_map<std::string /* title */, std::unique_ptr<Model>> Objects;
     private:
         struct shaderDeleter
         {
@@ -78,7 +77,5 @@ class GLRenderer
 
     // Renderer Components
     std::unordered_map<std::string /* title */, std::unique_ptr<Shader>> shaders;
-    std::vector<std::unique_ptr<Texture>> textures;
-
 };
 #endif // GL_RENDERER_HPP

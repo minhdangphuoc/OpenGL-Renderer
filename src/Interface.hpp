@@ -10,7 +10,7 @@
 #include <implot.h>
 #include <implot_internal.h>
 #include "glm/glm.hpp"
-#include "Object.hpp"
+#include "Model.hpp"
 
 #include <string>
 #include <memory>
@@ -26,7 +26,7 @@ private:
 public:
     // Con/Destructor
     Interface() = default;
-    ~Interface() = default;
+    ~Interface() = default; 
 
     void init(const std::string & glsl_version, GLFWwindow * window);
     void render();
@@ -45,10 +45,8 @@ public:
     void createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size);
     void createColorEdit3(std::string title, float * color);
 
-    void createColorEdit3(std::string title, Object & object);
+    void createColorEdit3(std::string title, Model & object);
     
-    // Create Box
-    void createComboBox(const std::string title, Object & object, const std::vector<std::string> & list);
 };
 
 #endif // __INTERFACE_HPP__
