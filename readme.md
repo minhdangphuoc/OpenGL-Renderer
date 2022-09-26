@@ -33,7 +33,7 @@
 - [0.4.0] Model Loader
 ## Screenshots
 
-### Multiple Lights
+### Model loader
 
 ![Model Loader](screenshots/model_loader.gif)
 
