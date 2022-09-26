@@ -85,7 +85,7 @@ bool Window::windowInit(Interface *interface)
 
 
     glfwMakeContextCurrent(window.get());
-    interface->init("#version 330", window.get());
+    interface->init("#version 410", window.get());
     glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);  
     
     return true;

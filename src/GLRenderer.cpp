@@ -68,10 +68,16 @@ void GLRenderer::draw()
     shaders.at("modelShader")->use();
     shaders.at("modelShader")->setVec3("viewPos", camera->Position);
 
+    // Directional light
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "dirLight.direction"), 0.0f, 5.0f, 0.0f);		
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "dirLight.ambient"), 1.0f, 1.0f, 1.0f);	
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "dirLight.diffuse"), 0.5f, 1.5f, 0.5); 
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "dirLight.specular"), 0.2f, 0.2f, 0.2f);
+
     // Point light 1
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].position"),  0.f, 2.f, 0.f);		
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);		
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].diffuse"), 0.5f, 0.5f, 0.5f); 
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].position"),  0.f, 5.f, 0.f);		
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].ambient"), 1.f, 1.f, 1.f);		
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].diffuse"), 1.f, 1.f, 1.f); 
     glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].specular"), 0.5f, 0.5f, 0.5f);
     glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].constant"), 1.0f);
     glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[0].linear"), 0.14);
@@ -79,8 +85,8 @@ void GLRenderer::draw()
     
     // Point light 2
     glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].position"),  x, y, z);		
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].ambient"), 0.025f, 0.025f, 0.025f);		
-    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].diffuse"), 0.5f, 0.5f, 0.5f); 
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].ambient"), 0.5f, 0.5f, 0.5f);		
+    glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].diffuse"), 0.7f, 0.7f, 0.7f); 
     glUniform3f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].specular"), 0.5f, 0.5f, 0.5f);  
     glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].constant"), 1.0f);
     glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].linear"), 0.14);
@@ -95,7 +101,7 @@ void GLRenderer::draw()
     // render the loaded model
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-    model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
+    model = glm::scale(model, glm::vec3(1.0f));
     shaders.at("modelShader")->setMat4("model", model);
     Objects.at("Guitar")->Draw(shaders.at("modelShader").get());
     
@@ -105,7 +111,7 @@ void GLRenderer::draw()
     
     //PL1
     model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0, 2, 0));
+    model = glm::translate(model, glm::vec3(0, 5, 0));
     model = glm::scale(model, glm::vec3(0.1f));
     shaders.at("lightShader")->setMat4("model", model);
     Objects.at("Light")->Draw(shaders.at("lightShader").get());

@@ -152,7 +152,7 @@ Material Model::loadMaterial(aiMaterial* mat) {
     material.Specular = glm::vec3(color.r, color.b, color.g);
 
     mat->Get(AI_MATKEY_SHININESS, shininess);
-    material.Shininess = shininess*1000.f;
+    material.Shininess = shininess;
 
     return material;
 }
