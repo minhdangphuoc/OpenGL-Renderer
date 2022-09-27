@@ -9,6 +9,7 @@
 #include "Interface.hpp"
 #include "Controller.hpp"
 #include "GLRenderer.hpp"
+#include "Material.hpp"
 
 class Window
 {

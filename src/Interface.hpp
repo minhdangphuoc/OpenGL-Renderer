@@ -10,7 +10,9 @@
 #include <implot.h>
 #include <implot_internal.h>
 #include "glm/glm.hpp"
-#include "Model.hpp"
+#include "Object.hpp"
+#include "Shape.hpp"
+#include "Material.hpp"
 
 #include <string>
 #include <memory>
@@ -45,8 +47,7 @@ public:
     void createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size);
     void createColorEdit3(std::string title, float * color);
 
-    void createColorEdit3(std::string title, Model & object);
-    
+    void createComboBox(const std::string title, Object & object, const std::map<std::string, Material> & set,const std::vector<std::string> & list);
 };
 
 #endif // __INTERFACE_HPP__

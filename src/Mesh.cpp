@@ -16,11 +16,12 @@ void Mesh::cleanData() {
 }
 
 // render the mesh
-void Mesh::Draw(Shader *shader) 
+void Mesh::draw(Shader *shader) 
 {
     // bind appropriate textures
     unsigned int diffuseNr  = 1;
     unsigned int specularNr = 1;
+    unsigned int shininessNr = 1;
     unsigned int normalNr   = 1;
     unsigned int heightNr   = 1;
     for(unsigned int i = 0; i < textures.size(); i++)
@@ -33,6 +34,8 @@ void Mesh::Draw(Shader *shader)
             number = std::to_string(diffuseNr++);
         else if(name == "texture_specular")
             number = std::to_string(specularNr++); // transfer unsigned int to string
+        else if(name == "material_shininess")
+            number = std::to_string(shininessNr++); // transfer unsigned int to string
         else if(name == "texture_normal")
             number = std::to_string(normalNr++); // transfer unsigned int to string
             else if(name == "texture_height")

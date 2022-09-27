@@ -12,7 +12,7 @@ class Mesh {
         Mesh(std::vector<Vertex> vertices, std::vector<uint32_t> indices, std::vector<Texture> textures);
         ~Mesh() = default;
 
-        void Draw(Shader *shader);
+        void draw(Shader *shader);
 
         // mesh data
         std::vector<Vertex>       vertices;

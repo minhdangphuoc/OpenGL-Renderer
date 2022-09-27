@@ -12,27 +12,29 @@
 #include "Mesh.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
+#include "Object.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-class Model
+class Model: public Object
 {
 public:
     Model(std::string path)
     {
+        this->model = glm::mat4(1.0f);
         loadModel(path);
     }
-    void Draw(Shader *shader);	
-
+    void draw(Shader *shader);	
+    void setMaterial(const Material & newMaterial) {}
     // model data 
     std::vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
     std::vector<Mesh>    meshes;
     std::string directory;
     bool gammaCorrection;
 
-    void cleanMesh();
+    void clean();
 
 private:
 

@@ -3,13 +3,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-void Model::Draw(Shader *shader)
+void Model::draw(Shader *shader)
 {
+    shader->setMat4("model", model);
     for(unsigned int i = 0; i < meshes.size(); i++)
-        meshes[i].Draw(shader);
+        meshes[i].draw(shader);
 }  
 
-void Model::cleanMesh()
+void Model::clean()
 {
     for(auto it:meshes) {
         it.cleanData();
@@ -123,13 +124,20 @@ Mesh Model::processMesh(aiMesh *mesh, const aiScene *scene)
     // 1. diffuse maps
     std::vector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+
     // 2. specular maps
     std::vector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    // 3. normal maps
+    
+    // 3. shininess maps
+    std::vector<Texture> shininessMaps = loadMaterialTextures(material, aiTextureType_SHININESS, "material_shininess");
+    textures.insert(textures.end(), shininessMaps.begin(), shininessMaps.end());
+
+    // 5. normal maps
     std::vector<Texture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-    // 4. height maps
+
+    // 6. height maps
     std::vector<Texture> heightMaps = loadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
     

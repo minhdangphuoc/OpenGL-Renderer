@@ -31,6 +31,9 @@
 - [0.3.3] Lighting Maps
 - [0.3.4] Light casters and Multiple Lights
 - [0.4.0] Model Loader
+- [0.4.1] 
+- [0.5.0] ImGuizmo
+
 ## Screenshots
 
 ### Model loader

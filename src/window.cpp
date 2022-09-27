@@ -132,7 +132,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         ImGui::SetNextWindowSizeConstraints(windowSize2, windowSize2);
         ImGui::SetNextWindowPos(windowPos2);
 
-        interface->beginWindow("Box");
+        interface->beginWindow("DEBUG");
         ImGui::Checkbox("POLYGON_MODE", &(renderer->polyMode));
         interface->createText("Camera:" + std::to_string(renderer->camera->Position.x) + ", " + std::to_string(renderer->camera->Position.y) + ", "+ std::to_string(renderer->camera->Position.z));
         interface->createText("Front:" + std::to_string(renderer->camera->Front.x) + ", " + std::to_string(renderer->camera->Front.y) + ", "+ std::to_string(renderer->camera->Front.z));
@@ -141,6 +141,9 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->createSlider("Y", renderer->y, -5.0f, 5.0f);
         interface->createSlider("Z", renderer->z, -5.0f, 5.0f);
 
+
+        interface->createText("Box");
+        interface->createComboBox("Material", *(renderer->Objects.at("Cube")), renderer->MaterialPresets, MaterialNames);
         interface->endWindow();
 
         ImGui::SetNextWindowSizeConstraints(windowSize1, windowSize1);
