@@ -78,7 +78,7 @@ void GLRenderer::loadShaders()
 void GLRenderer::loadObjects()
 {
     glEnable(GL_DEPTH_TEST); // Z-Buffer
-    Objects.insert(std::pair("Model", std::make_unique<Model>("../Models/miku/scene.gltf")));
+    Objects.insert(std::pair("Model", std::make_unique<Model>("../Models/car/scene.gltf")));
     Objects.insert(std::pair("PL1", std::make_unique<Model>("../Models/lightbulb/scene.gltf")));
     Objects.insert(std::pair("PL2", std::make_unique<Model>("../Models/lightbulb/scene.gltf")));
     Objects.insert(std::pair("Cube", std::make_unique<Box>()));
@@ -136,7 +136,8 @@ void GLRenderer::draw()
     // render the loaded model
     Objects.at("Model")->model = glm::mat4(1.0f);
     Objects.at("Model")->model = glm::translate(Objects.at("Model")->model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-    Objects.at("Model")->model = glm::scale(Objects.at("Model")->model, glm::vec3(1.0f));
+    Objects.at("Model")->model = glm::rotate(Objects.at("Model")->model, glm::radians(-90.0f), glm::vec3(1.f, 0.f, 0.f)); 
+    Objects.at("Model")->model = glm::scale(Objects.at("Model")->model, glm::vec3(0.005f));
     Objects.at("Model")->draw(shaders.at("modelShader").get());
     
     // CUBE
