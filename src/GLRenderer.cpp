@@ -72,7 +72,7 @@ void GLRenderer::loadShaders()
 {
     shaders.insert(std::pair("modelShader", std::make_unique<Shader>("../../shaders/colorModel.vert", "../../shaders/colorModel.frag")));
     shaders.insert(std::pair("lightShader", std::make_unique<Shader>("../../shaders/light.vert", "../../shaders/light.frag")));
-    shaders.insert(std::pair("cubeShader", std::make_unique<Shader>("../../shaders/Cube.vert", "../../shaders/Cube.frag")));
+    shaders.insert(std::pair("cubeShader", std::make_unique<Shader>("../../shaders/colorModel.vert", "../../shaders/colorModel.frag")));
 }
 
 void GLRenderer::loadObjects()
@@ -130,6 +130,8 @@ void GLRenderer::draw()
     glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].linear"), 0.14);
     glUniform1f(glGetUniformLocation(shaders.at("modelShader")->ID, "pointLights[1].quadratic"), 0.07);	
     
+    shaders.at("modelShader")->setBool("hasTexture", true);
+
     shaders.at("modelShader")->setMat4("projection", projection);
     shaders.at("modelShader")->setMat4("view", view);
 

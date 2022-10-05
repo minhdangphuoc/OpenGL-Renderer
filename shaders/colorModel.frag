@@ -38,6 +38,8 @@ uniform vec3 viewPos;
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
+uniform bool hasTexture;
+uniform Material inMaterial;
 uniform sampler2D texture_diffuse;
 uniform sampler2D texture_specular;
 uniform float material_shininess;
@@ -45,14 +47,33 @@ uniform float material_shininess;
 vec3 CalcDirLight(DirLight light, vec3 ambient, vec3 diffuse, vec3 specular, float shininess, vec3 normal, vec3 viewDir);
 vec3 CalcPointLight(PointLight light, vec3 ambient, vec3 diffuse, vec3 specular, float shininess, vec3 normal, vec3 fragPos, vec3 viewDir);
 
+float near = 0.1; 
+float far  = 100.0; 
+  
+float LinearizeDepth(float depth) 
+{
+    float z = depth * 2.0 - 1.0; // back to NDC 
+    return (2.0 * near * far) / (far + near - z * (far - near));	
+}
+
 void main()
 {
     Material material;
 
-    material.ambient = vec3(texture(texture_diffuse, TexCoords));
-    material.diffuse = vec3(texture(texture_diffuse, TexCoords));
-    material.specular = vec3(texture(texture_specular, TexCoords));
-    material.shininess = material_shininess;
+    if (hasTexture == true)
+    {
+        material.ambient = vec3(texture(texture_diffuse, TexCoords));
+        material.diffuse = vec3(texture(texture_diffuse, TexCoords));
+        material.specular = vec3(texture(texture_specular, TexCoords));
+        material.shininess = material_shininess;
+    } else {
+        material = inMaterial;
+    }
+
+    vec4 textureColour = texture(texture_diffuse, TexCoords);
+    if(textureColour.a < 0.5) {
+        discard;
+    }
 
     // Properties
     vec3 result = vec3(0.0);//needs an initial value or else the model won't render correctly
@@ -60,11 +81,14 @@ void main()
     vec3 norm = normalize(Normal);
     
     // phase 1: directional lighting
-    // result = CalcDirLight(dirLight, material.ambient, material.diffuse, material.specular, material_shininess, norm, viewDir);
+    result = CalcDirLight(dirLight, material.ambient, material.diffuse, material.specular, material.shininess, norm, viewDir);
 
     //Point lights
     for(int i = 0; i < NR_POINT_LIGHTS; i++)
-    result += CalcPointLight(pointLights[i], material.ambient, material.diffuse, material.specular, material_shininess, norm, FragPos, viewDir);
+    result += CalcPointLight(pointLights[i], material.ambient, material.diffuse, material.specular, material.shininess, norm, FragPos, viewDir);
+    
+    float depth = LinearizeDepth(gl_FragCoord.z) / far;
+    // FragColor = vec4(vec3(depth), 1.0);
 
     FragColor = vec4(result, 1.0);
 }
