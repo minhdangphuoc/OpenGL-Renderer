@@ -70,17 +70,17 @@ bool GLRenderer::initMaterial()
 
 void GLRenderer::loadShaders()
 {
-    shaders.insert(std::pair("modelShader", std::make_unique<Shader>("../shaders/colorModel.vert", "../shaders/colorModel.frag")));
-    shaders.insert(std::pair("lightShader", std::make_unique<Shader>("../shaders/light.vert", "../shaders/light.frag")));
-    shaders.insert(std::pair("cubeShader", std::make_unique<Shader>("../shaders/Cube.vert", "../shaders/Cube.frag")));
+    shaders.insert(std::pair("modelShader", std::make_unique<Shader>("../../shaders/colorModel.vert", "../../shaders/colorModel.frag")));
+    shaders.insert(std::pair("lightShader", std::make_unique<Shader>("../../shaders/light.vert", "../../shaders/light.frag")));
+    shaders.insert(std::pair("cubeShader", std::make_unique<Shader>("../../shaders/Cube.vert", "../../shaders/Cube.frag")));
 }
 
 void GLRenderer::loadObjects()
 {
     glEnable(GL_DEPTH_TEST); // Z-Buffer
-    Objects.insert(std::pair("Model", std::make_unique<Model>("../Model/Sponza/glTF/Sponza.gltf")));
-    Objects.insert(std::pair("PL1", std::make_unique<Model>("../Model/lightbulb/scene.gltf")));
-    Objects.insert(std::pair("PL2", std::make_unique<Model>("../Model/lightbulb/scene.gltf")));
+    Objects.insert(std::pair("Model", std::make_unique<Model>("../../Model/Sponza/glTF/Sponza.gltf")));
+    Objects.insert(std::pair("PL1", std::make_unique<Model>("../../Model/lightbulb/scene.gltf")));
+    Objects.insert(std::pair("PL2", std::make_unique<Model>("../../Model/lightbulb/scene.gltf")));
     Objects.insert(std::pair("Cube", std::make_unique<Sphere>(20,20)));
 }
 

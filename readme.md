@@ -38,6 +38,8 @@
 
 ### Model loader
 
+![Sphere and model](screenshots/sphereandmodel.png)
+
 ![Model Loader](screenshots/model_loader.gif)
 
 ### Multiple Lights
