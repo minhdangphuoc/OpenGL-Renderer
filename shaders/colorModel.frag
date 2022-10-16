@@ -35,6 +35,10 @@ in vec2 TexCoords;
 out vec4 FragColor;
 
 uniform vec3 viewPos;
+
+// LIGHTING
+uniform bool hasDirLight;
+uniform int NumberOfPointLight;
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 
@@ -42,6 +46,7 @@ uniform bool hasTexture;
 uniform Material inMaterial;
 uniform sampler2D texture_diffuse;
 uniform sampler2D texture_specular;
+uniform sampler2D texture_normal;
 uniform float material_shininess;
 
 vec3 CalcDirLight(DirLight light, vec3 ambient, vec3 diffuse, vec3 specular, float shininess, vec3 normal, vec3 viewDir);
@@ -49,6 +54,7 @@ vec3 CalcPointLight(PointLight light, vec3 ambient, vec3 diffuse, vec3 specular,
 
 float near = 0.1; 
 float far  = 100.0; 
+vec3 norm;
   
 float LinearizeDepth(float depth) 
 {
@@ -59,15 +65,17 @@ float LinearizeDepth(float depth)
 void main()
 {
     Material material;
-
     if (hasTexture == true)
     {
         material.ambient = vec3(texture(texture_diffuse, TexCoords));
         material.diffuse = vec3(texture(texture_diffuse, TexCoords));
         material.specular = vec3(texture(texture_specular, TexCoords));
         material.shininess = material_shininess;
+        norm = vec3(texture(texture_normal, TexCoords)).rgb;
+        norm = normalize(norm);
     } else {
         material = inMaterial;
+        norm = normalize(Normal);
     }
 
     vec4 textureColour = texture(texture_diffuse, TexCoords);
@@ -78,14 +86,18 @@ void main()
     // Properties
     vec3 result = vec3(0.0);//needs an initial value or else the model won't render correctly
     vec3 viewDir = normalize(viewPos - FragPos);
-    vec3 norm = normalize(Normal);
+    
     
     // phase 1: directional lighting
-    result = CalcDirLight(dirLight, material.ambient, material.diffuse, material.specular, material.shininess, norm, viewDir);
+    if (hasDirLight==true)
+        result = CalcDirLight(dirLight, material.ambient, material.diffuse, material.specular, material.shininess, norm, viewDir);
 
     //Point lights
-    for(int i = 0; i < NR_POINT_LIGHTS; i++)
-    result += CalcPointLight(pointLights[i], material.ambient, material.diffuse, material.specular, material.shininess, norm, FragPos, viewDir);
+    if (NumberOfPointLight>0)
+    {
+        for(int i = 0; i < NR_POINT_LIGHTS; i++)
+        result += CalcPointLight(pointLights[i], material.ambient, material.diffuse, material.specular, material.shininess, norm, FragPos, viewDir);
+    }
     
     float depth = LinearizeDepth(gl_FragCoord.z) / far;
     // FragColor = vec4(vec3(depth), 1.0);

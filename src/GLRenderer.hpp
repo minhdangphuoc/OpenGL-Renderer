@@ -9,6 +9,7 @@
 #include "Shape.hpp"
 #include "Model.hpp"
 #include "Material.hpp"
+#include "LightingSystem.hpp"
 
 #include <vector>
 #include <cstdlib>
@@ -83,6 +84,7 @@ class GLRenderer
     std::string errorInfo;
 
     // Renderer Components
+    std::unique_ptr<LightingSystem> lightingSystem = std::make_unique<LightingSystem>();
     std::unordered_map<std::string /* title */, std::unique_ptr<Shader>> shaders;
 };
 #endif // GL_RENDERER_HPP

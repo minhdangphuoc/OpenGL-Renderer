@@ -172,6 +172,8 @@ public:
         shader->setMat4("model", model);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glActiveTexture(GL_TEXTURE0);
     }
     void clean() override
     {
@@ -286,6 +288,8 @@ class Sphere: public Shape
         shader->setMat4("model", model);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (void*)0);
+        glBindVertexArray(0);
+        glActiveTexture(GL_TEXTURE0);
     }
     void clean() override
     {
