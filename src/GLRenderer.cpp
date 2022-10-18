@@ -79,12 +79,12 @@ void GLRenderer::loadObjects()
     Objects.insert(std::pair("Model", std::make_unique<Model>("../../Model/Sponza/glTF/Sponza.gltf")));
     Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/vampire/dancing_vampire.dae")));
 
-    lightingSystem->setNewDirLight("Direction Light",
-                                   new DirLight(
-                                       glm::vec3(0.0f, 5.0f, 0.0f),
-                                       glm::vec3(.2f, .2f, .2f),
-                                       glm::vec3(0.5f, 0.5f, 0.5),
-                                       glm::vec3(0.2f, 0.2f, 0.2f)));
+    // lightingSystem->setNewDirectionalLight("Direction Light",
+    //                                new DirectionalLight(
+    //                                    glm::vec3(0.0f, 5.0f, 0.0f),
+    //                                    glm::vec3(.2f, .2f, .2f),
+    //                                    glm::vec3(0.5f, 0.5f, 0.5),
+    //                                    glm::vec3(0.2f, 0.2f, 0.2f)));
     lightingSystem->setNewPointLight("PL1",
                                      new PointLight(
                                          glm::vec3(0.f, 5.f, 0.f),
@@ -96,13 +96,25 @@ void GLRenderer::loadObjects()
                                          0.07));
     lightingSystem->setNewPointLight("PL2",
                                      new PointLight(
-                                         glm::vec3(0.f, 0.f, 5.f),
-                                         glm::vec3(0.0f, 0.f, 0.5f),
+                                         glm::vec3(0.f, 0.f, 6.f),
+                                         glm::vec3(0.0f, 0.f, 0.f),
                                          glm::vec3(0.f, 0.f, 0.7f),
                                          glm::vec3(0.5f, 0.5f, 0.5f),
                                          1.0f,
                                          0.14,
                                          0.07));
+    lightingSystem->setNewSpotLight("SL1", new SpotLight(
+                                        glm::vec3(0.f, 3.f, 0.f),
+                                        glm::vec3(0.f, -1.f, 0.f),
+                                        glm::vec3(0.0f, 0.f, 0.f),
+                                        glm::vec3(1.f),
+                                        glm::vec3(1.f),
+                                        1.0f,
+                                        0.09,
+                                        0.032,
+                                        glm::cos(glm::radians(10.0f)),
+                                        glm::cos(glm::radians(15.0f))
+                                    ));
 }
 
 void GLRenderer::setCamera(Camera *newCamera)
@@ -127,11 +139,7 @@ void GLRenderer::draw()
 
     shaders.at("modelShader")->use();
     shaders.at("modelShader")->setVec3("viewPos", camera->Position);
-
-    // Directional light
-    lightingSystem->setupLighting(*(shaders.at("modelShader").get()));
-
-    shaders.at("modelShader")->setBool("hasTexture", true);
+    
 
     shaders.at("modelShader")->setMat4("projection", projection);
     shaders.at("modelShader")->setMat4("view", view);
@@ -152,7 +160,6 @@ void GLRenderer::draw()
     shaders.at("cubeShader")->setVec3("viewPos", camera->Position);
     shaders.at("cubeShader")->setMat4("projection", projection);
     shaders.at("cubeShader")->setMat4("view", view);
-    shaders.at("cubeShader")->setBool("hasTexture", true);
 
     // // Point light 2
 
@@ -170,6 +177,6 @@ void GLRenderer::draw()
     shaders.at("lightShader")->setMat4("projection", projection);
     shaders.at("lightShader")->setMat4("view", view);
 
-    lightingSystem->getPointLight("PL2")->setPosition(glm::vec3(x, y, z));
+    lightingSystem->getSpotLight("SL1")->setDirection(glm::vec3(x, y, z));
     lightingSystem->draw(shaders.at("lightShader").get());
 }

@@ -150,6 +150,8 @@ public:
 
     void draw(Shader * shader)
     {
+        shader->setBool("hasTexture", false);
+
         shader->setVec3("inMaterial.ambient", glm::vec3(
             material.Ambient.x, 
             material.Ambient.y, 
@@ -266,6 +268,7 @@ class Sphere: public Shape
 
     void draw(Shader * shader)
     {
+        shader->setBool("hasTexture", false);
         shader->setVec3("inMaterial.ambient", glm::vec3(
             material.Ambient.x, 
             material.Ambient.y, 
