@@ -38,7 +38,7 @@ public:
     //     return *this;
     // }
 
-    void setMaterial(const Material & newMaterial) override
+    void setMaterial(const Material & newMaterial)
     {
         this -> material = newMaterial;
     }

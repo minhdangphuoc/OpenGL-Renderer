@@ -15,6 +15,7 @@ public:
     virtual void setMaterial(const Material & newaterial) = 0;
     unsigned int selectedMaterial = 0;
     glm::mat4 model;
+protected:
     
 };
 

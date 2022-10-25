@@ -114,17 +114,6 @@ void LightingSystem::draw(Shader *pLightShader)
             spotLightModel->model = glm::mat4(1.0f);
             spotLightModel->model = glm::translate(spotLightModel->model, spotLight.second->getPosition());
 
-            // glm::vec3 from_vector;
-            // glm::vec3 to_vector;
-            // glm::normalize(from_vector);
-            // glm::normalize(to_vector);
-            // float cosa = glm::dot(from_vector, to_vector);
-            // glm::clamp(cosa, -1.0f, 1.0f);
-            // glm::vec3 axis = glm::cross(from_vector, to_vector);
-            // float angle = glm::degrees(glm::acos(cosa));
-            // glm::mat4 rotate_matrix = glm::rotate(glm::mat4(1), angle, axis);
-
-            // spotLightModel->model = glm::rotate(spotLightModel->model, glm::radians(-90.f), glm::vec3(1.f, 0.f, 0.f));
             float cosa = glm::dot(glm::normalize(glm::vec3(0.f, 0.f, 1.f)), glm::normalize(spotLight.second->getDirection()));
             glm::clamp(cosa, -1.0f, 1.0f);
             glm::vec3 axis = glm::cross(glm::normalize(glm::vec3(0.f, 0.f, 1.f)), glm::normalize(spotLight.second->getDirection()));
@@ -135,7 +124,7 @@ void LightingSystem::draw(Shader *pLightShader)
                 spotLightModel->model = glm::rotate(spotLightModel->model, glm::radians(angle), axis);
             else if (angle == 180.f)  
                 spotLightModel->model = glm::rotate(spotLightModel->model, glm::radians(-angle), glm::vec3(0.f, 1.f, 0.f));
-            spotLightModel->model = glm::scale(spotLightModel->model, glm::vec3(0.05f));
+            spotLightModel->model = glm::scale(spotLightModel->model, glm::vec3(0.01f));
             spotLightModel->draw(pLightShader);
         }
     }

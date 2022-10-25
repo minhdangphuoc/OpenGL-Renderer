@@ -13,12 +13,15 @@
 #include <string>
 #include <memory>
 
-class Lighting
+class Lighting : public Object
 {
 public:
     Lighting() = default;
     ~Lighting() = default;
-
+    void clean(){}
+    void draw(Shader *shader){}
+    void renderInterface(){}
+    void setMaterial(const Material & newaterial){}
 protected:
     glm::vec3 position;
     glm::vec3 direction;
@@ -53,6 +56,7 @@ public:
     glm::vec3 getAmbient() { return this->ambient; }
     glm::vec3 getDiffuse() { return this->diffuse; }
     glm::vec3 getSpecular() { return this->specular; }
+
 };
 
 class PointLight : public Lighting
@@ -93,6 +97,7 @@ public:
     float getConstant() { return this->constant; }
     float getLinear() { return this->linear; }
     float getQuadratic() { return this->quadratic; }
+
 
 private:
     // Unique attributes
@@ -151,7 +156,7 @@ public:
     float getConstant() { return this->constant; }
     float getLinear() { return this->linear; }
     float getQuadratic() { return this->quadratic; }
-
+    
 private:
     // Unique attributes
     float cutOff;

@@ -12,6 +12,7 @@
 #include "glm/glm.hpp"
 #include "Object.hpp"
 #include "Shape.hpp"
+#include "Model.hpp"
 #include "Material.hpp"
 
 #include <string>
