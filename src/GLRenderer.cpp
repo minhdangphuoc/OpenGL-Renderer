@@ -68,9 +68,9 @@ bool GLRenderer::initMaterial()
 
 void GLRenderer::loadShaders()
 {
-    shaders.insert(std::pair("modelShader", std::make_unique<Shader>("../../shaders/colorModel.vert", "../../shaders/colorModel.frag")));
+    shaders.insert(std::pair("modelShader", std::make_unique<Shader>("../../shaders/colorModelAni.vert", "../../shaders/colorModelAni.frag")));
     shaders.insert(std::pair("lightShader", std::make_unique<Shader>("../../shaders/light.vert", "../../shaders/light.frag")));
-    shaders.insert(std::pair("cubeShader", std::make_unique<Shader>("../../shaders/colorModel.vert", "../../shaders/colorModel.frag")));
+    shaders.insert(std::pair("cubeShader", std::make_unique<Shader>("../../shaders/colorModelAni.vert", "../../shaders/colorModelAni.frag")));
 }
 
 void GLRenderer::loadObjects()
