@@ -32,7 +32,8 @@
 - [0.3.4] Light casters and Multiple Lights
 - [0.4.0] Model Loader
 - [0.4.1] Add Sphere, clean source code
-- [0.5.0] ImGuizmo
+- [0.5.0] Lighting System w Lighting setup pre-drawing 3D object;
+
 
 ## Screenshots
 

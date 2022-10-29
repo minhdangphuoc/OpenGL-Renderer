@@ -35,7 +35,6 @@ public:
     bool gammaCorrection;
 
     void clean();
-
 private:
 
 

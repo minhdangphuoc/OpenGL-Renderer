@@ -12,11 +12,13 @@
 #include "glm/glm.hpp"
 #include "Object.hpp"
 #include "Shape.hpp"
+#include "Model.hpp"
 #include "Material.hpp"
+#include "Object.hpp"
 
 #include <string>
 #include <memory>
-#include <glad/glad.h> 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <unordered_map>
 #include <array>
@@ -24,19 +26,18 @@
 class Interface
 {
 private:
-    
 public:
     // Con/Destructor
     Interface() = default;
-    ~Interface() = default; 
+    ~Interface() = default;
 
-    void init(const std::string & glsl_version, GLFWwindow * window);
+    void init(const std::string &glsl_version, GLFWwindow *window);
     void render();
     void renderDrawData();
     void clean();
     void start();
 
-    void beginWindow(std::string wName, bool & isActivate);
+    void beginWindow(std::string wName, bool &isActivate);
     void beginWindow(std::string wName);
 
     void endWindow();
@@ -44,10 +45,13 @@ public:
     // Component
     void createText(std::string title);
     void createSlider(std::string title, float &f, const float min, const float max);
-    void createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size);
-    void createColorEdit3(std::string title, float * color);
+    void createPlotLine(std::string title, std::vector<float> &x_data, std::vector<float> &y_data, int size);
+    void createColorEdit3(std::string title, float *color);
 
-    void createComboBox(const std::string title, Object & object, const std::map<std::string, Material> & set,const std::vector<std::string> & list);
+    void createComboBox(const std::string title, Object &object, const std::map<std::string, Material> &set, const std::vector<std::string> &list);
+
+    // Render Interface
+    void renderInterface(const Object &object);
 };
 
 #endif // __INTERFACE_HPP__

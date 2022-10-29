@@ -1,16 +1,17 @@
 #include "Interface.hpp"
 
-void Interface::init(const std::string & glsl_version, GLFWwindow * window)
+void Interface::init(const std::string &glsl_version, GLFWwindow *window)
 {
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImPlot::CreateContext();
 
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGuiIO &io = ImGui::GetIO();
+    (void)io;
     // Setup Dear ImGui style
     ImGui::Spectrum::StyleColorsSpectrum();
-    
+
     ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 8.0f);
     ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.2f, 0.2f, 0.2f, 0.8f));
 
@@ -25,7 +26,7 @@ void Interface::start()
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame(); 
+    ImGui::NewFrame();
 }
 
 void Interface::render()
@@ -47,10 +48,10 @@ void Interface::clean()
     ImGui::DestroyContext();
 }
 
-void Interface::beginWindow(std::string wName, bool & isActivate)
+void Interface::beginWindow(std::string wName, bool &isActivate)
 {
     if (isActivate)
-    ImGui::Begin(wName.c_str(), &isActivate);
+        ImGui::Begin(wName.c_str(), &isActivate);
 }
 
 void Interface::beginWindow(std::string wName)
@@ -64,7 +65,7 @@ void Interface::endWindow()
 }
 
 void Interface::createText(std::string title)
-{  
+{
     ImGui::Text(title.c_str());
 }
 
@@ -73,7 +74,7 @@ void Interface::createSlider(std::string title, float &f, const float min, const
     ImGui::SliderFloat(title.c_str(), &f, min, max);
 }
 
-void Interface::createPlotLine(std::string title, std::vector<float> & x_data, std::vector<float> & y_data, int size)
+void Interface::createPlotLine(std::string title, std::vector<float> &x_data, std::vector<float> &y_data, int size)
 {
     ImPlot::BeginPlot("FPS Line Chart", ImVec2(320.f, 160.f), ImPlotFlags_NoTitle);
     ImPlot::SetupAxis(ImAxis_X1, "", ImPlotAxisFlags_AutoFit + ImPlotAxisFlags_NoTickLabels);
@@ -83,26 +84,26 @@ void Interface::createPlotLine(std::string title, std::vector<float> & x_data, s
     ImPlot::EndPlot();
 }
 
-void Interface::createColorEdit3(const std::string title, float*  color)
+void Interface::createColorEdit3(const std::string title, float *color)
 {
     ImGui::ColorEdit3(title.c_str(), color);
 }
 
-void Interface::createComboBox(const std::string title, Object & object, const std::map<std::string, Material> & set, const std::vector<std::string> & list)
-{   
+void Interface::createComboBox(const std::string title, Object &object, const std::map<std::string, Material> &set, const std::vector<std::string> &list)
+{
     // if (object.selectedMaterial != 0)
     // if(object.material != set.at(MaterialNames.at(object.selectedMaterial)))
     //     object.selectedMaterial = 0;
-    if(ImGui::BeginCombo(title.c_str(), list.at(object.selectedMaterial).c_str()))
+    if (ImGui::BeginCombo(title.c_str(), list.at(object.selectedMaterial).c_str()))
     {
-        for(int i = 1; i < list.size(); i++)
+        for (int i = 1; i < list.size(); i++)
         {
             bool is_selected = (object.selectedMaterial == i);
             if (ImGui::Selectable(list.at(i).c_str(), is_selected))
-                {
-                    object.selectedMaterial = i;
-                    object.setMaterial(set.at(MaterialNames.at(object.selectedMaterial)));
-                }
+            {
+                object.selectedMaterial = i;
+                object.setMaterial(set.at(MaterialNames.at(object.selectedMaterial)));
+            }
             if (is_selected)
             {
                 ImGui::SetItemDefaultFocus();
@@ -110,4 +111,8 @@ void Interface::createComboBox(const std::string title, Object & object, const s
         }
         ImGui::EndCombo();
     }
+}
+
+void Interface::renderInterface(const Object &object)
+{
 }

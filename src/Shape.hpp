@@ -38,7 +38,7 @@ public:
     //     return *this;
     // }
 
-    void setMaterial(const Material & newMaterial) override
+    void setMaterial(const Material & newMaterial)
     {
         this -> material = newMaterial;
     }
@@ -150,28 +150,32 @@ public:
 
     void draw(Shader * shader)
     {
-        shader->setVec3("material.ambient", glm::vec3(
+        shader->setBool("hasTexture", false);
+
+        shader->setVec3("inMaterial.ambient", glm::vec3(
             material.Ambient.x, 
             material.Ambient.y, 
             material.Ambient.z
         ));
             
-        shader->setVec3("material.diffuse", glm::vec3(
+        shader->setVec3("inMaterial.diffuse", glm::vec3(
                 material.Diffuse.x, 
                 material.Diffuse.y, 
                 material.Diffuse.z
         ));
 
-        shader->setVec3("material.specular", glm::vec3(
+        shader->setVec3("inMaterial.specular", glm::vec3(
                 material.Specular.x, 
                 material.Specular.y, 
                 material.Specular.z
         ));
         
-        shader->setFloat("material.shininess", material.Shininess);
+        shader->setFloat("inMaterial.shininess", material.Shininess);
         shader->setMat4("model", model);
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        glBindVertexArray(0);
+        glActiveTexture(GL_TEXTURE0);
     }
     void clean() override
     {
@@ -264,28 +268,31 @@ class Sphere: public Shape
 
     void draw(Shader * shader)
     {
-        shader->setVec3("material.ambient", glm::vec3(
+        shader->setBool("hasTexture", false);
+        shader->setVec3("inMaterial.ambient", glm::vec3(
             material.Ambient.x, 
             material.Ambient.y, 
             material.Ambient.z
         ));
             
-        shader->setVec3("material.diffuse", glm::vec3(
+        shader->setVec3("inMaterial.diffuse", glm::vec3(
                 material.Diffuse.x, 
                 material.Diffuse.y, 
                 material.Diffuse.z
         ));
 
-        shader->setVec3("material.specular", glm::vec3(
+        shader->setVec3("inMaterial.specular", glm::vec3(
                 material.Specular.x, 
                 material.Specular.y, 
                 material.Specular.z
         ));
         
-        shader->setFloat("material.shininess", material.Shininess);
+        shader->setFloat("inMaterial.shininess", material.Shininess);
         shader->setMat4("model", model);
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, (void*)0);
+        glBindVertexArray(0);
+        glActiveTexture(GL_TEXTURE0);
     }
     void clean() override
     {

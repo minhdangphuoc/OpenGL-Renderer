@@ -9,6 +9,7 @@
 #include "Shape.hpp"
 #include "Model.hpp"
 #include "Material.hpp"
+#include "LightingSystem.hpp"
 
 #include <vector>
 #include <cstdlib>
@@ -46,7 +47,7 @@ class GLRenderer
         void setCamera(Camera * newCamera);
 
     
-        float x = 1.f, y = 1.f, z = 1.f, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f, sX = 1.0f, sY = 1.0f, sZ = 1.0f;
+        float x = 0.f, y = 0.f, z = 1.f, rotX = 1.0f, rotY = 1.0f, rotZ = 1.0f, sX = 1.0f, sY = 1.0f, sZ = 1.0f;
         
         glm::vec3 cameraPos   = glm::vec3(0.0f, 0.0f,  3.0f);
         glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -83,6 +84,7 @@ class GLRenderer
     std::string errorInfo;
 
     // Renderer Components
+    std::unique_ptr<LightingSystem> lightingSystem = std::make_unique<LightingSystem>();
     std::unordered_map<std::string /* title */, std::unique_ptr<Shader>> shaders;
 };
 #endif // GL_RENDERER_HPP

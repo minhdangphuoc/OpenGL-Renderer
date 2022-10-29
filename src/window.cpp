@@ -137,9 +137,9 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->createText("Camera:" + std::to_string(renderer->camera->Position.x) + ", " + std::to_string(renderer->camera->Position.y) + ", "+ std::to_string(renderer->camera->Position.z));
         interface->createText("Front:" + std::to_string(renderer->camera->Front.x) + ", " + std::to_string(renderer->camera->Front.y) + ", "+ std::to_string(renderer->camera->Front.z));
         interface->createText("Position: Light 1");
-        interface->createSlider("X", renderer->x, -5.0f, 5.0f);
-        interface->createSlider("Y", renderer->y, -5.0f, 5.0f);
-        interface->createSlider("Z", renderer->z, -5.0f, 5.0f);
+        interface->createSlider("X", renderer->x, -15.0f, 15.0f);
+        interface->createSlider("Y", renderer->y, -15.0f, 15.0f);
+        interface->createSlider("Z", renderer->z, -15.0f, 15.0f);
 
 
         interface->createText("Box");
