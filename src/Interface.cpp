@@ -112,3 +112,7 @@ void Interface::createComboBox(const std::string title, Object &object, const st
         ImGui::EndCombo();
     }
 }
+
+void Interface::renderInterface(const Object &object)
+{
+}

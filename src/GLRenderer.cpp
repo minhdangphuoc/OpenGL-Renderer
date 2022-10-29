@@ -103,18 +103,18 @@ void GLRenderer::loadObjects()
                                          1.0f,
                                          0.14,
                                          0.07));
-    lightingSystem->setNewSpotLight("SL1", new SpotLight(
-                                        glm::vec3(0.f, 3.f, 0.f),
-                                        glm::vec3(0.f, -1.f, 0.f),
-                                        glm::vec3(0.0f, 0.f, 0.f),
-                                        glm::vec3(1.f),
-                                        glm::vec3(1.f),
-                                        1.0f,
-                                        0.09,
-                                        0.032,
-                                        glm::cos(glm::radians(10.0f)),
-                                        glm::cos(glm::radians(15.0f))
-                                    ));
+    // lightingSystem->setNewSpotLight("SL1", new SpotLight(
+    //                                     glm::vec3(0.f, 3.f, 0.f),
+    //                                     glm::vec3(0.f, -1.f, 0.f),
+    //                                     glm::vec3(0.0f, 0.f, 0.f),
+    //                                     glm::vec3(1.f),
+    //                                     glm::vec3(1.f),
+    //                                     1.0f,
+    //                                     0.09,
+    //                                     0.032,
+    //                                     glm::cos(glm::radians(10.0f)),
+    //                                     glm::cos(glm::radians(15.0f))
+    //                                 ));
 }
 
 void GLRenderer::setCamera(Camera *newCamera)
@@ -177,6 +177,6 @@ void GLRenderer::draw()
     shaders.at("lightShader")->setMat4("projection", projection);
     shaders.at("lightShader")->setMat4("view", view);
 
-    lightingSystem->getSpotLight("SL1")->setDirection(glm::vec3(x, y, z));
+    lightingSystem->getPointLight("PL2")->setPosition(glm::vec3(x, y, z));
     lightingSystem->draw(shaders.at("lightShader").get());
 }
