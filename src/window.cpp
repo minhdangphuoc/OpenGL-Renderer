@@ -141,9 +141,9 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->createSlider("Y", renderer->y, -15.0f, 15.0f);
         interface->createSlider("Z", renderer->z, -15.0f, 15.0f);
 
-
-        interface->createText("Box");
-        interface->createComboBox("Material", *(renderer->Objects.at("Cube")), renderer->MaterialPresets, MaterialNames);
+        // interface->createText("Box");
+        // interface->createComboBox("Material", *(renderer->Objects.at("Cube")), renderer->MaterialPresets, MaterialNames);
+        
         interface->endWindow();
 
         ImGui::SetNextWindowSizeConstraints(windowSize1, windowSize1);

@@ -3,6 +3,8 @@
 #include "GLRenderer.hpp"
 #include "Utilities.h"
 #include "Controller.hpp"
+#include "Animation.hpp"
+#include "Animator.hpp"
 
 #include <iostream>
 #include <stdexcept>
@@ -10,7 +12,6 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <array>
-
 bool GLRenderer::init()
 {
     try
@@ -77,7 +78,10 @@ void GLRenderer::loadObjects()
 {
     glEnable(GL_DEPTH_TEST); // Z-Buffer
     Objects.insert(std::pair("Model", std::make_unique<Model>("../../Model/Sponza/glTF/Sponza.gltf")));
-    Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/vampire/dancing_vampire.dae")));
+    Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/TestAniModel/Standing Run Forward.dae")));
+    std::string str = "../../Model/TestAniModel/Standing Run Forward.dae";
+    animation = new Animation(str, static_cast<Model *>(Objects.at("Cube").get()));
+    animator = new Animator((animation));
 
     // lightingSystem->setNewDirectionalLight("Direction Light",
     //                                new DirectionalLight(
@@ -122,8 +126,12 @@ void GLRenderer::setCamera(Camera *newCamera)
     camera.reset(newCamera);
 }
 
+// Temp
+
 void GLRenderer::draw()
 {
+    animator->UpdateAnimation(deltaTime / 3.0f);
+
     // draw in wireframe polygons
     if (polyMode)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // POLYGON_MODE
@@ -139,7 +147,6 @@ void GLRenderer::draw()
 
     shaders.at("modelShader")->use();
     shaders.at("modelShader")->setVec3("viewPos", camera->Position);
-    
 
     shaders.at("modelShader")->setMat4("projection", projection);
     shaders.at("modelShader")->setMat4("view", view);
@@ -147,7 +154,7 @@ void GLRenderer::draw()
     // render the loaded model
     Objects.at("Model")->model = glm::mat4(1.0f);
     Objects.at("Model")->model = glm::translate(Objects.at("Model")->model, glm::vec3(0.0f, 0.0f, .175f)); // translate it down so it's at the center of the scene
-    // Objects.at("Model")->model = glm::rotate(Objects.at("Model")->model, glm::radians(-90.0f), glm::vec3(1.f, 0.f, 0.f));
+    Objects.at("Model")->model = glm::rotate(Objects.at("Model")->model, glm::radians(90.0f), glm::vec3(0.f, 1.f, 0.f));
     Objects.at("Model")->model = glm::scale(Objects.at("Model")->model, glm::vec3(0.005f));
 
     // light
@@ -155,19 +162,20 @@ void GLRenderer::draw()
 
     Objects.at("Model")->draw(shaders.at("modelShader").get());
 
-    // CUBE
+    // Dancing model
     shaders.at("cubeShader")->use();
     shaders.at("cubeShader")->setVec3("viewPos", camera->Position);
     shaders.at("cubeShader")->setMat4("projection", projection);
     shaders.at("cubeShader")->setMat4("view", view);
 
-    // // Point light 2
-
     Objects.at("Cube")->model = glm::mat4(1.0f);
-    Objects.at("Cube")->model = glm::translate(Objects.at("Cube")->model, glm::vec3(0.f, 0.f, 0.f));
-    Objects.at("Cube")->model = glm::rotate(Objects.at("Cube")->model, glm::radians(-90.0f), glm::vec3(0.f, 1.f, 0.f));
-    Objects.at("Cube")->model = glm::scale(Objects.at("Cube")->model, glm::vec3(0.005f));
+    Objects.at("Cube")->model = glm::scale(Objects.at("Cube")->model, glm::vec3(0.0025f));
 
+    auto transforms = animator->GetFinalBoneMatrices();
+    for (int i = 0; i < transforms.size(); ++i)
+    {
+        shaders.at("cubeShader")->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+    }
     // light
     lightingSystem->setupLighting(*(shaders.at("cubeShader").get()));
 

@@ -4,7 +4,7 @@ layout (location = 1) in vec3 inNormal;
 layout (location = 2) in vec2 inTexCoords;
 layout(location = 3) in vec3 tangent;
 layout(location = 4) in vec3 bitangent;
-layout(location = 5) in ivec4 inBoneIds; 
+layout(location = 5) in uvec4 inBoneIds; 
 layout(location = 6) in vec4 inWeights;
 
 out vec3 FragPos;
@@ -18,32 +18,28 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform mat4 finalBonesMatrices[MAX_BONES];
-
+uniform bool hasAnimated;
 void main()
 {
-    vec4 totalPosition = vec4(0.0f);
-    vec3 totalNormal = vec3(0.0f);
-    for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
-    {
-        if(inBoneIds[i] == -1) 
-            continue;
-        if(inBoneIds[i] >=MAX_BONES) 
-        {
-            totalPosition = vec4(inPos,1.0f);
-            totalNormal = mat3(transpose(inverse(model))) * inNormal;
-            break;
-        }
-        vec4 localPosition = finalBonesMatrices[inBoneIds[i]] * vec4(inPos,1.0f);
-        totalPosition += localPosition * inWeights[i];
-        vec3 localNormal = mat3(finalBonesMatrices[inBoneIds[i]]) * inNormal;
-        totalNormal += localNormal;
-    }
-    
-    FragPos = vec3(model * totalPosition);
-    Normal = totalNormal;  
     TexCoords = inTexCoords;
-    
-    mat4 viewModel = view * model;
+    if (hasAnimated) {
+        mat4 BoneTransform = mat4(0.0f);
+        for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
+        {
+            BoneTransform += finalBonesMatrices[inBoneIds[i]] * inWeights[i];
+        }
+        
+        FragPos = (model * BoneTransform * vec4(inPos,1.0f)).xyz;
+        
+        vec4 NormalL = BoneTransform * vec4(inNormal, 0.0f);
+        Normal = (model * NormalL).xyz;   
 
-    gl_Position = projection * mat4(view * model) * totalPosition;
+        gl_Position = projection * view *  BoneTransform * vec4(inPos, 1.0);
+    }
+    else {
+        FragPos = vec3(model * vec4(inPos, 1.0));
+        Normal = mat3(transpose(inverse(model))) * inNormal;  
+
+        gl_Position = projection * view * vec4(FragPos, 1.0);
+    }
 }

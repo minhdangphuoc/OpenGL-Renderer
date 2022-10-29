@@ -7,16 +7,13 @@
 #include <string>
 #include <map>
 #include <cstdint> 
-#include <glm/gtc/matrix_transform.hpp>
 
+#include "Utilities.h"
 #include "Mesh.hpp"
 #include "Shader.hpp"
 #include "Material.hpp"
 #include "Object.hpp"
-
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include "BoneInfo.hpp"
 
 class Model: public Object
 {
@@ -28,24 +25,38 @@ public:
     }
     void draw(Shader *shader);	
     void setMaterial(const Material & newMaterial) {}
+    void clean();
+    
     // model data 
     std::vector<Texture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
     std::vector<Mesh>    meshes;
     std::string directory;
     bool gammaCorrection;
+    auto& GetBoneInfoMap() { return m_BoneInfoMap; }
+    int& GetBoneCount() { return m_BoneCounter; }
 
-    void clean();
 private:
+    // Vars
+    uint32_t TextureFromFile(const char *path, const std::string &directory, bool gamma);
+    std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, 
+                                             std::string typeName);
+
+    std::map<std::string, BoneInfo> m_BoneInfoMap; 
+    int m_BoneCounter = 0;
+    bool hasAnimated = false;
 
 
+    // Function
     void loadModel(std::string const &path);
     Material loadMaterial(aiMaterial* mat);
     void processNode(aiNode *node, const aiScene *scene);
     Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-    std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, 
-                                             std::string typeName);
-    uint32_t TextureFromFile(const char *path, const std::string &directory, bool gamma);
 
+    void SetVertexBoneDataToDefault(Vertex& vertex);
+    void SetVertexBoneData(Vertex& vertex, int boneID, float weight);
+    void ExtractBoneWeightForVertices(std::vector<Vertex>& vertices, aiMesh* mesh, const aiScene* scene);
+
+    
 };
 
 #endif

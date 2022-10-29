@@ -10,6 +10,8 @@
 #include "Model.hpp"
 #include "Material.hpp"
 #include "LightingSystem.hpp"
+#include "Animation.hpp"
+#include "Animator.hpp"
 
 #include <vector>
 #include <cstdlib>
@@ -86,5 +88,10 @@ class GLRenderer
     // Renderer Components
     std::unique_ptr<LightingSystem> lightingSystem = std::make_unique<LightingSystem>();
     std::unordered_map<std::string /* title */, std::unique_ptr<Shader>> shaders;
+
+
+    Animation * animation;
+    Animator * animator;
+
 };
 #endif // GL_RENDERER_HPP

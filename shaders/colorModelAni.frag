@@ -130,6 +130,7 @@ void main()
     // FragColor = vec4(vec3(depth), 1.0);
 
     FragColor = vec4(result, 1.0);
+    // FragColor = texture(texture_diffuse, TexCoords);
 }
 
 // calculates the color when using a directional light.
