@@ -107,18 +107,18 @@ void GLRenderer::loadObjects()
                                          1.0f,
                                          0.14,
                                          0.07));
-    // lightingSystem->setNewSpotLight("SL1", new SpotLight(
-    //                                     glm::vec3(0.f, 3.f, 0.f),
-    //                                     glm::vec3(0.f, -1.f, 0.f),
-    //                                     glm::vec3(0.0f, 0.f, 0.f),
-    //                                     glm::vec3(1.f),
-    //                                     glm::vec3(1.f),
-    //                                     1.0f,
-    //                                     0.09,
-    //                                     0.032,
-    //                                     glm::cos(glm::radians(10.0f)),
-    //                                     glm::cos(glm::radians(15.0f))
-    //                                 ));
+    lightingSystem->setNewSpotLight("SL1", new SpotLight(
+                                        glm::vec3(0.f, 3.f, 0.f),
+                                        glm::vec3(0.f, -1.f, 0.f),
+                                        glm::vec3(0.0f, 0.f, 0.f),
+                                        glm::vec3(1.f),
+                                        glm::vec3(1.f),
+                                        1.0f,
+                                        0.09,
+                                        0.032,
+                                        glm::cos(glm::radians(10.0f)),
+                                        glm::cos(glm::radians(15.0f))
+                                    ));
 }
 
 void GLRenderer::setCamera(Camera *newCamera)
@@ -154,7 +154,7 @@ void GLRenderer::draw()
     // render the loaded model
     Objects.at("Model")->model = glm::mat4(1.0f);
     Objects.at("Model")->model = glm::translate(Objects.at("Model")->model, glm::vec3(0.0f, 0.0f, .175f)); // translate it down so it's at the center of the scene
-    Objects.at("Model")->model = glm::rotate(Objects.at("Model")->model, glm::radians(90.0f), glm::vec3(0.f, 1.f, 0.f));
+    // Objects.at("Model")->model = glm::rotate(Objects.at("Model")->model, glm::radians(90.0f), glm::vec3(0.f, 1.f, 0.f));
     Objects.at("Model")->model = glm::scale(Objects.at("Model")->model, glm::vec3(0.005f));
 
     // light
@@ -169,12 +169,13 @@ void GLRenderer::draw()
     shaders.at("cubeShader")->setMat4("view", view);
 
     Objects.at("Cube")->model = glm::mat4(1.0f);
-    Objects.at("Cube")->model = glm::scale(Objects.at("Cube")->model, glm::vec3(0.0025f));
+    Objects.at("Cube")->model = glm::rotate(Objects.at("Cube")->model, glm::radians(90.0f), glm::vec3(0.f, 1.f, 0.f));
+    Objects.at("Cube")->model = glm::scale(Objects.at("Cube")->model, glm::vec3(0.7f));
 
     auto transforms = animator->GetFinalBoneMatrices();
     for (int i = 0; i < transforms.size(); ++i)
     {
-        shaders.at("cubeShader")->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", transforms[i]);
+        shaders.at("cubeShader")->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", Objects.at("Cube")->model * transforms[i]);
     }
     // light
     lightingSystem->setupLighting(*(shaders.at("cubeShader").get()));

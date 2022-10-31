@@ -37,6 +37,9 @@
 
 ## Screenshots
 
+### Animation
+
+![Sphere and model](screenshots/Animation.gif)
 ### Model loader
 
 ![Sphere and model](screenshots/sphereandmodel.png)
