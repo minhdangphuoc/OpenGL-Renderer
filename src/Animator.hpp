@@ -44,7 +44,6 @@ public:
     {
         std::string nodeName = node->name;
         glm::mat4 nodeTransform = node->transformation;
-        
         Bone *Bone = m_CurrentAnimation->FindBone(nodeName);
 
         if (Bone)

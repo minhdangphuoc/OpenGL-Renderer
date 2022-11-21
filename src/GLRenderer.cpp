@@ -78,8 +78,8 @@ void GLRenderer::loadObjects()
 {
     glEnable(GL_DEPTH_TEST); // Z-Buffer
     Objects.insert(std::pair("Model", std::make_unique<Model>("../../Model/Sponza/glTF/Sponza.gltf")));
-    Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/TestAniModel/Standing Run Forward.dae")));
-    std::string str = "../../Model/TestAniModel/Standing Run Forward.dae";
+    Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/vampire/dancing_vampire.dae")));
+    std::string str = "../../Model/vampire/dancing_vampire.dae";
     animation = new Animation(str, static_cast<Model *>(Objects.at("Cube").get()));
     animator = new Animator((animation));
 
@@ -108,17 +108,16 @@ void GLRenderer::loadObjects()
                                          0.14,
                                          0.07));
     lightingSystem->setNewSpotLight("SL1", new SpotLight(
-                                        glm::vec3(0.f, 3.f, 0.f),
-                                        glm::vec3(0.f, -1.f, 0.f),
-                                        glm::vec3(0.0f, 0.f, 0.f),
-                                        glm::vec3(1.f),
-                                        glm::vec3(1.f),
-                                        1.0f,
-                                        0.09,
-                                        0.032,
-                                        glm::cos(glm::radians(10.0f)),
-                                        glm::cos(glm::radians(15.0f))
-                                    ));
+                                               glm::vec3(0.f, 3.f, 0.f),
+                                               glm::vec3(0.f, -1.f, 0.f),
+                                               glm::vec3(0.0f, 0.f, 0.f),
+                                               glm::vec3(1.f),
+                                               glm::vec3(1.f),
+                                               1.0f,
+                                               0.09,
+                                               0.032,
+                                               glm::cos(glm::radians(10.0f)),
+                                               glm::cos(glm::radians(15.0f))));
 }
 
 void GLRenderer::setCamera(Camera *newCamera)
@@ -130,7 +129,7 @@ void GLRenderer::setCamera(Camera *newCamera)
 
 void GLRenderer::draw()
 {
-    animator->UpdateAnimation(deltaTime / 3.0f);
+    animator->UpdateAnimation(deltaTime);
 
     // draw in wireframe polygons
     if (polyMode)

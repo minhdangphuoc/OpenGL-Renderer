@@ -1,5 +1,5 @@
 #ifndef ANIMATION_HPP
-#define ANIMATION_HPP 
+#define ANIMATION_HPP
 #pragma once
 
 #include <vector>
@@ -25,10 +25,10 @@ class Animation
 public:
 	Animation() = default;
 
-	Animation(const std::string& animationPath, Model* model)
+	Animation(const std::string &animationPath, Model *model)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
+		const aiScene *scene = importer.ReadFile(animationPath, aiProcess_Triangulate);
 		assert(scene && scene->mRootNode);
 		auto animation = scene->mAnimations[0];
 		m_Duration = animation->mDuration;
@@ -43,40 +43,42 @@ public:
 	{
 	}
 
-	Bone* FindBone(const std::string& name)
+	Bone *FindBone(const std::string &name)
 	{
 		auto iter = std::find_if(m_Bones.begin(), m_Bones.end(),
-			[&](const Bone& Bone)
-			{
-				return Bone.GetBoneName() == name;
-			}
-		);
-		if (iter == m_Bones.end()) return nullptr;
-		else return &(*iter);
+								 [&](const Bone &Bone)
+								 {
+									 return Bone.GetBoneName() == name;
+								 });
+		if (iter == m_Bones.end())
+			return nullptr;
+		else
+			return &(*iter);
 	}
 
-	
 	inline float GetTicksPerSecond() { return m_TicksPerSecond; }
-	inline float GetDuration() { return m_Duration;}
-	inline const AssimpNodeData& GetRootNode() { return m_RootNode; }
-	inline const std::map<std::string,BoneInfo>& GetBoneIDMap() 
-	{ 
+	inline float GetDuration() { return m_Duration; }
+	inline const AssimpNodeData &GetRootNode() { return m_RootNode; }
+	inline const std::map<std::string, BoneInfo> &GetBoneIDMap()
+	{
 		return m_BoneInfoMap;
 	}
 
 private:
-	void ReadMissingBones(const aiAnimation* animation, Model& model)
+	void ReadMissingBones(const aiAnimation *animation, Model &model)
 	{
 		int size = animation->mNumChannels;
 
-		auto& boneInfoMap = model.GetBoneInfoMap();//getting m_BoneInfoMap from Model class
-		int& boneCount = model.GetBoneCount(); //getting the m_BoneCounter from Model class
+		auto &boneInfoMap = model.GetBoneInfoMap(); // getting m_BoneInfoMap from Model class
+		int &boneCount = model.GetBoneCount();		// getting the m_BoneCounter from Model class
 
-		//reading channels(bones engaged in an animation and their keyframes)
+		// reading channels(bones engaged in an animation and their keyframes)
 		for (int i = 0; i < size; i++)
 		{
 			auto channel = animation->mChannels[i];
 			std::string boneName = channel->mNodeName.data;
+
+			std::cout << i << ": " << boneName << std::endl;
 
 			if (boneInfoMap.find(boneName) == boneInfoMap.end())
 			{
@@ -84,13 +86,13 @@ private:
 				boneCount++;
 			}
 			m_Bones.push_back(Bone(channel->mNodeName.data,
-				boneInfoMap[channel->mNodeName.data].id, channel));
+								   boneInfoMap[channel->mNodeName.data].id, channel));
 		}
 
 		m_BoneInfoMap = boneInfoMap;
 	}
 
-	void ReadHeirarchyData(AssimpNodeData& dest, const aiNode* src)
+	void ReadHeirarchyData(AssimpNodeData &dest, const aiNode *src)
 	{
 		assert(src);
 
@@ -111,6 +113,5 @@ private:
 	AssimpNodeData m_RootNode;
 	std::map<std::string, BoneInfo> m_BoneInfoMap;
 };
-
 
 #endif // !ANIMATION_HPP

@@ -118,7 +118,7 @@ void LightingSystem::draw(Shader *pLightShader)
             glm::clamp(cosa, -1.0f, 1.0f);
             glm::vec3 axis = glm::cross(glm::normalize(glm::vec3(0.f, 0.f, 1.f)), glm::normalize(spotLight.second->getDirection()));
             float angle = glm::degrees(glm::acos(cosa));
-            std::cout << std::to_string(axis.x) + " " + std::to_string(axis.y) + " " + std::to_string(axis.z) + " " + std::to_string(angle) << std::endl;
+            // std::cout << std::to_string(axis.x) + " " + std::to_string(axis.y) + " " + std::to_string(axis.z) + " " + std::to_string(angle) << std::endl;
             
             if (axis != glm::vec3(0.f))
                 spotLightModel->model = glm::rotate(spotLightModel->model, glm::radians(angle), axis);
