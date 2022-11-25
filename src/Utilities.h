@@ -46,4 +46,6 @@ static glm::quat quat_cast(const aiQuaternion &q) { return glm::quat(q.w, q.x, q
 static glm::mat4 mat4_cast(const aiMatrix4x4 &m) { return glm::transpose(glm::make_mat4(&m.a1)); }
 static glm::mat4 mat4_cast(const aiMatrix3x3 &m) { return glm::transpose(glm::make_mat3(&m.a1)); }
 
+static std::string printVec3(const glm::vec3 &v3) { return std::to_string(v3.x) + "," + std::to_string(v3.y) + "," + std::to_string(v3.z); }
+
 #endif // __UTILITIES_H__

@@ -2,23 +2,25 @@
 
 void Window::processInput(GLRenderer *renderer)
 {
-    ImGuiIO& io = ImGui::GetIO();
-    if(io.KeysDown[ImGuiKey_Escape])
+    ImGuiIO &io = ImGui::GetIO();
+    if (io.KeysDown[ImGuiKey_Escape])
         glfwSetWindowShouldClose(window.get(), true);
-    
-    if (io.KeysDown[ImGuiKey_LeftAlt]) 
+
+    if (io.KeysDown[ImGuiKey_LeftAlt])
     {
 
-        if (isPressAlt == false) isPressAlt = true;
-    } else if (isPressAlt == true)
+        if (isPressAlt == false)
+            isPressAlt = true;
+    }
+    else if (isPressAlt == true)
     {
         isPressAlt = false;
         HWInput->firstMouse = true;
         glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
-
-    if(isPressAlt){
+    if (isPressAlt)
+    {
         if (io.KeysDown[ImGuiKey_W])
             renderer->camera->ProcessKeyboard(FORWARD, renderer->deltaTime);
         if (io.KeysDown[ImGuiKey_S])
@@ -28,7 +30,6 @@ void Window::processInput(GLRenderer *renderer)
         if (io.KeysDown[ImGuiKey_D])
             renderer->camera->ProcessKeyboard(RIGHT, renderer->deltaTime);
 
-        
         // Mouse pos
         float xpos = static_cast<float>(io.MousePos.x);
         float ypos = static_cast<float>(io.MousePos.y);
@@ -52,10 +53,9 @@ void Window::processInput(GLRenderer *renderer)
 
         // std::cerr<< std::to_string(glfwGetTime()) << " " << std::to_string(io.MouseWheel) << std::endl;
 
-        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);   
+        glfwSetInputMode(window.get(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 }
-
 
 bool Window::GLFWInit()
 {
@@ -65,17 +65,16 @@ bool Window::GLFWInit()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwSwapInterval(1);
     // glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
-    
-    #ifdef __APPLE__
-        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    #endif
-    
+
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
     return true;
 }
 
 bool Window::windowInit(Interface *interface)
-{   
+{
     window.reset(glfwCreateWindow(1080, 720, "OpenGL", NULL, NULL));
 
     if (!window)
@@ -83,11 +82,10 @@ bool Window::windowInit(Interface *interface)
         return false;
     }
 
-
     glfwMakeContextCurrent(window.get());
     interface->init("#version 410", window.get());
-    glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);  
-    
+    glfwSetFramebufferSizeCallback(window.get(), HWInput->framebuffer_size_callback);
+
     return true;
 }
 
@@ -102,7 +100,7 @@ bool Window::GLADInit()
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
         return false;
-    }    
+    }
     return true;
 }
 
@@ -115,18 +113,17 @@ void Window::render(GLRenderer *renderer, Interface *interface)
     ImVec2 windowSize2(340.f, 450.f);
     ImVec2 windowPos2(8.f, 216.f);
 
-    while(!glfwWindowShouldClose(window.get()))
+    while (!glfwWindowShouldClose(window.get()))
     {
         double currentFrame = static_cast<float>(glfwGetTime());
         renderer->deltaTime = currentFrame - renderer->lastFrame;
         renderer->lastFrame = currentFrame;
 
-        glfwGetWindowSize(window.get(), &renderer->wWidth,  &renderer->wHeight);
+        glfwGetWindowSize(window.get(), &renderer->wWidth, &renderer->wHeight);
 
         processInput(renderer);
-        glfwPollEvents();   
-        
-        
+        glfwPollEvents();
+
         interface->start();
 
         ImGui::SetNextWindowSizeConstraints(windowSize2, windowSize2);
@@ -134,8 +131,8 @@ void Window::render(GLRenderer *renderer, Interface *interface)
 
         interface->beginWindow("DEBUG");
         ImGui::Checkbox("POLYGON_MODE", &(renderer->polyMode));
-        interface->createText("Camera:" + std::to_string(renderer->camera->Position.x) + ", " + std::to_string(renderer->camera->Position.y) + ", "+ std::to_string(renderer->camera->Position.z));
-        interface->createText("Front:" + std::to_string(renderer->camera->Front.x) + ", " + std::to_string(renderer->camera->Front.y) + ", "+ std::to_string(renderer->camera->Front.z));
+        interface->createText("Camera:" + std::to_string(renderer->camera->Position.x) + ", " + std::to_string(renderer->camera->Position.y) + ", " + std::to_string(renderer->camera->Position.z));
+        interface->createText("Front:" + std::to_string(renderer->camera->Front.x) + ", " + std::to_string(renderer->camera->Front.y) + ", " + std::to_string(renderer->camera->Front.z));
         interface->createText("Position: Light 1");
         interface->createSlider("X", renderer->x, -15.0f, 15.0f);
         interface->createSlider("Y", renderer->y, -15.0f, 15.0f);
@@ -143,7 +140,7 @@ void Window::render(GLRenderer *renderer, Interface *interface)
 
         // interface->createText("Box");
         // interface->createComboBox("Material", *(renderer->Objects.at("Cube")), renderer->MaterialPresets, MaterialNames);
-        
+
         interface->endWindow();
 
         ImGui::SetNextWindowSizeConstraints(windowSize1, windowSize1);
@@ -154,7 +151,8 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         if (max_values + 1 >= 1000)
         {
             fps.erase(fps.begin());
-        } else 
+        }
+        else
         {
             max_values++;
             time.push_back(max_values);
@@ -167,10 +165,11 @@ void Window::render(GLRenderer *renderer, Interface *interface)
         interface->render();
 
         renderer->draw();
-        
+
         interface->renderDrawData();
-        
+
         glfwSwapBuffers(window.get());
+        
     }
 }
 

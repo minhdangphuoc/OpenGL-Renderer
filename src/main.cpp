@@ -3,7 +3,6 @@
 
 #include "window.hpp"
 #include "Interface.hpp"
-
 int main(int argc, const char **argv)
 {
     Window window;

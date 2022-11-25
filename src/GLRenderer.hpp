@@ -12,6 +12,7 @@
 #include "LightingSystem.hpp"
 #include "Animation.hpp"
 #include "Animator.hpp"
+#include "ManualAnimator.hpp"
 
 #include <vector>
 #include <cstdlib>
@@ -92,6 +93,8 @@ class GLRenderer
 
     Animation * animation;
     Animator * animator;
+    ManualAnimator * manualAnimator;
+    UDPServer * server;
 
 };
 #endif // GL_RENDERER_HPP

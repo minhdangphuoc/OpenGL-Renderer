@@ -12,6 +12,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <array>
+
 bool GLRenderer::init()
 {
     try
@@ -19,6 +20,10 @@ bool GLRenderer::init()
         initMaterial();
         loadShaders();
         loadObjects();
+        server = UDPServer::getInstance();
+        manualAnimator = new ManualAnimator(server);
+        server->runServer("192.168.31.61");
+        server->startRunning();
     }
     catch (const std::runtime_error &e)
     {
@@ -78,8 +83,8 @@ void GLRenderer::loadObjects()
 {
     glEnable(GL_DEPTH_TEST); // Z-Buffer
     Objects.insert(std::pair("Model", std::make_unique<Model>("../../Model/Sponza/glTF/Sponza.gltf")));
-    Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/vampire/dancing_vampire.dae")));
-    std::string str = "../../Model/vampire/dancing_vampire.dae";
+    Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/TestAniModel/Standing Run Forward.dae")));
+    std::string str = "../../Model/TestAniModel/Standing Run Forward.dae";
     animation = new Animation(str, static_cast<Model *>(Objects.at("Cube").get()));
     animator = new Animator((animation));
 
@@ -129,7 +134,8 @@ void GLRenderer::setCamera(Camera *newCamera)
 
 void GLRenderer::draw()
 {
-    animator->UpdateAnimation(deltaTime);
+    animator->UpdateAnimation(0.0f);
+    manualAnimator->stringToBones(*server->getMsg());
 
     // draw in wireframe polygons
     if (polyMode)
