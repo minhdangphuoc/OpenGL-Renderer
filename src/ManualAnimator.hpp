@@ -15,12 +15,14 @@ private:
     /* data */
     std::unique_ptr<UDPServer> server;
     std::vector<glm::vec3> mixamobones;
+    unsigned int temp = 0, head = 0, tail = 0;
+    std::array<float, 3> vec3;
 
 public:
     ManualAnimator(UDPServer *server);
     ~ManualAnimator();
-    void stringToBones(const std::string &raw);
-    std::vector<glm::vec3> * update();
+    bool stringToBones(const std::string &raw);
+    std::vector<glm::vec3> update();
 };
 
 #endif // !MANUAL_ANIMATOR

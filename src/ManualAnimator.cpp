@@ -9,17 +9,17 @@ ManualAnimator::~ManualAnimator()
 {
 }
 
-std::vector<glm::vec3> *ManualAnimator::update()
+std::vector<glm::vec3> ManualAnimator::update()
 {
     stringToBones(*server->getMsg());
-    return &mixamobones;
+    return mixamobones;
 }
 
-void ManualAnimator::stringToBones(const std::string &raw = "0.33, 0.4, 0.44, 0.1, 0.33, 0.4")
+bool ManualAnimator::stringToBones(const std::string &raw = "0.33, 0.4, 0.44, 0.1, 0.33, 0.4")
 {
-    unsigned int temp = 0, head = 0, tail = 0;
-    std::array<float, 3> vec3;
-
+    temp = 0;
+    head = 0;
+    tail = 0;
     mixamobones.clear();
 
     if (raw.size() != 0)
@@ -31,7 +31,7 @@ void ManualAnimator::stringToBones(const std::string &raw = "0.33, 0.4, 0.44, 0.
                 tail++;
                 if (raw[tail] == ',')
                 {
-                    vec3[temp] = std::stof(raw.substr(head, tail));
+                    vec3[temp] = std::stof(raw.substr(head, tail)) * 5.0f;
                     temp++;
                     head = tail + 1;
                 }
@@ -41,10 +41,18 @@ void ManualAnimator::stringToBones(const std::string &raw = "0.33, 0.4, 0.44, 0.
         }
 
         // Debug
+        temp = 0;
         std::cout << "--------" << std::endl;
         for (auto it : mixamobones)
         {
-            std::cout << printVec3(it) << std::endl;
+
+            if (temp >= 11 && temp <= 16)
+                std::cout << temp << ":" << printVec3(it) << std::endl;
+            temp++;
         }
     }
+    else
+        return false;
+
+    return true;
 }

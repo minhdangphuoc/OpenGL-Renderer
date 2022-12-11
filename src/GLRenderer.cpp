@@ -20,10 +20,10 @@ bool GLRenderer::init()
         initMaterial();
         loadShaders();
         loadObjects();
-        server = UDPServer::getInstance();
-        manualAnimator = new ManualAnimator(server);
-        server->runServer("192.168.31.61");
-        server->startRunning();
+        // server = UDPServer::getInstance();
+        // manualAnimator = new ManualAnimator(server);
+        // server->runServer("192.168.0.83");
+        // server->startRunning();
     }
     catch (const std::runtime_error &e)
     {
@@ -83,11 +83,11 @@ void GLRenderer::loadObjects()
 {
     glEnable(GL_DEPTH_TEST); // Z-Buffer
     Objects.insert(std::pair("Model", std::make_unique<Model>("../../Model/Sponza/glTF/Sponza.gltf")));
-    Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/TestAniModel/Standing Run Forward.dae")));
-    std::string str = "../../Model/TestAniModel/Standing Run Forward.dae";
+    Objects.insert(std::pair("Cube", std::make_unique<Model>("../../Model/PALADIN/Paladin J Nordstrom.dae")));
+    std::string str = "../../Model/PALADIN/Paladin J Nordstrom.dae";
     animation = new Animation(str, static_cast<Model *>(Objects.at("Cube").get()));
-    animator = new Animator((animation));
-
+    jsonAnimation = new JsonAnimation(str);
+    animator = new Animator(jsonAnimation);
     // lightingSystem->setNewDirectionalLight("Direction Light",
     //                                new DirectionalLight(
     //                                    glm::vec3(0.0f, 5.0f, 0.0f),
@@ -130,12 +130,9 @@ void GLRenderer::setCamera(Camera *newCamera)
     camera.reset(newCamera);
 }
 
-// Temp
-
 void GLRenderer::draw()
 {
-    animator->UpdateAnimation(0.0f);
-    manualAnimator->stringToBones(*server->getMsg());
+    animator->UpdateAnimation(deltaTime);
 
     // draw in wireframe polygons
     if (polyMode)
@@ -178,19 +175,24 @@ void GLRenderer::draw()
     Objects.at("Cube")->model = glm::scale(Objects.at("Cube")->model, glm::vec3(0.7f));
 
     auto transforms = animator->GetFinalBoneMatrices();
+
+    auto manualTransform = manualAnimator->update();
     for (int i = 0; i < transforms.size(); ++i)
     {
+        // if (!((i >= 10 && i <= 11) || (i >= 29 && i <= 30) || i == 0))
         shaders.at("cubeShader")->setMat4("finalBonesMatrices[" + std::to_string(i) + "]", Objects.at("Cube")->model * transforms[i]);
     }
-    // light
-    lightingSystem->setupLighting(*(shaders.at("cubeShader").get()));
+}
 
-    Objects.at("Cube")->draw(shaders.at("cubeShader").get());
+// light
+lightingSystem->setupLighting(*(shaders.at("cubeShader").get()));
 
-    shaders.at("lightShader")->use();
-    shaders.at("lightShader")->setMat4("projection", projection);
-    shaders.at("lightShader")->setMat4("view", view);
+Objects.at("Cube")->draw(shaders.at("cubeShader").get());
 
-    lightingSystem->getPointLight("PL2")->setPosition(glm::vec3(x, y, z));
-    lightingSystem->draw(shaders.at("lightShader").get());
+shaders.at("lightShader")->use();
+shaders.at("lightShader")->setMat4("projection", projection);
+shaders.at("lightShader")->setMat4("view", view);
+
+lightingSystem->getPointLight("PL2")->setPosition(glm::vec3(x, y, z));
+lightingSystem->draw(shaders.at("lightShader").get());
 }

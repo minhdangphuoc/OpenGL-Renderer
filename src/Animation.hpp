@@ -107,11 +107,13 @@ private:
 			dest.children.push_back(newData);
 		}
 	}
+	std::vector<Bone> m_Bones;
+
+protected:
+	std::map<std::string, BoneInfo> m_BoneInfoMap;
 	float m_Duration;
 	int m_TicksPerSecond;
-	std::vector<Bone> m_Bones;
 	AssimpNodeData m_RootNode;
-	std::map<std::string, BoneInfo> m_BoneInfoMap;
 };
 
 #endif // !ANIMATION_HPP

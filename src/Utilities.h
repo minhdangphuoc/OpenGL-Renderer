@@ -45,7 +45,10 @@ static glm::vec2 vec2_cast(const aiVector3D &v) { return glm::vec2(v.x, v.y); }
 static glm::quat quat_cast(const aiQuaternion &q) { return glm::quat(q.w, q.x, q.y, q.z); }
 static glm::mat4 mat4_cast(const aiMatrix4x4 &m) { return glm::transpose(glm::make_mat4(&m.a1)); }
 static glm::mat4 mat4_cast(const aiMatrix3x3 &m) { return glm::transpose(glm::make_mat3(&m.a1)); }
-
+static glm::vec3 mid_point_vec3(const glm::vec3 &v1, const glm::vec3 &v2)
+{
+	return glm::vec3((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
+}
 static std::string printVec3(const glm::vec3 &v3) { return std::to_string(v3.x) + "," + std::to_string(v3.y) + "," + std::to_string(v3.z); }
 
 #endif // __UTILITIES_H__

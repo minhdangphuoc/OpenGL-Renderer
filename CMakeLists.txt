@@ -10,6 +10,7 @@ find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 # find_package(imgui CONFIG REQUIRED)
 # find_package(implot CONFIG REQUIRED)
+find_package(jsoncpp CONFIG REQUIRED)
 
 # MANUAL
 set(IMGUI_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/deps/imgui")
@@ -24,6 +25,9 @@ target_link_libraries(renderer PRIVATE
     glad::glad
     glm::glm
     assimp::assimp
+    jsoncpp_object 
+    jsoncpp_static 
+    JsonCpp::JsonCpp
 )
 target_include_directories(renderer PRIVATE
     ${STB_INCLUDE_DIRS}

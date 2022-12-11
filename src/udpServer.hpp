@@ -17,8 +17,8 @@
 #include <atomic>
 #include <cstring>
 #include <climits>
-
 #define MAXLINE 65536
+#define PORT 8080
 
 class UDPServer
 {
@@ -32,9 +32,9 @@ public:
 
     // Supporting Funtions
     void runServer(
-        const std::string &UDPAddress = "192.168.1.1", // UDP Address
-        const uint16_t &UDPPort = 8080,                // UDP Port
-        const uint32_t &bufferSize = 64 * 1024         // Buffer Size
+        const std::string &UDPAddress,         // UDP Address
+        const uint16_t &UDPPort = 8080,        // UDP Port
+        const uint32_t &bufferSize = 64 * 1024 // Buffer Size
     )
     {
         // int flags = fcntl(sockfd, F_GETFL);
@@ -54,9 +54,8 @@ public:
         // Filling server information
         servaddr.sin_family = AF_INET; // IPv4
         // servaddr.sin_addr.s_addr = inet_addr(UDPAddress.c_str());
-        servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+        servaddr.sin_addr.s_addr = inet_addr("192.168.0.83");
         servaddr.sin_port = htons(UDPPort);
-        
 
         // Bind the socket with the server address
         if (bind(sockfd, (const struct sockaddr *)&servaddr,
@@ -66,24 +65,26 @@ public:
             exit(EXIT_FAILURE);
         }
 
-        
+        len = sizeof(cliaddr);
+        read_timeout.tv_sec = 0;
+        read_timeout.tv_usec = 10;
+        setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &read_timeout, sizeof(read_timeout));
     }
 
     void receiveMessage()
     {
-        unsigned int len, n;
-        char *c_buffer;
+        c_buffer = global_buffer;
+        this->n = recvfrom(this->sockfd, (char *)this->c_buffer, MAXLINE, 0, (struct sockaddr *)&this->cliaddr, &this->len);
+        // std::cout << c_buffer << std::endl;
 
-        len = sizeof(cliaddr);
-        n = recvfrom(sockfd, (char *)c_buffer, MAXLINE, MSG_DONTWAIT, (struct sockaddr *)&cliaddr, &len);
-        // std::cout<< msg << ", " << n << std::endl;
-        if (n!=UINT_MAX) {
+        // printf("Receive : %s\n", this->c_buffer);
+
+        if (n != UINT_MAX)
+        {
             c_buffer[n] = '\0';
-            printf("Receive : %s\n", c_buffer);
             msg = c_buffer;
         }
     }
-
 
     static void receiveMessageMT(std::atomic<bool> &program_is_running, unsigned int update_interval_millisecs)
     {
@@ -91,7 +92,6 @@ public:
         char *c_buffer;
         const auto wait_duration = std::chrono::milliseconds(update_interval_millisecs);
         struct timeval read_timeout;
-        
 
         while (program_is_running)
         {
@@ -104,7 +104,8 @@ public:
                 len = sizeof(cliaddr);
                 n = recvfrom(sockfd, (char *)c_buffer, MAXLINE, MSG_DONTWAIT, (struct sockaddr *)&cliaddr, &len);
                 // std::cout<< msg << ", " << n << std::endl;
-                if (n!=UINT_MAX) {
+                if (n != UINT_MAX)
+                {
                     c_buffer[n] = '\0';
                     printf("Receive : %s\n", c_buffer);
                     msg = c_buffer;
@@ -124,7 +125,7 @@ public:
         receiveMessage();
         return &(this->msg);
     }
-    void startRunning() 
+    void startRunning()
     {
         // const unsigned int interval = 5; // update after every 50 milliseconds
         // std::thread thread(receiveMessageMT, std::ref(running), interval);
@@ -141,8 +142,11 @@ protected:
     static inline UDPServer *instance = nullptr;
 
     // Variables
-    std::string UDPAddress = "192.168.1.1";
+    std::string UDPAddress = "192.168.0.83";
     uint16_t UDPPort = 8080;
+    unsigned int len, n;
+    char *c_buffer;
+    struct timeval read_timeout;
 
     //
     static inline std::string msg;

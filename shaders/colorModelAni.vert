@@ -22,6 +22,7 @@ uniform bool hasAnimated;
 void main()
 {
     TexCoords = inTexCoords;
+    
     if (hasAnimated) {
         mat4 BoneTransform = mat4(0.0f);
         for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++)
